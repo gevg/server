@@ -1,0 +1,124 @@
+
+version: '2'
+    services: 
+        db:
+        image: postgres:latest
+        container_name: postgres
+        ports:
+            - "5432"
+        environment:
+        - POSTGRES_DB=nc
+        - POSTGRES_PASSWORD=iceman22
+        - POSTGRES_USER=postgres
+        - POSTGRES_PORT=5432
+    # store:
+    #     # data-only container
+    #     image: postgres:latest # reuse postgres container
+    #     volumes:
+    #         - /var/lib/postgresql/data
+    #     command: "true"
+
+    # postgres:
+    #     image: postgres:latest
+    #     ports:
+    #         - "5432" # random available host port will be chosen, same as -P
+    #     volumes_from:
+    #         - store # connect postgres and the data-only container
+    #     environment:
+    #         - POSTGRES_PASSWORD=iceman22
+    #         - POSTGRES_USERNAME=postgres
+    #         - POSTGRES_DATABASE=nc
+    #         # you can also set the postgres username and database name
+
+    # go:
+    #     build: .
+    #     links:
+    #         - postgres:db # [other container]:[alias in this container]
+    #         # this will create environment variables in the go container
+    #         # with ip and port info for the postgres container
+    #         # also creates entries in /etc/hosts with ip info
+    #     ports:
+    #         - "8080" # this is port i'm exposing in the container
+
+    # proxy:
+    #     image: nginx:latest
+    #     ports:
+    #         - "80:80" # host:container
+    #         - "443:443"
+    #     volumes:
+    #         - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    #         # connect host's ./nginx.conf with container's nginx.conf
+    #         # :ro == read only perms in container
+    #     links:
+    #         - go:app # [other container]:[alias in this container]
+    #         # creates environment variables in proxy container
+    #         # with ip and port info for go container
+    #         # also creates entries in /etc/hosts with ip info
+
+# version: '2'
+# services:
+#   ie-server:
+#     image: interventionengine/ie-server:v1.0.0-rc.1
+#     ports:
+#       - "3001"
+#     volumes:
+#       - ./config/ie-server:/config
+#       - ./logs/ie-server:/etc/ie-server/logs
+#     depends_on:
+#       - mongo
+#     env_file:
+#       - ./config/default.env
+#     command: dockerize -wait tcp://mongo:27017 -timeout 300s ./server -loadCodes
+#   ie-ccda-endpoint:
+#     image: interventionengine/ie-ccda-endpoint:v1.0.0-rc.1
+#     ports:
+#       - "3000"
+#     depends_on:
+#       - ie-server
+#     env_file:
+#       - ./config/default.env
+#   ie-multifactorriskservice:
+#     image: interventionengine/ie-multifactorriskservice:v1.0.0-rc.1
+#     ports:
+#       - "9000"
+#     depends_on:
+#       - ie-server
+#       - mongo
+#     env_file:
+#       - ./config/default.env
+#       - ./config/site.env
+#     command: dockerize -wait tcp://mongo:27017 -timeout 300s ./multifactorriskservice
+#     # command: dockerize -wait tcp://mongo:27017 -timeout 300s ./mock-service -confirm-mock # for testing only!
+#   ie-integrator:
+#     image: interventionengine/ie-integrator:v1.0.0-rc.1
+#     volumes:
+#       - ./config/ie-integrator:/config
+#       - ./data/ie-integrator:/data
+#       - ./logs/ie-integrator:/etc/ie-integrator/logs
+#     depends_on:
+#       - ie-server
+#       - mongo
+#       - ie-ccda-endpoint
+#     env_file:
+#       - ./config/default.env
+#       - ./config/site.env
+#     command: dockerize -wait http://ie-ccda-endpoint:3000 -wait tcp://mongo:27017 -timeout 300s ./integrator
+#   ie-nginx:
+#     image: interventionengine/ie-nginx:v1.0.0-rc.1
+#     ports:
+#       - "443:443"
+#     volumes:
+#       - ./config/ie-nginx:/config
+#       - ./logs/ie-nginx:/etc/nginx/logs
+#     depends_on:
+#       - ie-server
+#       - ie-multifactorriskservice
+#     env_file:
+#       - ./config/default.env
+#     command: dockerize -template /etc/nginx/nginx.conf.tmpl:/etc/nginx/nginx.conf nginx -g 'daemon off;'
+#   mongo:
+#     image: mongo:3.2.10
+#     ports:
+#       - "27017"
+#     volumes:
+#       - ./data/mongo/db:/data/db
