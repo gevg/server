@@ -1,9 +1,9 @@
 package design
 
 import (
+	. "github.com/goa-fhir/server/design/nutrition_request"
 	. "github.com/goadesign/goa/design"
 	. "github.com/goadesign/goa/design/apidsl"
-	. "github.com/goa-fhir/server/design/nutrition_request"
 )
 
 //vital resource-----------------------------------------------------------------------------------------------------------
@@ -24,7 +24,6 @@ var _ = Resource("NutritionRequest", func() {
 		Response(OK, func() {
 			Media(CollectionOf(NutritionRequest, func() {
 				View("default")
-				View("tiny")
 			}))
 		})
 		Response(NotFound)

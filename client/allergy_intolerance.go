@@ -8,29 +8,51 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"time"
 )
 
 // CreateAllergyIntolerancePayload is the AllergyIntolerance create action payload.
 type CreateAllergyIntolerancePayload struct {
-	Active  *bool `form:"active,omitempty" json:"active,omitempty" xml:"active,omitempty"`
-	Address *struct {
-		// City
-		City   string `form:"city" json:"city" xml:"city"`
-		Number *struct {
-			// Street name
-			Other *string `form:"other,omitempty" json:"other,omitempty" xml:"other,omitempty"`
-		} `form:"number,omitempty" json:"number,omitempty" xml:"number,omitempty"`
-		// Street name
-		Street *string `form:"street,omitempty" json:"street,omitempty" xml:"street,omitempty"`
-	} `form:"address,omitempty" json:"address,omitempty" xml:"address,omitempty"`
-	BirthDate     *string `form:"birthDate,omitempty" json:"birthDate,omitempty" xml:"birthDate,omitempty"`
-	Country       *string `form:"country,omitempty" json:"country,omitempty" xml:"country,omitempty"`
-	Deceased      *bool   `form:"deceased,omitempty" json:"deceased,omitempty" xml:"deceased,omitempty"`
-	Gender        *string `form:"gender,omitempty" json:"gender,omitempty" xml:"gender,omitempty"`
-	MultipleBirth *bool   `form:"multiple_birth,omitempty" json:"multiple_birth,omitempty" xml:"multiple_birth,omitempty"`
-	Region        *string `form:"region,omitempty" json:"region,omitempty" xml:"region,omitempty"`
-	Review        *string `form:"review,omitempty" json:"review,omitempty" xml:"review,omitempty"`
-	Sweetness     *int    `form:"sweetness,omitempty" json:"sweetness,omitempty" xml:"sweetness,omitempty"`
+	// Category of the identified Substance. See http://hl7.org/fhir/ValueSet/allergy-intolerance-category
+	Category *string `form:"category,omitempty" json:"category,omitempty" xml:"category,omitempty"`
+	// Date of creation
+	CreatedAt *time.Time `form:"created_at,omitempty" json:"created_at,omitempty" xml:"created_at,omitempty"`
+	// Estimate of the potential clinical harm, or seriousness, of the reaction to the identified Substance. See http://hl7.org/fhir/ValueSet/allergy-intolerance-criticality
+	Criticality *string `form:"criticality,omitempty" json:"criticality,omitempty" xml:"criticality,omitempty"`
+	// API href of nutrition request
+	Href string `form:"href" json:"href" xml:"href"`
+	// ID of nutrition request
+	ID int `form:"id" json:"id" xml:"id"`
+	// This records identifiers associated with this allergy/intolerance concern that are defined by business processes and/or
+	// 		used to refer to it when a direct URL reference to the resource itself is not appropriate (e.g. in CDA documents, or in written / printed documentation).
+	Identifier *Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
+	// Represents the date and/or time of the last known occurrence of a reaction event.
+	LastOccurence *time.Time `form:"lastOccurence,omitempty" json:"lastOccurence,omitempty" xml:"lastOccurence,omitempty"`
+	// Additional narrative about the propensity for the Adverse Reaction, not captured in other fields..
+	Note *Annotation `form:"note,omitempty" json:"note,omitempty" xml:"note,omitempty"`
+	// Record of the date and/or time of the onset of the Allergy or Intolerance.
+	Onset   *time.Time `form:"onset,omitempty" json:"onset,omitempty" xml:"onset,omitempty"`
+	Orderer *struct {
+		// xml:id (or equivalent in JSON)
+		ID        *string    `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+		Reference *Reference `form:"reference,omitempty" json:"reference,omitempty" xml:"reference,omitempty"`
+	} `form:"orderer,omitempty" json:"orderer,omitempty" xml:"orderer,omitempty"`
+	// The patient who has the allergy or intolerance.
+	Patient *Reference `form:"patient,omitempty" json:"patient,omitempty" xml:"patient,omitempty"`
+	// Details about each adverse reaction event linked to exposure to the identified Substance.
+	Reaction *Reaction `form:"reaction,omitempty" json:"reaction,omitempty" xml:"reaction,omitempty"`
+	// Date when the sensitivity was recorded.
+	RecordedDate *time.Time `form:"recordedDate,omitempty" json:"recordedDate,omitempty" xml:"recordedDate,omitempty"`
+	// Individual who recorded the record and takes responsibility for its conten.
+	Recorder *Reference `form:"recorder,omitempty" json:"recorder,omitempty" xml:"recorder,omitempty"`
+	// The source of the information about the allergy that is recorded.
+	Reporter *Reference `form:"reporter,omitempty" json:"reporter,omitempty" xml:"reporter,omitempty"`
+	// Assertion about certainty associated with a propensity, or potential risk, of a reaction to the identified Substance. See http://hl7.org/fhir/ValueSet/allergy-intolerance-status
+	Status string `form:"status" json:"status" xml:"status"`
+	// Identification of the underlying physiological mechanism for the reaction risk. See http://hl7.org/fhir/ValueSet/allergy-intolerance-type
+	Type string `form:"type" json:"type" xml:"type"`
+	// Date of last update
+	UpdatedAt *time.Time `form:"updated_at,omitempty" json:"updated_at,omitempty" xml:"updated_at,omitempty"`
 }
 
 // CreateAllergyIntolerancePath computes a request path to the create action of AllergyIntolerance.
@@ -56,7 +78,7 @@ func (c *Client) NewCreateAllergyIntoleranceRequest(ctx context.Context, path st
 	}
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("POST", u.String(), &body)
@@ -84,7 +106,7 @@ func (c *Client) DeleteAllergyIntolerance(ctx context.Context, path string) (*ht
 func (c *Client) NewDeleteAllergyIntoleranceRequest(ctx context.Context, path string) (*http.Request, error) {
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("DELETE", u.String(), nil)
@@ -112,7 +134,7 @@ func (c *Client) ListAllergyIntolerance(ctx context.Context, path string, years 
 func (c *Client) NewListAllergyIntoleranceRequest(ctx context.Context, path string, years []int) (*http.Request, error) {
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	values := u.Query()
@@ -156,7 +178,7 @@ func (c *Client) NewRateAllergyIntoleranceRequest(ctx context.Context, path stri
 	}
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("PUT", u.String(), &body)
@@ -184,7 +206,7 @@ func (c *Client) ShowAllergyIntolerance(ctx context.Context, path string) (*http
 func (c *Client) NewShowAllergyIntoleranceRequest(ctx context.Context, path string) (*http.Request, error) {
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("GET", u.String(), nil)
@@ -217,7 +239,7 @@ func (c *Client) NewUpdateAllergyIntoleranceRequest(ctx context.Context, path st
 	}
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("PATCH", u.String(), &body)

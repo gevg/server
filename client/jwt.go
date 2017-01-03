@@ -27,7 +27,7 @@ func (c *Client) SecureJWT(ctx context.Context, path string, fail *bool) (*http.
 func (c *Client) NewSecureJWTRequest(ctx context.Context, path string, fail *bool) (*http.Request, error) {
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	values := u.Query()
@@ -75,7 +75,7 @@ func (c *Client) NewSigninJWTRequest(ctx context.Context, path string, payload *
 	}
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("POST", u.String(), &body)
@@ -124,7 +124,7 @@ func (c *Client) NewSignupJWTRequest(ctx context.Context, path string, payload *
 	}
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("POST", u.String(), &body)
@@ -152,7 +152,7 @@ func (c *Client) UnsecureJWT(ctx context.Context, path string) (*http.Response, 
 func (c *Client) NewUnsecureJWTRequest(ctx context.Context, path string) (*http.Request, error) {
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("GET", u.String(), nil)

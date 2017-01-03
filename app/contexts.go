@@ -14,6 +14,7 @@ import (
 	"github.com/goadesign/goa"
 	"golang.org/x/net/context"
 	"strconv"
+	"time"
 	"unicode/utf8"
 )
 
@@ -51,67 +52,85 @@ func NewCreateAllergyIntoleranceContext(ctx context.Context, service *goa.Servic
 
 // createAllergyIntolerancePayload is the AllergyIntolerance create action payload.
 type createAllergyIntolerancePayload struct {
-	Active  *bool `form:"active,omitempty" json:"active,omitempty" xml:"active,omitempty"`
-	Address *struct {
-		// City
-		City   *string `form:"city,omitempty" json:"city,omitempty" xml:"city,omitempty"`
-		Number *struct {
-			// Street name
-			Other *string `form:"other,omitempty" json:"other,omitempty" xml:"other,omitempty"`
-		} `form:"number,omitempty" json:"number,omitempty" xml:"number,omitempty"`
-		// Street name
-		Street *string `form:"street,omitempty" json:"street,omitempty" xml:"street,omitempty"`
-	} `form:"address,omitempty" json:"address,omitempty" xml:"address,omitempty"`
-	BirthDate     *string `form:"birthDate,omitempty" json:"birthDate,omitempty" xml:"birthDate,omitempty"`
-	Country       *string `form:"country,omitempty" json:"country,omitempty" xml:"country,omitempty"`
-	Deceased      *bool   `form:"deceased,omitempty" json:"deceased,omitempty" xml:"deceased,omitempty"`
-	Gender        *string `form:"gender,omitempty" json:"gender,omitempty" xml:"gender,omitempty"`
-	MultipleBirth *bool   `form:"multiple_birth,omitempty" json:"multiple_birth,omitempty" xml:"multiple_birth,omitempty"`
-	Region        *string `form:"region,omitempty" json:"region,omitempty" xml:"region,omitempty"`
-	Review        *string `form:"review,omitempty" json:"review,omitempty" xml:"review,omitempty"`
-	Sweetness     *int    `form:"sweetness,omitempty" json:"sweetness,omitempty" xml:"sweetness,omitempty"`
+	// Category of the identified Substance. See http://hl7.org/fhir/ValueSet/allergy-intolerance-category
+	Category *string `form:"category,omitempty" json:"category,omitempty" xml:"category,omitempty"`
+	// Date of creation
+	CreatedAt *time.Time `form:"created_at,omitempty" json:"created_at,omitempty" xml:"created_at,omitempty"`
+	// Estimate of the potential clinical harm, or seriousness, of the reaction to the identified Substance. See http://hl7.org/fhir/ValueSet/allergy-intolerance-criticality
+	Criticality *string `form:"criticality,omitempty" json:"criticality,omitempty" xml:"criticality,omitempty"`
+	// API href of nutrition request
+	Href *string `form:"href,omitempty" json:"href,omitempty" xml:"href,omitempty"`
+	// ID of nutrition request
+	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+	// This records identifiers associated with this allergy/intolerance concern that are defined by business processes and/or
+	// 		used to refer to it when a direct URL reference to the resource itself is not appropriate (e.g. in CDA documents, or in written / printed documentation).
+	Identifier *identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
+	// Represents the date and/or time of the last known occurrence of a reaction event.
+	LastOccurence *time.Time `form:"lastOccurence,omitempty" json:"lastOccurence,omitempty" xml:"lastOccurence,omitempty"`
+	// Additional narrative about the propensity for the Adverse Reaction, not captured in other fields..
+	Note *annotation `form:"note,omitempty" json:"note,omitempty" xml:"note,omitempty"`
+	// Record of the date and/or time of the onset of the Allergy or Intolerance.
+	Onset   *time.Time `form:"onset,omitempty" json:"onset,omitempty" xml:"onset,omitempty"`
+	Orderer *struct {
+		// xml:id (or equivalent in JSON)
+		ID        *string    `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+		Reference *reference `form:"reference,omitempty" json:"reference,omitempty" xml:"reference,omitempty"`
+	} `form:"orderer,omitempty" json:"orderer,omitempty" xml:"orderer,omitempty"`
+	// The patient who has the allergy or intolerance.
+	Patient *reference `form:"patient,omitempty" json:"patient,omitempty" xml:"patient,omitempty"`
+	// Details about each adverse reaction event linked to exposure to the identified Substance.
+	Reaction *reaction `form:"reaction,omitempty" json:"reaction,omitempty" xml:"reaction,omitempty"`
+	// Date when the sensitivity was recorded.
+	RecordedDate *time.Time `form:"recordedDate,omitempty" json:"recordedDate,omitempty" xml:"recordedDate,omitempty"`
+	// Individual who recorded the record and takes responsibility for its conten.
+	Recorder *reference `form:"recorder,omitempty" json:"recorder,omitempty" xml:"recorder,omitempty"`
+	// The source of the information about the allergy that is recorded.
+	Reporter *reference `form:"reporter,omitempty" json:"reporter,omitempty" xml:"reporter,omitempty"`
+	// Assertion about certainty associated with a propensity, or potential risk, of a reaction to the identified Substance. See http://hl7.org/fhir/ValueSet/allergy-intolerance-status
+	Status *string `form:"status,omitempty" json:"status,omitempty" xml:"status,omitempty"`
+	// Identification of the underlying physiological mechanism for the reaction risk. See http://hl7.org/fhir/ValueSet/allergy-intolerance-type
+	Type *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
+	// Date of last update
+	UpdatedAt *time.Time `form:"updated_at,omitempty" json:"updated_at,omitempty" xml:"updated_at,omitempty"`
 }
 
 // Validate runs the validation rules defined in the design.
 func (payload *createAllergyIntolerancePayload) Validate() (err error) {
-	if payload.Address != nil {
-		if payload.Address.City == nil {
-			err = goa.MergeErrors(err, goa.MissingAttributeError(`raw.address`, "city"))
+	if payload.ID == nil {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "id"))
+	}
+	if payload.Href == nil {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "href"))
+	}
+	if payload.Status == nil {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "status"))
+	}
+	if payload.Type == nil {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "type"))
+	}
+	if payload.Category != nil {
+		if !(*payload.Category == "food" || *payload.Category == "medication" || *payload.Category == "environment" || *payload.Category == "other") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`raw.category`, *payload.Category, []interface{}{"food", "medication", "environment", "other"}))
 		}
 	}
-	if payload.BirthDate != nil {
-		if utf8.RuneCountInString(*payload.BirthDate) < 4 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.birthDate`, *payload.BirthDate, utf8.RuneCountInString(*payload.BirthDate), 4, true))
+	if payload.Criticality != nil {
+		if !(*payload.Criticality == "CRITL" || *payload.Criticality == "CRITH" || *payload.Criticality == "CRITU") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`raw.criticality`, *payload.Criticality, []interface{}{"CRITL", "CRITH", "CRITU"}))
 		}
 	}
-	if payload.Country != nil {
-		if utf8.RuneCountInString(*payload.Country) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.country`, *payload.Country, utf8.RuneCountInString(*payload.Country), 2, true))
+	if payload.Reaction != nil {
+		if err2 := payload.Reaction.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
 		}
 	}
-	if payload.Gender != nil {
-		if !(*payload.Gender == "male" || *payload.Gender == "female" || *payload.Gender == "other" || *payload.Gender == "unknown") {
-			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`raw.gender`, *payload.Gender, []interface{}{"male", "female", "other", "unknown"}))
+	if payload.Status != nil {
+		if !(*payload.Status == "active" || *payload.Status == "unconfirmed" || *payload.Status == "confirmed" || *payload.Status == "inactive" || *payload.Status == "resolved" || *payload.Status == "refuted" || *payload.Status == "entered-in-error") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`raw.status`, *payload.Status, []interface{}{"active", "unconfirmed", "confirmed", "inactive", "resolved", "refuted", "entered-in-error"}))
 		}
 	}
-	if payload.Review != nil {
-		if utf8.RuneCountInString(*payload.Review) < 3 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.review`, *payload.Review, utf8.RuneCountInString(*payload.Review), 3, true))
-		}
-	}
-	if payload.Review != nil {
-		if utf8.RuneCountInString(*payload.Review) > 300 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.review`, *payload.Review, utf8.RuneCountInString(*payload.Review), 300, false))
-		}
-	}
-	if payload.Sweetness != nil {
-		if *payload.Sweetness < 1 {
-			err = goa.MergeErrors(err, goa.InvalidRangeError(`raw.sweetness`, *payload.Sweetness, 1, true))
-		}
-	}
-	if payload.Sweetness != nil {
-		if *payload.Sweetness > 5 {
-			err = goa.MergeErrors(err, goa.InvalidRangeError(`raw.sweetness`, *payload.Sweetness, 5, false))
+	if payload.Type != nil {
+		if !(*payload.Type == "allergy" || *payload.Type == "intolerance") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`raw.type`, *payload.Type, []interface{}{"allergy", "intolerance"}))
 		}
 	}
 	return
@@ -120,127 +139,149 @@ func (payload *createAllergyIntolerancePayload) Validate() (err error) {
 // Publicize creates CreateAllergyIntolerancePayload from createAllergyIntolerancePayload
 func (payload *createAllergyIntolerancePayload) Publicize() *CreateAllergyIntolerancePayload {
 	var pub CreateAllergyIntolerancePayload
-	if payload.Active != nil {
-		pub.Active = payload.Active
+	if payload.Category != nil {
+		pub.Category = payload.Category
 	}
-	if payload.Address != nil {
-		pub.Address = &struct {
-			// City
-			City   string `form:"city" json:"city" xml:"city"`
-			Number *struct {
-				// Street name
-				Other *string `form:"other,omitempty" json:"other,omitempty" xml:"other,omitempty"`
-			} `form:"number,omitempty" json:"number,omitempty" xml:"number,omitempty"`
-			// Street name
-			Street *string `form:"street,omitempty" json:"street,omitempty" xml:"street,omitempty"`
+	if payload.CreatedAt != nil {
+		pub.CreatedAt = payload.CreatedAt
+	}
+	if payload.Criticality != nil {
+		pub.Criticality = payload.Criticality
+	}
+	if payload.Href != nil {
+		pub.Href = *payload.Href
+	}
+	if payload.ID != nil {
+		pub.ID = *payload.ID
+	}
+	if payload.Identifier != nil {
+		pub.Identifier = payload.Identifier.Publicize()
+	}
+	if payload.LastOccurence != nil {
+		pub.LastOccurence = payload.LastOccurence
+	}
+	if payload.Note != nil {
+		pub.Note = payload.Note.Publicize()
+	}
+	if payload.Onset != nil {
+		pub.Onset = payload.Onset
+	}
+	if payload.Orderer != nil {
+		pub.Orderer = &struct {
+			// xml:id (or equivalent in JSON)
+			ID        *string    `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+			Reference *Reference `form:"reference,omitempty" json:"reference,omitempty" xml:"reference,omitempty"`
 		}{}
-		if payload.Address.City != nil {
-			pub.Address.City = *payload.Address.City
+		if payload.Orderer.ID != nil {
+			pub.Orderer.ID = payload.Orderer.ID
 		}
-		if payload.Address.Number != nil {
-			pub.Address.Number = &struct {
-				// Street name
-				Other *string `form:"other,omitempty" json:"other,omitempty" xml:"other,omitempty"`
-			}{}
-			if payload.Address.Number.Other != nil {
-				pub.Address.Number.Other = payload.Address.Number.Other
-			}
-		}
-		if payload.Address.Street != nil {
-			pub.Address.Street = payload.Address.Street
+		if payload.Orderer.Reference != nil {
+			pub.Orderer.Reference = payload.Orderer.Reference.Publicize()
 		}
 	}
-	if payload.BirthDate != nil {
-		pub.BirthDate = payload.BirthDate
+	if payload.Patient != nil {
+		pub.Patient = payload.Patient.Publicize()
 	}
-	if payload.Country != nil {
-		pub.Country = payload.Country
+	if payload.Reaction != nil {
+		pub.Reaction = payload.Reaction.Publicize()
 	}
-	if payload.Deceased != nil {
-		pub.Deceased = payload.Deceased
+	if payload.RecordedDate != nil {
+		pub.RecordedDate = payload.RecordedDate
 	}
-	if payload.Gender != nil {
-		pub.Gender = payload.Gender
+	if payload.Recorder != nil {
+		pub.Recorder = payload.Recorder.Publicize()
 	}
-	if payload.MultipleBirth != nil {
-		pub.MultipleBirth = payload.MultipleBirth
+	if payload.Reporter != nil {
+		pub.Reporter = payload.Reporter.Publicize()
 	}
-	if payload.Region != nil {
-		pub.Region = payload.Region
+	if payload.Status != nil {
+		pub.Status = *payload.Status
 	}
-	if payload.Review != nil {
-		pub.Review = payload.Review
+	if payload.Type != nil {
+		pub.Type = *payload.Type
 	}
-	if payload.Sweetness != nil {
-		pub.Sweetness = payload.Sweetness
+	if payload.UpdatedAt != nil {
+		pub.UpdatedAt = payload.UpdatedAt
 	}
 	return &pub
 }
 
 // CreateAllergyIntolerancePayload is the AllergyIntolerance create action payload.
 type CreateAllergyIntolerancePayload struct {
-	Active  *bool `form:"active,omitempty" json:"active,omitempty" xml:"active,omitempty"`
-	Address *struct {
-		// City
-		City   string `form:"city" json:"city" xml:"city"`
-		Number *struct {
-			// Street name
-			Other *string `form:"other,omitempty" json:"other,omitempty" xml:"other,omitempty"`
-		} `form:"number,omitempty" json:"number,omitempty" xml:"number,omitempty"`
-		// Street name
-		Street *string `form:"street,omitempty" json:"street,omitempty" xml:"street,omitempty"`
-	} `form:"address,omitempty" json:"address,omitempty" xml:"address,omitempty"`
-	BirthDate     *string `form:"birthDate,omitempty" json:"birthDate,omitempty" xml:"birthDate,omitempty"`
-	Country       *string `form:"country,omitempty" json:"country,omitempty" xml:"country,omitempty"`
-	Deceased      *bool   `form:"deceased,omitempty" json:"deceased,omitempty" xml:"deceased,omitempty"`
-	Gender        *string `form:"gender,omitempty" json:"gender,omitempty" xml:"gender,omitempty"`
-	MultipleBirth *bool   `form:"multiple_birth,omitempty" json:"multiple_birth,omitempty" xml:"multiple_birth,omitempty"`
-	Region        *string `form:"region,omitempty" json:"region,omitempty" xml:"region,omitempty"`
-	Review        *string `form:"review,omitempty" json:"review,omitempty" xml:"review,omitempty"`
-	Sweetness     *int    `form:"sweetness,omitempty" json:"sweetness,omitempty" xml:"sweetness,omitempty"`
+	// Category of the identified Substance. See http://hl7.org/fhir/ValueSet/allergy-intolerance-category
+	Category *string `form:"category,omitempty" json:"category,omitempty" xml:"category,omitempty"`
+	// Date of creation
+	CreatedAt *time.Time `form:"created_at,omitempty" json:"created_at,omitempty" xml:"created_at,omitempty"`
+	// Estimate of the potential clinical harm, or seriousness, of the reaction to the identified Substance. See http://hl7.org/fhir/ValueSet/allergy-intolerance-criticality
+	Criticality *string `form:"criticality,omitempty" json:"criticality,omitempty" xml:"criticality,omitempty"`
+	// API href of nutrition request
+	Href string `form:"href" json:"href" xml:"href"`
+	// ID of nutrition request
+	ID int `form:"id" json:"id" xml:"id"`
+	// This records identifiers associated with this allergy/intolerance concern that are defined by business processes and/or
+	// 		used to refer to it when a direct URL reference to the resource itself is not appropriate (e.g. in CDA documents, or in written / printed documentation).
+	Identifier *Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
+	// Represents the date and/or time of the last known occurrence of a reaction event.
+	LastOccurence *time.Time `form:"lastOccurence,omitempty" json:"lastOccurence,omitempty" xml:"lastOccurence,omitempty"`
+	// Additional narrative about the propensity for the Adverse Reaction, not captured in other fields..
+	Note *Annotation `form:"note,omitempty" json:"note,omitempty" xml:"note,omitempty"`
+	// Record of the date and/or time of the onset of the Allergy or Intolerance.
+	Onset   *time.Time `form:"onset,omitempty" json:"onset,omitempty" xml:"onset,omitempty"`
+	Orderer *struct {
+		// xml:id (or equivalent in JSON)
+		ID        *string    `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+		Reference *Reference `form:"reference,omitempty" json:"reference,omitempty" xml:"reference,omitempty"`
+	} `form:"orderer,omitempty" json:"orderer,omitempty" xml:"orderer,omitempty"`
+	// The patient who has the allergy or intolerance.
+	Patient *Reference `form:"patient,omitempty" json:"patient,omitempty" xml:"patient,omitempty"`
+	// Details about each adverse reaction event linked to exposure to the identified Substance.
+	Reaction *Reaction `form:"reaction,omitempty" json:"reaction,omitempty" xml:"reaction,omitempty"`
+	// Date when the sensitivity was recorded.
+	RecordedDate *time.Time `form:"recordedDate,omitempty" json:"recordedDate,omitempty" xml:"recordedDate,omitempty"`
+	// Individual who recorded the record and takes responsibility for its conten.
+	Recorder *Reference `form:"recorder,omitempty" json:"recorder,omitempty" xml:"recorder,omitempty"`
+	// The source of the information about the allergy that is recorded.
+	Reporter *Reference `form:"reporter,omitempty" json:"reporter,omitempty" xml:"reporter,omitempty"`
+	// Assertion about certainty associated with a propensity, or potential risk, of a reaction to the identified Substance. See http://hl7.org/fhir/ValueSet/allergy-intolerance-status
+	Status string `form:"status" json:"status" xml:"status"`
+	// Identification of the underlying physiological mechanism for the reaction risk. See http://hl7.org/fhir/ValueSet/allergy-intolerance-type
+	Type string `form:"type" json:"type" xml:"type"`
+	// Date of last update
+	UpdatedAt *time.Time `form:"updated_at,omitempty" json:"updated_at,omitempty" xml:"updated_at,omitempty"`
 }
 
 // Validate runs the validation rules defined in the design.
 func (payload *CreateAllergyIntolerancePayload) Validate() (err error) {
-	if payload.Address != nil {
-		if payload.Address.City == "" {
-			err = goa.MergeErrors(err, goa.MissingAttributeError(`raw.address`, "city"))
+
+	if payload.Href == "" {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "href"))
+	}
+	if payload.Status == "" {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "status"))
+	}
+	if payload.Type == "" {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "type"))
+	}
+	if payload.Category != nil {
+		if !(*payload.Category == "food" || *payload.Category == "medication" || *payload.Category == "environment" || *payload.Category == "other") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`raw.category`, *payload.Category, []interface{}{"food", "medication", "environment", "other"}))
 		}
 	}
-	if payload.BirthDate != nil {
-		if utf8.RuneCountInString(*payload.BirthDate) < 4 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.birthDate`, *payload.BirthDate, utf8.RuneCountInString(*payload.BirthDate), 4, true))
+	if payload.Criticality != nil {
+		if !(*payload.Criticality == "CRITL" || *payload.Criticality == "CRITH" || *payload.Criticality == "CRITU") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`raw.criticality`, *payload.Criticality, []interface{}{"CRITL", "CRITH", "CRITU"}))
 		}
 	}
-	if payload.Country != nil {
-		if utf8.RuneCountInString(*payload.Country) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.country`, *payload.Country, utf8.RuneCountInString(*payload.Country), 2, true))
+	if payload.Reaction != nil {
+		if err2 := payload.Reaction.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
 		}
 	}
-	if payload.Gender != nil {
-		if !(*payload.Gender == "male" || *payload.Gender == "female" || *payload.Gender == "other" || *payload.Gender == "unknown") {
-			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`raw.gender`, *payload.Gender, []interface{}{"male", "female", "other", "unknown"}))
-		}
+	if !(payload.Status == "active" || payload.Status == "unconfirmed" || payload.Status == "confirmed" || payload.Status == "inactive" || payload.Status == "resolved" || payload.Status == "refuted" || payload.Status == "entered-in-error") {
+		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`raw.status`, payload.Status, []interface{}{"active", "unconfirmed", "confirmed", "inactive", "resolved", "refuted", "entered-in-error"}))
 	}
-	if payload.Review != nil {
-		if utf8.RuneCountInString(*payload.Review) < 3 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.review`, *payload.Review, utf8.RuneCountInString(*payload.Review), 3, true))
-		}
-	}
-	if payload.Review != nil {
-		if utf8.RuneCountInString(*payload.Review) > 300 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.review`, *payload.Review, utf8.RuneCountInString(*payload.Review), 300, false))
-		}
-	}
-	if payload.Sweetness != nil {
-		if *payload.Sweetness < 1 {
-			err = goa.MergeErrors(err, goa.InvalidRangeError(`raw.sweetness`, *payload.Sweetness, 1, true))
-		}
-	}
-	if payload.Sweetness != nil {
-		if *payload.Sweetness > 5 {
-			err = goa.MergeErrors(err, goa.InvalidRangeError(`raw.sweetness`, *payload.Sweetness, 5, false))
-		}
+	if !(payload.Type == "allergy" || payload.Type == "intolerance") {
+		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`raw.type`, payload.Type, []interface{}{"allergy", "intolerance"}))
 	}
 	return
 }
@@ -371,15 +412,6 @@ func (ctx *ListAllergyIntoleranceContext) OK(r AllergyIntoleranceCollection) err
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.allergy_intolerance+json; type=collection")
 	if r == nil {
 		r = AllergyIntoleranceCollection{}
-	}
-	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
-}
-
-// OKTiny sends a HTTP response with status code 200.
-func (ctx *ListAllergyIntoleranceContext) OKTiny(r AllergyIntoleranceTinyCollection) error {
-	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.allergy_intolerance+json; type=collection")
-	if r == nil {
-		r = AllergyIntoleranceTinyCollection{}
 	}
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
@@ -538,18 +570,6 @@ func (ctx *ShowAllergyIntoleranceContext) OK(r *AllergyIntolerance) error {
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
 
-// OKFull sends a HTTP response with status code 200.
-func (ctx *ShowAllergyIntoleranceContext) OKFull(r *AllergyIntoleranceFull) error {
-	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.allergy_intolerance+json")
-	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
-}
-
-// OKTiny sends a HTTP response with status code 200.
-func (ctx *ShowAllergyIntoleranceContext) OKTiny(r *AllergyIntoleranceTiny) error {
-	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.allergy_intolerance+json")
-	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
-}
-
 // BadRequest sends a HTTP response with status code 400.
 func (ctx *ShowAllergyIntoleranceContext) BadRequest(r error) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.goa.error")
@@ -703,37 +723,73 @@ func NewCreateNutritionRequestContext(ctx context.Context, service *goa.Service)
 
 // createNutritionRequestPayload is the NutritionRequest create action payload.
 type createNutritionRequestPayload struct {
-	Address                *string `form:"address,omitempty" json:"address,omitempty" xml:"address,omitempty"`
-	AddressPostalCode      *string `form:"address_postal_code,omitempty" json:"address_postal_code,omitempty" xml:"address_postal_code,omitempty"`
-	EnteralFormula         *string `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
-	FoodPreferenceModifier *struct {
-		Coding *string `form:"coding,omitempty" json:"coding,omitempty" xml:"coding,omitempty"`
-		ID     *string `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
-		Text   *string `form:"text,omitempty" json:"text,omitempty" xml:"text,omitempty"`
-	} `form:"foodPreferenceModifier,omitempty" json:"foodPreferenceModifier,omitempty" xml:"foodPreferenceModifier,omitempty"`
-	Href             *string           `form:"href,omitempty" json:"href,omitempty" xml:"href,omitempty"`
-	ID               *string           `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
-	Identifier       *string           `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
-	Links            *string           `form:"links,omitempty" json:"links,omitempty" xml:"links,omitempty"`
-	NutritionRequest *nutritionRequest `form:"nutritionRequest,omitempty" json:"nutritionRequest,omitempty" xml:"nutritionRequest,omitempty"`
-	OralDiet         *string           `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
-	Patient          *struct {
-		ID        *string `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
-		Reference *string `form:"reference,omitempty" json:"reference,omitempty" xml:"reference,omitempty"`
-	} `form:"patient,omitempty" json:"patient,omitempty" xml:"patient,omitempty"`
-	Supplement *string `form:"supplement,omitempty" json:"supplement,omitempty" xml:"supplement,omitempty"`
+	// A link to a record of allergies or intolerances  which should be included in the nutrition order.
+	AllergyIntolerance []*reference `form:"allergyIntolerance,omitempty" json:"allergyIntolerance,omitempty" xml:"allergyIntolerance,omitempty"`
+	// Date of creation
+	CreatedAt *time.Time `form:"created_at,omitempty" json:"created_at,omitempty" xml:"created_at,omitempty"`
+	// The date and time that this nutrition order was requested.
+	DateTime *time.Time `form:"dateTime,omitempty" json:"dateTime,omitempty" xml:"dateTime,omitempty"`
+	// An encounter that provides additional information about the healthcare context in which this request is made.
+	Encounter *reference `form:"encounter,omitempty" json:"encounter,omitempty" xml:"encounter,omitempty"`
+	// Feeding provided through the gastrointestinal tract via a tube, catheter, or stoma that delivers nutrition distal to the oral cavity.
+	EnteralFormula enteralFormulaCollection `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
+	// This modifier is used to convey order-specific modifiers about the type of food that should NOT be given. These can be derived from
+	// 		patient allergies, intolerances, or preferences such as No Red Meat, No Soy or No Wheat or  Gluten-Free.  While it should not be necessary to repeat allergy or intolerance
+	// 		information captured in the referenced allergyIntolerance resource in the excludeFoodModifier, this element may be used to convey additional specificity related to foods that should be
+	// 		eliminated from the patient’s diet for any reason.  This modifier applies to the entire nutrition order inclusive of the oral diet, nutritional supplements and enteral formula feedings.
+	// 		See http://hl7.org/fhir/ValueSet/food-type
+	ExcludeFoodModifier []*codeableConcept `form:"excludeFoodModifier,omitempty" json:"excludeFoodModifier,omitempty" xml:"excludeFoodModifier,omitempty"`
+	// This modifier is used to convey order-specific modifiers about the type of food that should be given. These can be derived
+	// 		from patient allergies, intolerances, or preferences such as Halal, Vegan or Kosher. This modifier applies to the entire nutrition order inclusive of the oral diet, nutritional
+	// 		supplements and enteral formula feedings. See http://hl7.org/fhir/ValueSet/encounter-diet
+	FoodPreferenceModifier []*codeableConcept `form:"foodPreferenceModifier,omitempty" json:"foodPreferenceModifier,omitempty" xml:"foodPreferenceModifier,omitempty"`
+	// API href of nutrition request
+	Href *string `form:"href,omitempty" json:"href,omitempty" xml:"href,omitempty"`
+	// ID of nutrition request
+	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+	// Identifiers assigned to this order by the order sender or by the order receiver.
+	Identifier []*identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
+	// Diet given orally in contrast to enteral (tube) feeding.
+	OralDiet oralDietCollection `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
+	// The practitioner that holds legal responsibility for ordering the diet, nutritional supplement, or formula feedings.
+	Orderer *reference `form:"orderer,omitempty" json:"orderer,omitempty" xml:"orderer,omitempty"`
+	// The person (patient) who needs the nutrition order for an oral diet, nutritional supplement and/or enteral or formula feeding.
+	Patient *reference `form:"patient,omitempty" json:"patient,omitempty" xml:"patient,omitempty"`
+	// The workflow status of the nutrition order/request. See http://hl7.org/fhir/nutrition-request-status
+	Status *string `form:"status,omitempty" json:"status,omitempty" xml:"status,omitempty"`
+	// Oral nutritional products given in order to add further nutritional value to the patient's diet.
+	Supplement []*supplement `form:"supplement,omitempty" json:"supplement,omitempty" xml:"supplement,omitempty"`
+	// Date of last update
+	UpdatedAt *time.Time `form:"updated_at,omitempty" json:"updated_at,omitempty" xml:"updated_at,omitempty"`
 }
 
 // Validate runs the validation rules defined in the design.
 func (payload *createNutritionRequestPayload) Validate() (err error) {
-	if payload.AddressPostalCode != nil {
-		if utf8.RuneCountInString(*payload.AddressPostalCode) < 5 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.address_postal_code`, *payload.AddressPostalCode, utf8.RuneCountInString(*payload.AddressPostalCode), 5, true))
+	if payload.ID == nil {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "id"))
+	}
+	if payload.Href == nil {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "href"))
+	}
+	if payload.Status == nil {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "status"))
+	}
+	if err2 := payload.EnteralFormula.Validate(); err2 != nil {
+		err = goa.MergeErrors(err, err2)
+	}
+	if err2 := payload.OralDiet.Validate(); err2 != nil {
+		err = goa.MergeErrors(err, err2)
+	}
+	if payload.Status != nil {
+		if !(*payload.Status == "proposed" || *payload.Status == "draft" || *payload.Status == "planned" || *payload.Status == "requested" || *payload.Status == "active" || *payload.Status == "on-hold" || *payload.Status == "completed" || *payload.Status == "cancelled") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`raw.status`, *payload.Status, []interface{}{"proposed", "draft", "planned", "requested", "active", "on-hold", "completed", "cancelled"}))
 		}
 	}
-	if payload.NutritionRequest != nil {
-		if err2 := payload.NutritionRequest.Validate(); err2 != nil {
-			err = goa.MergeErrors(err, err2)
+	for _, e := range payload.Supplement {
+		if e != nil {
+			if err2 := e.Validate(); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
 		}
 	}
 	return
@@ -742,100 +798,143 @@ func (payload *createNutritionRequestPayload) Validate() (err error) {
 // Publicize creates CreateNutritionRequestPayload from createNutritionRequestPayload
 func (payload *createNutritionRequestPayload) Publicize() *CreateNutritionRequestPayload {
 	var pub CreateNutritionRequestPayload
-	if payload.Address != nil {
-		pub.Address = payload.Address
+	if payload.AllergyIntolerance != nil {
+		pub.AllergyIntolerance = make([]*Reference, len(payload.AllergyIntolerance))
+		for i2, elem2 := range payload.AllergyIntolerance {
+			pub.AllergyIntolerance[i2] = elem2.Publicize()
+		}
 	}
-	if payload.AddressPostalCode != nil {
-		pub.AddressPostalCode = payload.AddressPostalCode
+	if payload.CreatedAt != nil {
+		pub.CreatedAt = payload.CreatedAt
+	}
+	if payload.DateTime != nil {
+		pub.DateTime = payload.DateTime
+	}
+	if payload.Encounter != nil {
+		pub.Encounter = payload.Encounter.Publicize()
 	}
 	if payload.EnteralFormula != nil {
-		pub.EnteralFormula = payload.EnteralFormula
+		pub.EnteralFormula = make(EnteralFormulaCollection, len(payload.EnteralFormula))
+		for i2, elem2 := range payload.EnteralFormula {
+			pub.EnteralFormula[i2] = elem2.Publicize()
+		}
+	}
+	if payload.ExcludeFoodModifier != nil {
+		pub.ExcludeFoodModifier = make([]*CodeableConcept, len(payload.ExcludeFoodModifier))
+		for i2, elem2 := range payload.ExcludeFoodModifier {
+			pub.ExcludeFoodModifier[i2] = elem2.Publicize()
+		}
 	}
 	if payload.FoodPreferenceModifier != nil {
-		pub.FoodPreferenceModifier = &struct {
-			Coding *string `form:"coding,omitempty" json:"coding,omitempty" xml:"coding,omitempty"`
-			ID     *string `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
-			Text   *string `form:"text,omitempty" json:"text,omitempty" xml:"text,omitempty"`
-		}{}
-		if payload.FoodPreferenceModifier.Coding != nil {
-			pub.FoodPreferenceModifier.Coding = payload.FoodPreferenceModifier.Coding
-		}
-		if payload.FoodPreferenceModifier.ID != nil {
-			pub.FoodPreferenceModifier.ID = payload.FoodPreferenceModifier.ID
-		}
-		if payload.FoodPreferenceModifier.Text != nil {
-			pub.FoodPreferenceModifier.Text = payload.FoodPreferenceModifier.Text
+		pub.FoodPreferenceModifier = make([]*CodeableConcept, len(payload.FoodPreferenceModifier))
+		for i2, elem2 := range payload.FoodPreferenceModifier {
+			pub.FoodPreferenceModifier[i2] = elem2.Publicize()
 		}
 	}
 	if payload.Href != nil {
-		pub.Href = payload.Href
+		pub.Href = *payload.Href
 	}
 	if payload.ID != nil {
-		pub.ID = payload.ID
+		pub.ID = *payload.ID
 	}
 	if payload.Identifier != nil {
-		pub.Identifier = payload.Identifier
-	}
-	if payload.Links != nil {
-		pub.Links = payload.Links
-	}
-	if payload.NutritionRequest != nil {
-		pub.NutritionRequest = payload.NutritionRequest.Publicize()
+		pub.Identifier = make([]*Identifier, len(payload.Identifier))
+		for i2, elem2 := range payload.Identifier {
+			pub.Identifier[i2] = elem2.Publicize()
+		}
 	}
 	if payload.OralDiet != nil {
-		pub.OralDiet = payload.OralDiet
+		pub.OralDiet = make(OralDietCollection, len(payload.OralDiet))
+		for i2, elem2 := range payload.OralDiet {
+			pub.OralDiet[i2] = elem2.Publicize()
+		}
+	}
+	if payload.Orderer != nil {
+		pub.Orderer = payload.Orderer.Publicize()
 	}
 	if payload.Patient != nil {
-		pub.Patient = &struct {
-			ID        *string `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
-			Reference *string `form:"reference,omitempty" json:"reference,omitempty" xml:"reference,omitempty"`
-		}{}
-		if payload.Patient.ID != nil {
-			pub.Patient.ID = payload.Patient.ID
-		}
-		if payload.Patient.Reference != nil {
-			pub.Patient.Reference = payload.Patient.Reference
-		}
+		pub.Patient = payload.Patient.Publicize()
+	}
+	if payload.Status != nil {
+		pub.Status = *payload.Status
 	}
 	if payload.Supplement != nil {
-		pub.Supplement = payload.Supplement
+		pub.Supplement = make([]*Supplement, len(payload.Supplement))
+		for i2, elem2 := range payload.Supplement {
+			pub.Supplement[i2] = elem2.Publicize()
+		}
+	}
+	if payload.UpdatedAt != nil {
+		pub.UpdatedAt = payload.UpdatedAt
 	}
 	return &pub
 }
 
 // CreateNutritionRequestPayload is the NutritionRequest create action payload.
 type CreateNutritionRequestPayload struct {
-	Address                *string `form:"address,omitempty" json:"address,omitempty" xml:"address,omitempty"`
-	AddressPostalCode      *string `form:"address_postal_code,omitempty" json:"address_postal_code,omitempty" xml:"address_postal_code,omitempty"`
-	EnteralFormula         *string `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
-	FoodPreferenceModifier *struct {
-		Coding *string `form:"coding,omitempty" json:"coding,omitempty" xml:"coding,omitempty"`
-		ID     *string `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
-		Text   *string `form:"text,omitempty" json:"text,omitempty" xml:"text,omitempty"`
-	} `form:"foodPreferenceModifier,omitempty" json:"foodPreferenceModifier,omitempty" xml:"foodPreferenceModifier,omitempty"`
-	Href             *string           `form:"href,omitempty" json:"href,omitempty" xml:"href,omitempty"`
-	ID               *string           `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
-	Identifier       *string           `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
-	Links            *string           `form:"links,omitempty" json:"links,omitempty" xml:"links,omitempty"`
-	NutritionRequest *NutritionRequest `form:"nutritionRequest,omitempty" json:"nutritionRequest,omitempty" xml:"nutritionRequest,omitempty"`
-	OralDiet         *string           `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
-	Patient          *struct {
-		ID        *string `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
-		Reference *string `form:"reference,omitempty" json:"reference,omitempty" xml:"reference,omitempty"`
-	} `form:"patient,omitempty" json:"patient,omitempty" xml:"patient,omitempty"`
-	Supplement *string `form:"supplement,omitempty" json:"supplement,omitempty" xml:"supplement,omitempty"`
+	// A link to a record of allergies or intolerances  which should be included in the nutrition order.
+	AllergyIntolerance []*Reference `form:"allergyIntolerance,omitempty" json:"allergyIntolerance,omitempty" xml:"allergyIntolerance,omitempty"`
+	// Date of creation
+	CreatedAt *time.Time `form:"created_at,omitempty" json:"created_at,omitempty" xml:"created_at,omitempty"`
+	// The date and time that this nutrition order was requested.
+	DateTime *time.Time `form:"dateTime,omitempty" json:"dateTime,omitempty" xml:"dateTime,omitempty"`
+	// An encounter that provides additional information about the healthcare context in which this request is made.
+	Encounter *Reference `form:"encounter,omitempty" json:"encounter,omitempty" xml:"encounter,omitempty"`
+	// Feeding provided through the gastrointestinal tract via a tube, catheter, or stoma that delivers nutrition distal to the oral cavity.
+	EnteralFormula EnteralFormulaCollection `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
+	// This modifier is used to convey order-specific modifiers about the type of food that should NOT be given. These can be derived from
+	// 		patient allergies, intolerances, or preferences such as No Red Meat, No Soy or No Wheat or  Gluten-Free.  While it should not be necessary to repeat allergy or intolerance
+	// 		information captured in the referenced allergyIntolerance resource in the excludeFoodModifier, this element may be used to convey additional specificity related to foods that should be
+	// 		eliminated from the patient’s diet for any reason.  This modifier applies to the entire nutrition order inclusive of the oral diet, nutritional supplements and enteral formula feedings.
+	// 		See http://hl7.org/fhir/ValueSet/food-type
+	ExcludeFoodModifier []*CodeableConcept `form:"excludeFoodModifier,omitempty" json:"excludeFoodModifier,omitempty" xml:"excludeFoodModifier,omitempty"`
+	// This modifier is used to convey order-specific modifiers about the type of food that should be given. These can be derived
+	// 		from patient allergies, intolerances, or preferences such as Halal, Vegan or Kosher. This modifier applies to the entire nutrition order inclusive of the oral diet, nutritional
+	// 		supplements and enteral formula feedings. See http://hl7.org/fhir/ValueSet/encounter-diet
+	FoodPreferenceModifier []*CodeableConcept `form:"foodPreferenceModifier,omitempty" json:"foodPreferenceModifier,omitempty" xml:"foodPreferenceModifier,omitempty"`
+	// API href of nutrition request
+	Href string `form:"href" json:"href" xml:"href"`
+	// ID of nutrition request
+	ID int `form:"id" json:"id" xml:"id"`
+	// Identifiers assigned to this order by the order sender or by the order receiver.
+	Identifier []*Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
+	// Diet given orally in contrast to enteral (tube) feeding.
+	OralDiet OralDietCollection `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
+	// The practitioner that holds legal responsibility for ordering the diet, nutritional supplement, or formula feedings.
+	Orderer *Reference `form:"orderer,omitempty" json:"orderer,omitempty" xml:"orderer,omitempty"`
+	// The person (patient) who needs the nutrition order for an oral diet, nutritional supplement and/or enteral or formula feeding.
+	Patient *Reference `form:"patient,omitempty" json:"patient,omitempty" xml:"patient,omitempty"`
+	// The workflow status of the nutrition order/request. See http://hl7.org/fhir/nutrition-request-status
+	Status string `form:"status" json:"status" xml:"status"`
+	// Oral nutritional products given in order to add further nutritional value to the patient's diet.
+	Supplement []*Supplement `form:"supplement,omitempty" json:"supplement,omitempty" xml:"supplement,omitempty"`
+	// Date of last update
+	UpdatedAt *time.Time `form:"updated_at,omitempty" json:"updated_at,omitempty" xml:"updated_at,omitempty"`
 }
 
 // Validate runs the validation rules defined in the design.
 func (payload *CreateNutritionRequestPayload) Validate() (err error) {
-	if payload.AddressPostalCode != nil {
-		if utf8.RuneCountInString(*payload.AddressPostalCode) < 5 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.address_postal_code`, *payload.AddressPostalCode, utf8.RuneCountInString(*payload.AddressPostalCode), 5, true))
-		}
+
+	if payload.Href == "" {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "href"))
 	}
-	if payload.NutritionRequest != nil {
-		if err2 := payload.NutritionRequest.Validate(); err2 != nil {
-			err = goa.MergeErrors(err, err2)
+	if payload.Status == "" {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "status"))
+	}
+	if err2 := payload.EnteralFormula.Validate(); err2 != nil {
+		err = goa.MergeErrors(err, err2)
+	}
+	if err2 := payload.OralDiet.Validate(); err2 != nil {
+		err = goa.MergeErrors(err, err2)
+	}
+	if !(payload.Status == "proposed" || payload.Status == "draft" || payload.Status == "planned" || payload.Status == "requested" || payload.Status == "active" || payload.Status == "on-hold" || payload.Status == "completed" || payload.Status == "cancelled") {
+		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`raw.status`, payload.Status, []interface{}{"proposed", "draft", "planned", "requested", "active", "on-hold", "completed", "cancelled"}))
+	}
+	for _, e := range payload.Supplement {
+		if e != nil {
+			if err2 := e.Validate(); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
 		}
 	}
 	return
@@ -967,15 +1066,6 @@ func (ctx *ListNutritionRequestContext) OK(r NutritionRequestCollection) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.nutrition_request+json; type=collection")
 	if r == nil {
 		r = NutritionRequestCollection{}
-	}
-	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
-}
-
-// OKTiny sends a HTTP response with status code 200.
-func (ctx *ListNutritionRequestContext) OKTiny(r NutritionRequestTinyCollection) error {
-	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.nutrition_request+json; type=collection")
-	if r == nil {
-		r = NutritionRequestTinyCollection{}
 	}
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
@@ -1130,18 +1220,6 @@ func NewShowNutritionRequestContext(ctx context.Context, service *goa.Service) (
 
 // OK sends a HTTP response with status code 200.
 func (ctx *ShowNutritionRequestContext) OK(r *NutritionRequest) error {
-	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.nutrition_request+json")
-	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
-}
-
-// OKFull sends a HTTP response with status code 200.
-func (ctx *ShowNutritionRequestContext) OKFull(r *NutritionRequestFull) error {
-	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.nutrition_request+json")
-	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
-}
-
-// OKTiny sends a HTTP response with status code 200.
-func (ctx *ShowNutritionRequestContext) OKTiny(r *NutritionRequestTiny) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.nutrition_request+json")
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }

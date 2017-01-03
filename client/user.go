@@ -39,7 +39,7 @@ func (c *Client) NewCreateUserRequest(ctx context.Context, path string, payload 
 	}
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("POST", u.String(), &body)
@@ -67,7 +67,7 @@ func (c *Client) DeleteUser(ctx context.Context, path string) (*http.Response, e
 func (c *Client) NewDeleteUserRequest(ctx context.Context, path string) (*http.Request, error) {
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("DELETE", u.String(), nil)
@@ -95,7 +95,7 @@ func (c *Client) ListUser(ctx context.Context, path string) (*http.Response, err
 func (c *Client) NewListUserRequest(ctx context.Context, path string) (*http.Request, error) {
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("GET", u.String(), nil)
@@ -123,7 +123,7 @@ func (c *Client) ShowUser(ctx context.Context, path string) (*http.Response, err
 func (c *Client) NewShowUserRequest(ctx context.Context, path string) (*http.Request, error) {
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("GET", u.String(), nil)
@@ -164,7 +164,7 @@ func (c *Client) NewSigninUserRequest(ctx context.Context, path string, payload 
 	}
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("POST", u.String(), &body)
@@ -219,7 +219,7 @@ func (c *Client) NewSignupUserRequest(ctx context.Context, path string, payload 
 	}
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("POST", u.String(), &body)
@@ -260,7 +260,7 @@ func (c *Client) NewUpdateUserRequest(ctx context.Context, path string, payload 
 	}
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("PUT", u.String(), &body)

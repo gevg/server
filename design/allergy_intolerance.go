@@ -24,7 +24,6 @@ var _ = Resource("AllergyIntolerance", func() {
 		Response(OK, func() {
 			Media(CollectionOf(AllergyIntolerance, func() {
 				View("default")
-				View("tiny")
 			}))
 		})
 		Response(NotFound)

@@ -25,7 +25,7 @@ func (c *Client) HealthHealth(ctx context.Context, path string) (*http.Response,
 func (c *Client) NewHealthHealthRequest(ctx context.Context, path string) (*http.Request, error) {
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("GET", u.String(), nil)

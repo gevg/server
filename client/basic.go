@@ -25,7 +25,7 @@ func (c *Client) SecureBasic(ctx context.Context, path string) (*http.Response, 
 func (c *Client) NewSecureBasicRequest(ctx context.Context, path string) (*http.Request, error) {
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("GET", u.String(), nil)
@@ -56,7 +56,7 @@ func (c *Client) UnsecureBasic(ctx context.Context, path string) (*http.Response
 func (c *Client) NewUnsecureBasicRequest(ctx context.Context, path string) (*http.Request, error) {
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("GET", u.String(), nil)

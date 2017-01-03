@@ -37,7 +37,7 @@ func (c *Client) NewCreatePatientRequest(ctx context.Context, path string, paylo
 	}
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("POST", u.String(), &body)
@@ -65,7 +65,7 @@ func (c *Client) DeletePatient(ctx context.Context, path string) (*http.Response
 func (c *Client) NewDeletePatientRequest(ctx context.Context, path string) (*http.Request, error) {
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("DELETE", u.String(), nil)
@@ -98,7 +98,7 @@ func (c *Client) ListPatient(ctx context.Context, path string, fail *bool) (*htt
 func (c *Client) NewListPatientRequest(ctx context.Context, path string, fail *bool) (*http.Request, error) {
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	values := u.Query()
@@ -132,7 +132,7 @@ func (c *Client) ShowPatient(ctx context.Context, path string) (*http.Response, 
 func (c *Client) NewShowPatientRequest(ctx context.Context, path string) (*http.Request, error) {
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("GET", u.String(), nil)
@@ -170,7 +170,7 @@ func (c *Client) NewUpdatePatientRequest(ctx context.Context, path string, paylo
 	}
 	scheme := c.Scheme
 	if scheme == "" {
-		scheme = "http"
+		scheme = "https"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
 	req, err := http.NewRequest("PUT", u.String(), &body)

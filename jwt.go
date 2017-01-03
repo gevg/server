@@ -68,7 +68,7 @@ func NewJWTController(service *goa.Service) (*JWTController, error) {
 
 // Signin creates JWTs for use by clients to access the secure endpoints.
 func (c *JWTController) Signin(ctx *app.SigninJWTContext) error {
-	fmt.Printf("%s\n %s\n", "hi", ctx.Payload.Password)
+	fmt.Printf("%s\n %s\n", "hi", ctx.Payload)
 
 	url := fmt.Sprintf("dbname=nc user=postgres password=iceman22 sslmode=disable port=%d host=%s", 5432, "localhost")
 

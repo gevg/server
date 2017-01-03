@@ -16,7 +16,7 @@ import (
 	"unicode/utf8"
 )
 
-// There is a variety of postal address formats defined around the world. This format defines a superset that is the basis for all addresses around the world. (default view)
+// Address media type (default view)
 //
 // Identifier: application/vnd.address+json; view=default
 type Address struct {
@@ -33,29 +33,27 @@ type Address struct {
 	// Sub-unit of a country with limited sovereignty in a federally organized country. A code may be used if codes are in common use (i.e. US 2 letter state codes).
 	State *string `form:"state,omitempty" json:"state,omitempty" xml:"state,omitempty"`
 	// Distinguishes between physical addresses (those you can visit) and mailing addresses (e.g. PO Boxes and care-of addresses). Most addresses are both.
-	Type string `form:"type" json:"type" xml:"type"`
+	Type *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
 	// The use of an address
-	Use string `form:"use" json:"use" xml:"use"`
+	Use *string `form:"use,omitempty" json:"use,omitempty" xml:"use,omitempty"`
 }
 
 // Validate validates the Address media type instance.
 func (mt *Address) Validate() (err error) {
-	if mt.Use == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "use"))
+	if mt.Type != nil {
+		if !(*mt.Type == "postal" || *mt.Type == "physical" || *mt.Type == "both") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.type`, *mt.Type, []interface{}{"postal", "physical", "both"}))
+		}
 	}
-	if mt.Type == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "type"))
-	}
-	if !(mt.Type == "postal" || mt.Type == "physical" || mt.Type == "both") {
-		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.type`, mt.Type, []interface{}{"postal", "physical", "both"}))
-	}
-	if !(mt.Use == "home" || mt.Use == "work" || mt.Use == "temp" || mt.Use == "old - purpose of this address") {
-		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.use`, mt.Use, []interface{}{"home", "work", "temp", "old - purpose of this address"}))
+	if mt.Use != nil {
+		if !(*mt.Use == "home" || *mt.Use == "work" || *mt.Use == "temp" || *mt.Use == "old - purpose of this address") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.use`, *mt.Use, []interface{}{"home", "work", "temp", "old - purpose of this address"}))
+		}
 	}
 	return
 }
 
-// A nutrition request from the patient (default view)
+// Allergy_intolerance media type (default view)
 //
 // Identifier: application/vnd.allergy_intolerance+json; view=default
 type AllergyIntolerance struct {
@@ -88,19 +86,13 @@ type AllergyIntolerance struct {
 	// The source of the information about the allergy that is recorded.
 	Reporter *Reference `form:"reporter,omitempty" json:"reporter,omitempty" xml:"reporter,omitempty"`
 	// Assertion about certainty associated with a propensity, or potential risk, of a reaction to the identified Substance. See http://hl7.org/fhir/ValueSet/allergy-intolerance-status
-	Status string `form:"status" json:"status" xml:"status"`
+	Status *string `form:"status,omitempty" json:"status,omitempty" xml:"status,omitempty"`
 	// Identification of the underlying physiological mechanism for the reaction risk. See http://hl7.org/fhir/ValueSet/allergy-intolerance-type
-	Type string `form:"type" json:"type" xml:"type"`
+	Type *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
 }
 
 // Validate validates the AllergyIntolerance media type instance.
 func (mt *AllergyIntolerance) Validate() (err error) {
-	if mt.Status == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "status"))
-	}
-	if mt.Type == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "type"))
-	}
 	if mt.Category != nil {
 		if !(*mt.Category == "food" || *mt.Category == "medication" || *mt.Category == "environment" || *mt.Category == "other") {
 			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.category`, *mt.Category, []interface{}{"food", "medication", "environment", "other"}))
@@ -116,49 +108,15 @@ func (mt *AllergyIntolerance) Validate() (err error) {
 			err = goa.MergeErrors(err, err2)
 		}
 	}
-	if !(mt.Status == "active" || mt.Status == "unconfirmed" || mt.Status == "confirmed" || mt.Status == "inactive" || mt.Status == "resolved" || mt.Status == "refuted" || mt.Status == "entered-in-error") {
-		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.status`, mt.Status, []interface{}{"active", "unconfirmed", "confirmed", "inactive", "resolved", "refuted", "entered-in-error"}))
+	if mt.Status != nil {
+		if !(*mt.Status == "active" || *mt.Status == "unconfirmed" || *mt.Status == "confirmed" || *mt.Status == "inactive" || *mt.Status == "resolved" || *mt.Status == "refuted" || *mt.Status == "entered-in-error") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.status`, *mt.Status, []interface{}{"active", "unconfirmed", "confirmed", "inactive", "resolved", "refuted", "entered-in-error"}))
+		}
 	}
-	if !(mt.Type == "allergy" || mt.Type == "intolerance") {
-		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.type`, mt.Type, []interface{}{"allergy", "intolerance"}))
-	}
-	return
-}
-
-// A nutrition request from the patient (full view)
-//
-// Identifier: application/vnd.allergy_intolerance+json; view=full
-type AllergyIntoleranceFull struct {
-	// API href of nutrition request
-	Href string `form:"href" json:"href" xml:"href"`
-	// ID of nutrition request
-	ID int `form:"id" json:"id" xml:"id"`
-}
-
-// Validate validates the AllergyIntoleranceFull media type instance.
-func (mt *AllergyIntoleranceFull) Validate() (err error) {
-
-	if mt.Href == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "href"))
-	}
-	return
-}
-
-// A nutrition request from the patient (tiny view)
-//
-// Identifier: application/vnd.allergy_intolerance+json; view=tiny
-type AllergyIntoleranceTiny struct {
-	// API href of nutrition request
-	Href string `form:"href" json:"href" xml:"href"`
-	// ID of nutrition request
-	ID int `form:"id" json:"id" xml:"id"`
-}
-
-// Validate validates the AllergyIntoleranceTiny media type instance.
-func (mt *AllergyIntoleranceTiny) Validate() (err error) {
-
-	if mt.Href == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "href"))
+	if mt.Type != nil {
+		if !(*mt.Type == "allergy" || *mt.Type == "intolerance") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.type`, *mt.Type, []interface{}{"allergy", "intolerance"}))
+		}
 	}
 	return
 }
@@ -180,23 +138,6 @@ func (mt AllergyIntoleranceCollection) Validate() (err error) {
 	return
 }
 
-// Allergy_intoleranceCollection is the media type for an array of Allergy_intolerance (tiny view)
-//
-// Identifier: application/vnd.allergy_intolerance+json; type=collection; view=tiny
-type AllergyIntoleranceTinyCollection []*AllergyIntoleranceTiny
-
-// Validate validates the AllergyIntoleranceTinyCollection media type instance.
-func (mt AllergyIntoleranceTinyCollection) Validate() (err error) {
-	for _, e := range mt {
-		if e != nil {
-			if err2 := e.Validate(); err2 != nil {
-				err = goa.MergeErrors(err, err2)
-			}
-		}
-	}
-	return
-}
-
 // Animal media type (default view)
 //
 // Identifier: application/vnd.animal+json; view=default
@@ -206,7 +147,7 @@ type Animal struct {
 	Species      *string `form:"species,omitempty" json:"species,omitempty" xml:"species,omitempty"`
 }
 
-// A  text note which also  contains information about who made the statement and when. (default view)
+// Annotation media type (default view)
 //
 // Identifier: application/vnd.annotation+json; view=default
 type Annotation struct {
@@ -218,13 +159,13 @@ type Annotation struct {
 	Time *time.Time `form:"time,omitempty" json:"time,omitempty" xml:"time,omitempty"`
 }
 
-// For referring to data content defined in other formats. (default view)
+// Attachment media type (default view)
 //
 // Identifier: application/vnd.attachment+json; view=default
 type Attachment struct {
 	// Identifies the type of the data in the attachment and allows a method to be chosen to interpret or render the data.
 	// 				Includes mime type parameters such as charset where appropriate. See http://www.rfc-editor.org/bcp/bcp13.txt
-	ContentType string `form:"contentType" json:"contentType" xml:"contentType"`
+	ContentType *string `form:"contentType,omitempty" json:"contentType,omitempty" xml:"contentType,omitempty"`
 	// The date that the attachment was first created.
 	Creation *time.Time `form:"creation,omitempty" json:"creation,omitempty" xml:"creation,omitempty"`
 	// The actual data of the attachment - a sequence of bytes. In XML, represented using base64.
@@ -235,14 +176,6 @@ type Attachment struct {
 	Size *int `form:"size,omitempty" json:"size,omitempty" xml:"size,omitempty"`
 	// A label or set of text to display in place of the data.
 	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
-}
-
-// Validate validates the Attachment media type instance.
-func (mt *Attachment) Validate() (err error) {
-	if mt.ContentType == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "contentType"))
-	}
-	return
 }
 
 // BackboneElement media type (default view)
@@ -268,19 +201,19 @@ func (mt *BackboneElement) Validate() (err error) {
 	return
 }
 
-// A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text. (default view)
+// CodeableConcept media type (default view)
 //
 // Identifier: application/vnd.codeable.concept+json; view=default
 type CodeableConcept struct {
 	// A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.
 	Coding []*Coding `form:"coding,omitempty" json:"coding,omitempty" xml:"coding,omitempty"`
 	// The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the
-	// 		version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured. And when the meaning is not
-	// 		guaranteed to be consistent, the version SHOULD be exchanged.
+	// 	version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured. And when the meaning is not
+	// 	guaranteed to be consistent, the version SHOULD be exchanged.
 	Text *string `form:"text,omitempty" json:"text,omitempty" xml:"text,omitempty"`
 }
 
-// A reference to a code defined by a terminology system. (default view)
+// Coding media type (default view)
 //
 // Identifier: application/vnd.coding+json; view=default
 type Coding struct {
@@ -335,11 +268,6 @@ func (mt *Component) Validate() (err error) {
 			err = goa.MergeErrors(err, err2)
 		}
 	}
-	if mt.ValueAttachment != nil {
-		if err2 := mt.ValueAttachment.Validate(); err2 != nil {
-			err = goa.MergeErrors(err, err2)
-		}
-	}
 	if mt.ValueQuantity != nil {
 		if err2 := mt.ValueQuantity.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -388,7 +316,7 @@ type Contact struct {
 	Telecom      *string `form:"telecom,omitempty" json:"telecom,omitempty" xml:"telecom,omitempty"`
 }
 
-// Details for all kinds of technology mediated contact points for a person or organization, including telephone, email, etc. (default view)
+// ContactPoint media type (default view)
 //
 // Identifier: application/vnd.contact.point+json; view=default
 type ContactPoint struct {
@@ -435,7 +363,7 @@ func (mt *Element) Validate() (err error) {
 	return
 }
 
-// Feeding provided through the gastrointestinal tract via a tube, catheter, or stoma that delivers nutrition distal to the oral cavity. (default view)
+// Enteral_formula media type (default view)
 //
 // Identifier: application/vnd.enteral_formula+json; view=default
 type EnteralFormula struct {
@@ -491,7 +419,7 @@ func (mt EnteralFormulaCollection) Validate() (err error) {
 	return
 }
 
-// Extension media type (default view)
+// Default view for Extension element (default view)
 //
 // Identifier: application/vnd.extension+json; view=default
 type Extension struct {
@@ -535,11 +463,6 @@ type Extension struct {
 func (mt *Extension) Validate() (err error) {
 	if mt.ValueAddress != nil {
 		if err2 := mt.ValueAddress.Validate(); err2 != nil {
-			err = goa.MergeErrors(err, err2)
-		}
-	}
-	if mt.ValueAttachment != nil {
-		if err2 := mt.ValueAttachment.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
 		}
 	}
@@ -717,7 +640,7 @@ type Link struct {
 	Type  *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
 }
 
-// The metadata about a resource. This is content in the resource that is maintained by the infrastructure. Changes to the content may not always be associated with version changes to the resource. (default view)
+// Meta media type (default view)
 //
 // Identifier: application/vnd.meta+json; view=default
 type Meta struct {
@@ -743,7 +666,7 @@ func (mt *Meta) Validate() (err error) {
 	return
 }
 
-// A nutrition request from the patient (default view)
+// Nutrient media type (default view)
 //
 // Identifier: application/vnd.nutrient+json; view=default
 type Nutrient struct {
@@ -763,7 +686,7 @@ func (mt *Nutrient) Validate() (err error) {
 	return
 }
 
-// A nutrition request from the patient (default view)
+// Nutrition_request media type (default view)
 //
 // Identifier: application/vnd.nutrition_request+json; view=default
 type NutritionRequest struct {
@@ -771,6 +694,8 @@ type NutritionRequest struct {
 	AllergyIntolerance []*Reference `form:"allergyIntolerance,omitempty" json:"allergyIntolerance,omitempty" xml:"allergyIntolerance,omitempty"`
 	// The date and time that this nutrition order was requested.
 	DateTime *time.Time `form:"dateTime,omitempty" json:"dateTime,omitempty" xml:"dateTime,omitempty"`
+	// An encounter that provides additional information about the healthcare context in which this request is made.
+	Encounter *Reference `form:"encounter,omitempty" json:"encounter,omitempty" xml:"encounter,omitempty"`
 	// Feeding provided through the gastrointestinal tract via a tube, catheter, or stoma that delivers nutrition distal to the oral cavity.
 	EnteralFormula EnteralFormulaCollection `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
 	// This modifier is used to convey order-specific modifiers about the type of food that should NOT be given. These can be derived from
@@ -783,14 +708,8 @@ type NutritionRequest struct {
 	// 		from patient allergies, intolerances, or preferences such as Halal, Vegan or Kosher. This modifier applies to the entire nutrition order inclusive of the oral diet, nutritional
 	// 		supplements and enteral formula feedings. See http://hl7.org/fhir/ValueSet/encounter-diet
 	FoodPreferenceModifier []*CodeableConcept `form:"foodPreferenceModifier,omitempty" json:"foodPreferenceModifier,omitempty" xml:"foodPreferenceModifier,omitempty"`
-	// API href of nutrition request
-	Href string `form:"href" json:"href" xml:"href"`
-	// ID of nutrition request
-	ID int `form:"id" json:"id" xml:"id"`
 	// Identifiers assigned to this order by the order sender or by the order receiver.
 	Identifier []*Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
-	// Links to related resources
-	Links *NutritionRequestLinks `form:"links,omitempty" json:"links,omitempty" xml:"links,omitempty"`
 	// Diet given orally in contrast to enteral (tube) feeding.
 	OralDiet OralDietCollection `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
 	// The practitioner that holds legal responsibility for ordering the diet, nutritional supplement, or formula feedings.
@@ -798,33 +717,23 @@ type NutritionRequest struct {
 	// The person (patient) who needs the nutrition order for an oral diet, nutritional supplement and/or enteral or formula feeding.
 	Patient *Reference `form:"patient,omitempty" json:"patient,omitempty" xml:"patient,omitempty"`
 	// The workflow status of the nutrition order/request. See http://hl7.org/fhir/nutrition-request-status
-	Status string `form:"status" json:"status" xml:"status"`
+	Status *string `form:"status,omitempty" json:"status,omitempty" xml:"status,omitempty"`
 	// Oral nutritional products given in order to add further nutritional value to the patient's diet.
 	Supplement []*Supplement `form:"supplement,omitempty" json:"supplement,omitempty" xml:"supplement,omitempty"`
 }
 
 // Validate validates the NutritionRequest media type instance.
 func (mt *NutritionRequest) Validate() (err error) {
-
-	if mt.Href == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "href"))
-	}
-	if mt.Status == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "status"))
-	}
 	if err2 := mt.EnteralFormula.Validate(); err2 != nil {
 		err = goa.MergeErrors(err, err2)
-	}
-	if mt.Links != nil {
-		if err2 := mt.Links.Validate(); err2 != nil {
-			err = goa.MergeErrors(err, err2)
-		}
 	}
 	if err2 := mt.OralDiet.Validate(); err2 != nil {
 		err = goa.MergeErrors(err, err2)
 	}
-	if !(mt.Status == "proposed" || mt.Status == "draft" || mt.Status == "planned" || mt.Status == "requested" || mt.Status == "active" || mt.Status == "on-hold" || mt.Status == "completed" || mt.Status == "cancelled") {
-		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.status`, mt.Status, []interface{}{"proposed", "draft", "planned", "requested", "active", "on-hold", "completed", "cancelled"}))
+	if mt.Status != nil {
+		if !(*mt.Status == "proposed" || *mt.Status == "draft" || *mt.Status == "planned" || *mt.Status == "requested" || *mt.Status == "active" || *mt.Status == "on-hold" || *mt.Status == "completed" || *mt.Status == "cancelled") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.status`, *mt.Status, []interface{}{"proposed", "draft", "planned", "requested", "active", "on-hold", "completed", "cancelled"}))
+		}
 	}
 	for _, e := range mt.Supplement {
 		if e != nil {
@@ -832,79 +741,6 @@ func (mt *NutritionRequest) Validate() (err error) {
 				err = goa.MergeErrors(err, err2)
 			}
 		}
-	}
-	return
-}
-
-// A nutrition request from the patient (full view)
-//
-// Identifier: application/vnd.nutrition_request+json; view=full
-type NutritionRequestFull struct {
-	// Date of creation
-	CreatedAt *time.Time `form:"created_at,omitempty" json:"created_at,omitempty" xml:"created_at,omitempty"`
-	// API href of nutrition request
-	Href string `form:"href" json:"href" xml:"href"`
-	// ID of nutrition request
-	ID int `form:"id" json:"id" xml:"id"`
-	// Links to related resources
-	Links *NutritionRequestLinks `form:"links,omitempty" json:"links,omitempty" xml:"links,omitempty"`
-	// Date of last update
-	UpdatedAt *time.Time `form:"updated_at,omitempty" json:"updated_at,omitempty" xml:"updated_at,omitempty"`
-}
-
-// Validate validates the NutritionRequestFull media type instance.
-func (mt *NutritionRequestFull) Validate() (err error) {
-
-	if mt.Href == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "href"))
-	}
-	if mt.Links != nil {
-		if err2 := mt.Links.Validate(); err2 != nil {
-			err = goa.MergeErrors(err, err2)
-		}
-	}
-	return
-}
-
-// A nutrition request from the patient (tiny view)
-//
-// Identifier: application/vnd.nutrition_request+json; view=tiny
-type NutritionRequestTiny struct {
-	// API href of nutrition request
-	Href string `form:"href" json:"href" xml:"href"`
-	// ID of nutrition request
-	ID int `form:"id" json:"id" xml:"id"`
-	// Links to related resources
-	Links *NutritionRequestLinks `form:"links,omitempty" json:"links,omitempty" xml:"links,omitempty"`
-}
-
-// Validate validates the NutritionRequestTiny media type instance.
-func (mt *NutritionRequestTiny) Validate() (err error) {
-
-	if mt.Href == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "href"))
-	}
-	if mt.Links != nil {
-		if err2 := mt.Links.Validate(); err2 != nil {
-			err = goa.MergeErrors(err, err2)
-		}
-	}
-	return
-}
-
-// Nutrition_requestLinks contains links to related resources of Nutrition_request.
-type NutritionRequestLinks struct {
-	EnteralFormula EnteralFormulaCollection `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
-	OralDiet       OralDietCollection       `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
-}
-
-// Validate validates the NutritionRequestLinks type instance.
-func (ut *NutritionRequestLinks) Validate() (err error) {
-	if err2 := ut.EnteralFormula.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
-	}
-	if err2 := ut.OralDiet.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
 	}
 	return
 }
@@ -917,38 +753,6 @@ type NutritionRequestCollection []*NutritionRequest
 // Validate validates the NutritionRequestCollection media type instance.
 func (mt NutritionRequestCollection) Validate() (err error) {
 	for _, e := range mt {
-		if e != nil {
-			if err2 := e.Validate(); err2 != nil {
-				err = goa.MergeErrors(err, err2)
-			}
-		}
-	}
-	return
-}
-
-// Nutrition_requestCollection is the media type for an array of Nutrition_request (tiny view)
-//
-// Identifier: application/vnd.nutrition_request+json; type=collection; view=tiny
-type NutritionRequestTinyCollection []*NutritionRequestTiny
-
-// Validate validates the NutritionRequestTinyCollection media type instance.
-func (mt NutritionRequestTinyCollection) Validate() (err error) {
-	for _, e := range mt {
-		if e != nil {
-			if err2 := e.Validate(); err2 != nil {
-				err = goa.MergeErrors(err, err2)
-			}
-		}
-	}
-	return
-}
-
-// Nutrition_requestLinksArray contains links to related resources of Nutrition_requestCollection.
-type NutritionRequestLinksArray []*NutritionRequestLinks
-
-// Validate validates the NutritionRequestLinksArray type instance.
-func (ut NutritionRequestLinksArray) Validate() (err error) {
-	for _, e := range ut {
 		if e != nil {
 			if err2 := e.Validate(); err2 != nil {
 				err = goa.MergeErrors(err, err2)
@@ -1032,11 +836,6 @@ func (mt *Observation) Validate() (err error) {
 			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.status`, *mt.Status, []interface{}{"registered", "preliminary", "final", "amended +"}))
 		}
 	}
-	if mt.ValueAttachment != nil {
-		if err2 := mt.ValueAttachment.Validate(); err2 != nil {
-			err = goa.MergeErrors(err, err2)
-		}
-	}
 	if mt.ValueQuantity != nil {
 		if err2 := mt.ValueQuantity.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -1055,7 +854,7 @@ func (mt *Observation) Validate() (err error) {
 	return
 }
 
-// A nutrition request from the patient (default view)
+// Oral_diet media type (default view)
 //
 // Identifier: application/vnd.oral_diet+json; view=default
 type OralDiet struct {
@@ -1180,8 +979,7 @@ type Period struct {
 	Start *time.Time `form:"start,omitempty" json:"start,omitempty" xml:"start,omitempty"`
 }
 
-// A measured amount (or an amount that can potentially be measured). Note that measured amounts include amounts that are not precisely quantified,
-// 	including amounts involving arbitrary units and floating currencies. (default view)
+// Quantity media type (default view)
 //
 // Identifier: application/vnd.quantity+json; view=default
 type Quantity struct {
@@ -1189,7 +987,7 @@ type Quantity struct {
 	Code *string `form:"code,omitempty" json:"code,omitempty" xml:"code,omitempty"`
 	// How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues;
 	// 		e.g. if the comparator is "<" , then the real value is < stated value. See http://hl7.org/fhir/ValueSet/quantity-comparator
-	Comparator string `form:"comparator" json:"comparator" xml:"comparator"`
+	Comparator *string `form:"comparator,omitempty" json:"comparator,omitempty" xml:"comparator,omitempty"`
 	// The identification of the system that provides the coded form of the unit.
 	System *string `form:"system,omitempty" json:"system,omitempty" xml:"system,omitempty"`
 	// A human-readable form of the unit.
@@ -1200,11 +998,10 @@ type Quantity struct {
 
 // Validate validates the Quantity media type instance.
 func (mt *Quantity) Validate() (err error) {
-	if mt.Comparator == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "comparator"))
-	}
-	if !(mt.Comparator == "<" || mt.Comparator == "<=" || mt.Comparator == ">=" || mt.Comparator == ">") {
-		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.comparator`, mt.Comparator, []interface{}{"<", "<=", ">=", ">"}))
+	if mt.Comparator != nil {
+		if !(*mt.Comparator == "<" || *mt.Comparator == "<=" || *mt.Comparator == ">=" || *mt.Comparator == ">") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.comparator`, *mt.Comparator, []interface{}{"<", "<=", ">=", ">"}))
+		}
 	}
 	if mt.System != nil {
 		if err2 := goa.ValidateFormat(goa.FormatURI, *mt.System); err2 != nil {
@@ -1214,7 +1011,7 @@ func (mt *Quantity) Validate() (err error) {
 	return
 }
 
-// A set of ordered Quantities defined by a low and high limit. (default view)
+// Range media type (default view)
 //
 // Identifier: application/vnd.range+json; view=default
 type Range struct {
@@ -1239,7 +1036,7 @@ func (mt *Range) Validate() (err error) {
 	return
 }
 
-// A relationship of two Quantity values - expressed as a numerator and a denominator. (default view)
+// Ratio media type (default view)
 //
 // Identifier: application/vnd.ratio+json; view=default
 type Ratio struct {
@@ -1264,7 +1061,7 @@ func (mt *Ratio) Validate() (err error) {
 	return
 }
 
-// Details about each adverse reaction event linked to exposure to the identified Substance. (default view)
+// Reaction media type (default view)
 //
 // Identifier: application/vnd.reaction+json; view=default
 type Reaction struct {
@@ -1304,7 +1101,7 @@ func (mt *Reaction) Validate() (err error) {
 	return
 }
 
-// A reference from one resource to another. (default view)
+// Reference media type (default view)
 //
 // Identifier: application/vnd.reference+json; view=default
 type Reference struct {
@@ -1387,7 +1184,7 @@ type Related struct {
 // Identifier: application/vnd.related+json; type=collection; view=default
 type RelatedCollection []*Related
 
-// Many timing schedules are determined by regular repetitions. (default view)
+// Repeat media type (default view)
 //
 // Identifier: application/vnd.repeat+json; view=default
 type Repeat struct {
@@ -1398,7 +1195,7 @@ type Repeat struct {
 	// How long this thing happens for when it happens.
 	Duration *float64 `form:"duration,omitempty" json:"duration,omitempty" xml:"duration,omitempty"`
 	// The units of time for the duration, in UCUM units. See http://hl7.org/fhir/ValueSet/units-of-time
-	DurationUnits string `form:"durationUnits" json:"durationUnits" xml:"durationUnits"`
+	DurationUnits *string `form:"durationUnits,omitempty" json:"durationUnits,omitempty" xml:"durationUnits,omitempty"`
 	// The number of times to repeat the action within the specified period / period range (i.e. both period and periodMax provided).
 	Frequency *int `form:"frequency,omitempty" json:"frequency,omitempty" xml:"frequency,omitempty"`
 	// If present, indicates that the frequency is a range - so repeat between [frequency] and [frequencyMax] times within the period or period range.
@@ -1408,32 +1205,27 @@ type Repeat struct {
 	// If present, indicates that the period is a range from [period] to [periodMax], allowing expressing concepts such as 'do this once every 3-5 days.'
 	PeriodMax *string `form:"periodMax,omitempty" json:"periodMax,omitempty" xml:"periodMax,omitempty"`
 	// The units of time for the period in UCUM units. See http://hl7.org/fhir/ValueSet/units-of-time
-	PeriodUnits string `form:"periodUnits" json:"periodUnits" xml:"periodUnits"`
+	PeriodUnits *string `form:"periodUnits,omitempty" json:"periodUnits,omitempty" xml:"periodUnits,omitempty"`
 	// A real world event that the occurrence of the event should be tied to. See http://hl7.org/fhir/ValueSet/event-timing
-	When string `form:"when" json:"when" xml:"when"`
+	When *string `form:"when,omitempty" json:"when,omitempty" xml:"when,omitempty"`
 }
 
 // Validate validates the Repeat media type instance.
 func (mt *Repeat) Validate() (err error) {
-	if mt.PeriodUnits == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "periodUnits"))
+	if mt.DurationUnits != nil {
+		if !(*mt.DurationUnits == "s" || *mt.DurationUnits == "min" || *mt.DurationUnits == "h" || *mt.DurationUnits == "d" || *mt.DurationUnits == "wk" || *mt.DurationUnits == "mo" || *mt.DurationUnits == "a") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.durationUnits`, *mt.DurationUnits, []interface{}{"s", "min", "h", "d", "wk", "mo", "a"}))
+		}
 	}
-	if mt.When == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "when"))
-	}
-	if mt.DurationUnits == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "durationUnits"))
-	}
-	if !(mt.DurationUnits == "s" || mt.DurationUnits == "min" || mt.DurationUnits == "h" || mt.DurationUnits == "d" || mt.DurationUnits == "wk" || mt.DurationUnits == "mo" || mt.DurationUnits == "a") {
-		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.durationUnits`, mt.DurationUnits, []interface{}{"s", "min", "h", "d", "wk", "mo", "a"}))
-	}
-	if !(mt.PeriodUnits == "s" || mt.PeriodUnits == "min" || mt.PeriodUnits == "h" || mt.PeriodUnits == "d" || mt.PeriodUnits == "wk" || mt.PeriodUnits == "mo" || mt.PeriodUnits == "a") {
-		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.periodUnits`, mt.PeriodUnits, []interface{}{"s", "min", "h", "d", "wk", "mo", "a"}))
+	if mt.PeriodUnits != nil {
+		if !(*mt.PeriodUnits == "s" || *mt.PeriodUnits == "min" || *mt.PeriodUnits == "h" || *mt.PeriodUnits == "d" || *mt.PeriodUnits == "wk" || *mt.PeriodUnits == "mo" || *mt.PeriodUnits == "a") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.periodUnits`, *mt.PeriodUnits, []interface{}{"s", "min", "h", "d", "wk", "mo", "a"}))
+		}
 	}
 	return
 }
 
-// A series of measurements taken by a device, with upper and lower limits. There may be more than one dimension in the data. (default view)
+// SampleData media type (default view)
 //
 // Identifier: application/vnd.sample.data+json; view=default
 type SampleData struct {
@@ -1463,7 +1255,7 @@ func (mt *SampleData) Validate() (err error) {
 	return
 }
 
-// Oral nutritional products given in order to add further nutritional value to the patient's diet. (default view)
+// Supplement media type (default view)
 //
 // Identifier: application/vnd.supplement+json; view=default
 type Supplement struct {
@@ -1487,7 +1279,7 @@ func (mt *Supplement) Validate() (err error) {
 	return
 }
 
-// A nutrition request from the patient (default view)
+// Texture media type (default view)
 //
 // Identifier: application/vnd.texture+json; view=default
 type Texture struct {
@@ -1497,8 +1289,7 @@ type Texture struct {
 	Modifier *CodeableConcept `form:"modifier,omitempty" json:"modifier,omitempty" xml:"modifier,omitempty"`
 }
 
-// Specifies an event that may occur multiple times. Timing schedules are used to record when things are expected
-// 	or requested to occur. The most common usage is in dosage instructions for medications. They are also used when planning care of various kinds. (default view)
+// Timing media type (default view)
 //
 // Identifier: application/vnd.timing+json; view=default
 type Timing struct {
