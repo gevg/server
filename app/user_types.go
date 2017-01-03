@@ -8,7 +8,7 @@
 //
 // The content of this file is auto-generated, DO NOT MODIFY
 
-package client
+package app
 
 import (
 	"github.com/goadesign/goa"

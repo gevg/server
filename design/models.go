@@ -1,12 +1,12 @@
 package design
 
-// goagen --design=github.com/jamesallain/goa-fhir/design gen --pkg-path=github.com/goadesign/gorma
+// goagen --design=github.com/goa-fhir/server/design gen --pkg-path=github.com/goadesign/gorma
 
 import (
 	"github.com/goadesign/gorma"
 	. "github.com/goadesign/gorma/dsl"
-	. "github.com/jamesallain/goa-fhir/design/patient"
-	. "github.com/jamesallain/goa-fhir/design/user"
+	. "github.com/goa-fhir/server/design/patient"
+	. "github.com/goa-fhir/server/design/user"
 )
 
 var _ = StorageGroup("Cellar", func() {

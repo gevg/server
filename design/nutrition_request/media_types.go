@@ -3,7 +3,7 @@ package design
 import (
 	. "github.com/goadesign/goa/design"
 	. "github.com/goadesign/goa/design/apidsl"
-	. "github.com/jamesallain/goa-fhir/design/data_types"
+	. "github.com/goa-fhir/server/design/data_types"
 )
 
 // NutritionRequest is the nutrition_request resource media type.--------------------------------------------------------------------------------

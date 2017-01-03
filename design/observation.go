@@ -3,7 +3,7 @@ package design
 import (
 	. "github.com/goadesign/goa/design"
 	. "github.com/goadesign/goa/design/apidsl"
-	. "github.com/jamesallain/goa-fhir/design/observation"
+	. "github.com/goa-fhir/server/design/observation"
 )
 
 //vital resource-----------------------------------------------------------------------------------------------------------

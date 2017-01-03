@@ -107,7 +107,6 @@ var Extension = MediaType("application/vnd.extension+json", func() {
 		Attribute("ValueUnsignedInt")
 		Attribute("ValueUri")
 	})
-
 })
 
 var Address = MediaType("application/vnd.address+json", func() {
@@ -297,7 +296,7 @@ var CodeableConcept = MediaType("application/vnd.codeable.concept+json", func() 
 	//codings, translations and the relationship between elements and pre- and post-coordination.
 	//Reason for inclusion or contrainment:
 	Attributes(func() {
-		Attribute("coding", Coding, "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.", func() {
+		Attribute("coding", ArrayOf(Coding), "A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.", func() {
 			//Comments: Codes may be defined very casually in enumerations, or code lists, up to very formal definitions such as SNOMED CT - See the HL7 v3 Core Principles for more information.
 			//Ordering of codings is undefined and SHALL NOT be used to infer meaning. Generally, at most only one of the coding values will be labelled as UserSelected = true.
 			//Reason for inclusion or contrainment: Allows for translations and alternate encodings within a code system.  Also supports communication of the same
@@ -317,8 +316,7 @@ var CodeableConcept = MediaType("application/vnd.codeable.concept+json", func() 
 		Attribute("text")
 	})
 })
-
-var ContactPoint = MediaType("application/vnd.contactpoint+json", func() {
+var ContactPoint = MediaType("application/vnd.contact.point+json", func() {
 	Description("Details for all kinds of technology mediated contact points for a person or organization, including telephone, email, etc.")
 	//Comments:
 	//Reason for inclusion or contrainment:
@@ -351,7 +349,6 @@ var ContactPoint = MediaType("application/vnd.contactpoint+json", func() {
 		Attribute("rank")
 	})
 })
-
 //Goa has a function named Reference. Changed to HL7Reference
 var HL7Reference = MediaType("application/vnd.reference+json", func() {
 	Description("A reference from one resource to another.")
@@ -378,42 +375,15 @@ var HL7Reference = MediaType("application/vnd.reference+json", func() {
 	})
 })
 var HumanName = MediaType("application/vnd.human.name+json", func() {
-	Description("A human's name with the ability to identify parts and usage.")
-	// Comments:Names may be changed, or repudiated, or people may have different names in different contexts. Names may be divided into parts of different
-	// type that have variable significance depending on context, though the division into parts does not always matter. With personal names, the different
-	// parts may or may not be imbued with some implicit meaning; various cultures associate different importance with the name parts and the degree to which
-	// systems must care about name parts around the world varies widely.
-	// Reason for inclusion or contrainment:
-	Attributes(func() {
-		Required("use")
-		Attribute("use", String, "Identifies the purpose for this name.", func() {
-			//Comments:
-			//Reason for inclusion or contrainment: Allows the appropriate name for a particular context of use to be selected from among a set of names.
-			Enum("usual", "official", "temp", "nickname", "anonymous", "old", "maiden")
-		})
-		Attribute("family", ArrayOf(String), "The part of a name that links to the genealogy. In some cultures (e.g. Eritrea) the family name of a son is the first name of his father.", func() {
-
-			//Comments:
-			//Reason for inclusion or contrainment:
-		})
-		Attribute("given", ArrayOf(String), "Given names (not always 'first'). Includes middle names", func() {
-			//Comments:
-			//Reason for inclusion or contrainment: If only initials are recorded, they may be used in place of the full name.  Not called "first name" since given names do not always come first.
-		})
-		Attribute("prefix", ArrayOf(String), "Part of the name that is acquired as a title due to academic, legal, employment or nobility status, etc. and that appears at the start of the name.", func() {
-			//Comments:
-			//Reason for inclusion or contrainment:
-		})
-		Attribute("suffix", ArrayOf(String), "Part of the name that is acquired as a title due to academic, legal, employment or nobility status, etc. and that appears at the end of the name.", func() {
-			//Comments:
-			//Reason for inclusion or contrainment:
-		})
-		Attribute("period", Period, "Indicates the period of time when this name was valid for the named person.", func() {
-			//Comments:
-			//Reason for inclusion or contrainment: Allows names to be placed in historical context.
-		})
-	})
 	Reference(HumanNamePayload)
+	Attributes(func() {
+		Attribute("use")
+		Attribute("family")
+		Attribute("given")
+		Attribute("prefix")
+		Attribute("suffix")
+		Attribute("period")
+	})
 	View("default", func() {
 		Description("A reference to a code defined by a terminology system")
 		Required("use")
@@ -424,36 +394,13 @@ var HumanName = MediaType("application/vnd.human.name+json", func() {
 		Attribute("suffix")
 		Attribute("period")
 	})
-
 })
-
 var Identifier = MediaType("application/vnd.identifier+json", func() {
-	Description("A technical identifier - identifies some entity uniquely and unambiguously.")
-	//Comments:
-	//Reason for inclusion or contrainment:
+	Reference(IdentifierPayload)
 	Attributes(func() {
-		Required("use")
-		Attribute("use", String, "Identifies the purpose for this identifier, if known.", func() {
-			//This is labeled as "Is Modifier" because applications should not mistake a temporary id for a permanent one.
-			// Applications can assume that an identifier is permanent unless it explicitly says that it is temporary.
-			Enum("usual", "official", "temp", "secondary (If known)")
-			Example("usual")
-		})
-		Attribute("CodeableConcept", CodeableConcept, "A coded type for the identifier that can be used to determine which identifier to use for a specific purpose.", func() {
-			//Comments: This element deals only with general categories of identifiers.  It SHOULD not be used for codes that correspond 1..1 with the Identifier.system.
-			//Some identifiers may fall into multiple categories due to common usage.   Where the system is known, a type is unnecessary because the type is always part
-			//of the system definition. However systems often need to handle identifiers where the system is not known. There is not a 1:1 relationship between type and system,
-			//since many different systems have the same type.
-			//Reason for inclusion or contrainment: Allows users to make use of identifiers when the identifier system is not known.
-		})
-		Attribute("period", Period, "Time period during which identifier is/was valid for use.", func() {
-			//Comments:
-			//Reason for inclusion or contrainment:
-		})
-		Attribute("assigner", HL7Reference, "Organization that issued/manages the identifier.", func() {
-			//Comments: The reference may be just a text description of the assigner.
-			//Reason for inclusion or contrainment:
-		})
+		Attribute("CodeableConcept")
+		Attribute("period")
+		Attribute("assigner")
 	})
 	View("default", func() {
 		Description("Default view for identifier resource")
@@ -461,9 +408,7 @@ var Identifier = MediaType("application/vnd.identifier+json", func() {
 		Attribute("period")
 		Attribute("assigner")
 	})
-
 })
-
 var Meta = MediaType("application/vnd.meta+json", func() {
 	Description("The metadata about a resource. This is content in the resource that is maintained by the infrastructure. Changes to the content may not always be associated with version changes to the resource.")
 	//Comments:
@@ -503,7 +448,6 @@ var Meta = MediaType("application/vnd.meta+json", func() {
 		Attribute("tag")
 	})
 })
-
 var Period = MediaType("application/vnd.period+json", func() {
 	Description("A time period defined by a start and end date and optionally time.")
 	Attributes(func() {
@@ -521,7 +465,6 @@ var Period = MediaType("application/vnd.period+json", func() {
 		Attribute("end")
 	})
 })
-
 var Quantity = MediaType("application/vnd.quantity+json", func() {
 	Description(`A measured amount (or an amount that can potentially be measured). Note that measured amounts include amounts that are not precisely quantified, 
 	including amounts involving arbitrary units and floating currencies.`)
@@ -559,7 +502,6 @@ var Quantity = MediaType("application/vnd.quantity+json", func() {
 			//Reason for inclusion or contrainment:
 		})
 	})
-
 	View("default", func() {
 		Description("A reference to a code defined by a terminology system")
 		Required("comparator")
@@ -570,7 +512,6 @@ var Quantity = MediaType("application/vnd.quantity+json", func() {
 		Attribute("code")
 	})
 })
-
 var Range = MediaType("application/vnd.range+json", func() {
 	Description("A set of ordered Quantities defined by a low and high limit.")
 	//Comments:
@@ -686,7 +627,6 @@ var Repeat = MediaType("application/vnd.repeat+json", func() {
 		Attribute("when")
 	})
 })
-
 var SampleData = MediaType("application/vnd.sample.data+json", func() {
 	Description("A series of measurements taken by a device, with upper and lower limits. There may be more than one dimension in the data.")
 	//Comments:
@@ -737,7 +677,6 @@ var SampleData = MediaType("application/vnd.sample.data+json", func() {
 		Attribute("data")
 	})
 })
-
 var Timing = MediaType("application/vnd.timing+json", func() {
 	Description(`Specifies an event that may occur multiple times. Timing schedules are used to record when things are expected 
 	or requested to occur. The most common usage is in dosage instructions for medications. They are also used when planning care of various kinds.`)
@@ -761,7 +700,6 @@ var Timing = MediaType("application/vnd.timing+json", func() {
 			Enum("QD", "QOD", "Q4H", "Q6H", "BID", "TID", "QID", "AM", "PM +")
 		})
 	})
-
 	View("default", func() {
 		Description("Default view of Timing data type")
 		Attribute("event")

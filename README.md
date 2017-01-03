@@ -31,8 +31,8 @@ Development
 This project uses Go 1.7, goa 1.1.0, gorma 1.0 and Postgres. To test the library, first, install all of the dependencies:
 
 ```
-$ goagen bootstrap -d github.com/jamesallain/goa-fhir/design
-$ goagen --design=github.com/jamesallain/goa-fhir/design gen --pkg-path=github.com/goadesign/gorma
+$ goagen bootstrap -d github.com/goa-fhir/server/design
+$ goagen --design=github.com/goa-fhir/server/design gen --pkg-path=github.com/goadesign/gorma
 
 $ go get -t ./...
 ```

@@ -1,4 +1,4 @@
-//go:generate goagen bootstrap -d github.com/jamesallain/goa-fhir/design
+//go:generate goagen bootstrap -d github.com/goa-fhir/server/design
 
 package main
 
@@ -9,8 +9,8 @@ import (
 	"github.com/goadesign/goa"
 	"github.com/goadesign/goa/middleware"
 	"github.com/inconshreveable/log15"
-	"github.com/jamesallain/goa-fhir/app"
-	"github.com/jamesallain/goa-fhir/models"
+	"github.com/goa-fhir/server/app"
+	"github.com/goa-fhir/server/models"
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
 )

@@ -12,15 +12,7 @@ import (
 
 // CreateObservationPayload is the Observation create action payload.
 type CreateObservationPayload struct {
-	Active        *bool   `form:"active,omitempty" json:"active,omitempty" xml:"active,omitempty"`
-	BirthDate     *string `form:"birthDate,omitempty" json:"birthDate,omitempty" xml:"birthDate,omitempty"`
-	Country       *string `form:"country,omitempty" json:"country,omitempty" xml:"country,omitempty"`
-	Deceased      *bool   `form:"deceased,omitempty" json:"deceased,omitempty" xml:"deceased,omitempty"`
-	Gender        *string `form:"gender,omitempty" json:"gender,omitempty" xml:"gender,omitempty"`
-	MultipleBirth *bool   `form:"multiple_birth,omitempty" json:"multiple_birth,omitempty" xml:"multiple_birth,omitempty"`
-	Region        *string `form:"region,omitempty" json:"region,omitempty" xml:"region,omitempty"`
-	Review        *string `form:"review,omitempty" json:"review,omitempty" xml:"review,omitempty"`
-	Sweetness     *int    `form:"sweetness,omitempty" json:"sweetness,omitempty" xml:"sweetness,omitempty"`
+	Observation *Observation `form:"observation,omitempty" json:"observation,omitempty" xml:"observation,omitempty"`
 }
 
 // CreateObservationPath computes a request path to the create action of Observation.
@@ -118,19 +110,14 @@ func (c *Client) NewListObservationRequest(ctx context.Context, path string, yea
 	return req, nil
 }
 
-// RateObservationPayload is the Observation rate action payload.
-type RateObservationPayload struct {
-	Rating string `form:"rating" json:"rating" xml:"rating"`
-}
-
 // RateObservationPath computes a request path to the rate action of Observation.
 func RateObservationPath(patientID int, observationID int) string {
 	return fmt.Sprintf("/nosh/patients/%v/observation/%v/actions/rate", patientID, observationID)
 }
 
 // RateObservation makes a request to the rate action endpoint of the Observation resource
-func (c *Client) RateObservation(ctx context.Context, path string, payload *RateObservationPayload) (*http.Response, error) {
-	req, err := c.NewRateObservationRequest(ctx, path, payload)
+func (c *Client) RateObservation(ctx context.Context, path string) (*http.Response, error) {
+	req, err := c.NewRateObservationRequest(ctx, path)
 	if err != nil {
 		return nil, err
 	}
@@ -138,18 +125,13 @@ func (c *Client) RateObservation(ctx context.Context, path string, payload *Rate
 }
 
 // NewRateObservationRequest create the request corresponding to the rate action endpoint of the Observation resource.
-func (c *Client) NewRateObservationRequest(ctx context.Context, path string, payload *RateObservationPayload) (*http.Request, error) {
-	var body bytes.Buffer
-	err := c.Encoder.Encode(payload, &body, "*/*")
-	if err != nil {
-		return nil, fmt.Errorf("failed to encode body: %s", err)
-	}
+func (c *Client) NewRateObservationRequest(ctx context.Context, path string) (*http.Request, error) {
 	scheme := c.Scheme
 	if scheme == "" {
 		scheme = "http"
 	}
 	u := url.URL{Host: c.Host, Scheme: scheme, Path: path}
-	req, err := http.NewRequest("PUT", u.String(), &body)
+	req, err := http.NewRequest("PUT", u.String(), nil)
 	if err != nil {
 		return nil, err
 	}

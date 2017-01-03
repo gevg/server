@@ -4,7 +4,7 @@ import (
 	. "github.com/goadesign/goa/design/apidsl"
 )
 
-//	. "github.com/jamesallain/goa-fhir/design/data_types"
+//	. "github.com/goa-fhir/server/design/data_types"
 
 // NutritionRequestPayload defines the data structure used in the create vital request body.
 // It is also the base type for the vital media type used to render bottles.

@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	goaclient "github.com/goadesign/goa/client"
-	"github.com/jamesallain/goa-fhir/client"
-	"github.com/jamesallain/goa-fhir/tool/cli"
+	"github.com/goa-fhir/server/client"
+	"github.com/goa-fhir/server/tool/cli"
 	"github.com/spf13/cobra"
 	"net/http"
 	"os"

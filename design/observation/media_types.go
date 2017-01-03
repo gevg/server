@@ -1,9 +1,9 @@
 package design
 
 import (
+	. "github.com/goa-fhir/server/design/data_types"
 	. "github.com/goadesign/goa/design"
 	. "github.com/goadesign/goa/design/apidsl"
-	. "github.com/jamesallain/goa-fhir/design/data_types"
 )
 
 // Observation is the observation resource media type------------------------------------------------------------------------------------------------

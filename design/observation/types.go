@@ -1,23 +1,45 @@
 package design
 
 import (
-	. "github.com/goadesign/goa/design"
 	. "github.com/goadesign/goa/design/apidsl"
-	. "github.com/jamesallain/goa-fhir/design/data_types"
 )
+
+//	. "github.com/goa-fhir/server/design/data_types"
+//	. "github.com/goadesign/goa/design"
 
 // ObservationPayload defines the data structure used in the create vital request body.
 // It is also the base type for the vital media type used to render bottles.
 var ObservationPayload = Type("ObservationPayload", func() {
 	Reference(Observation)
-	Attribute("identifier", ArrayOf(Identifier), "A unique identifier for the simple observation instance.", func() {
-		//Comments:
-		//Reason for inclusion or contrainment:
-	})
-	Attribute("status", String, "The status of the result value. See http://hl7.org/fhir/ValueSet/observation-status", func() {
-		//Comments:
-		//Reason for inclusion or contrainment:
-		Enum("registered", "preliminary", "final", "amended +")
-	})
+	Attribute("observation", Observation)
+	// Attribute("status")
+	// Attribute("category")
+	// Attribute("code")
+	// Attribute("encounter")
+	// Attribute("effectiveDateTime")
+	// Attribute("effectivePeriod")
+	// Attribute("issued")
+	// Attribute("performer")
+	// Attribute("effectiveDateTime")
 
+	// Attribute("valueQuantity")
+	// Attribute("valueCodeableConcept")
+	// Attribute("valueString")
+	// Attribute("valueRange")
+	// Attribute("valueSampledData")
+	// Attribute("valueAttachment")
+	// Attribute("valueTime")
+	// Attribute("valueDatTime")
+	// Attribute("valuePeriod")
+
+	// Attribute("dateAbsentReason")
+	// Attribute("interpretation")
+	// Attribute("comments")
+	// Attribute("bodySite")
+	// Attribute("method")
+	// Attribute("specimen")
+	// Attribute("device")
+	// Attribute("referenceRange")
+	// Attribute("related")
+	// Attribute("component")
 })

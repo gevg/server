@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/goadesign/goa"
-	"github.com/jamesallain/goa-fhir/app"
+	"github.com/goa-fhir/server/app"
 	"golang.org/x/net/context"
 )
 

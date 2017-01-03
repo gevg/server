@@ -13,8 +13,8 @@ import (
 	"golang.org/x/net/context"
 
 	jwtgo "github.com/dgrijalva/jwt-go"
-	"github.com/jamesallain/goa-fhir/app"
-	"github.com/jamesallain/goa-fhir/models"
+	"github.com/goa-fhir/server/app"
+	"github.com/goa-fhir/server/models"
 
 	"github.com/goadesign/goa"
 	"github.com/goadesign/goa/middleware/security/jwt"
