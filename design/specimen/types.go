@@ -6,7 +6,7 @@ import (
 	. "github.com/goadesign/goa/design/apidsl"
 )
 
-var SpecimenPayload = Type("SpecimenPayload", func() {
+var Specimen = Type("Specimen", func() {
 	Description("Demographics and other administrative information about an individual or animal receiving care or other health-related services.")
 	//Comments:
 	//Reason for inclusion or contrainment:
@@ -55,7 +55,7 @@ var SpecimenPayload = Type("SpecimenPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var CollectionPayload = Type("CollectionPayload", func() {
+var Collection = Type("Collection", func() {
 	Description("Details concerning the specimen collection.")
 	//Comments:
 	//Reason for inclusion or contrainment:
@@ -90,7 +90,7 @@ var CollectionPayload = Type("CollectionPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var ContainerPayload = Type("ContainerPayload", func() {
+var Container = Type("Container", func() {
 	Description("A contact party (e.g. guardian, partner, friend) for the specimen.")
 	//Comments:
 	//Reason for inclusion or contrainment:
@@ -128,7 +128,7 @@ var ContainerPayload = Type("ContainerPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var TreatmentPayload = Type("TreatmentPayload", func() {
+var Treatment = Type("Treatment", func() {
 	Description("Details concerning treatment and processing steps for the specimen.")
 	//Comments:
 	//Reason for inclusion or contrainment:

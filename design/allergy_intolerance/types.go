@@ -8,8 +8,7 @@ import (
 
 // PatientPayload defines the data structure used in the create vital request body.
 // It is also the base type for the vital media type used to render bottles.
-
-var AllergyIntolerancePayload = Type("AllergyIntolerancePayload", func() {
+var AllergyIntolerance = Type("AllergyIntolerance", func() {
 	Description("A nutrition request from the patient")
 	//Reference(AllergyIntolerancePayload)
 	//Local Start-------------------------------------------------------------------------------
@@ -27,7 +26,7 @@ var AllergyIntolerancePayload = Type("AllergyIntolerancePayload", func() {
 	//Local End-----------------------------------------------------------------------------------
 
 	Required("status", "type")
-	Attribute("identifier", Identifier, `This records identifiers associated with this allergy/intolerance concern that are defined by business processes and/or
+	Attribute("identifier", ArrayOf(Identifier), `This records identifiers associated with this allergy/intolerance concern that are defined by business processes and/or
 		used to refer to it when a direct URL reference to the resource itself is not appropriate (e.g. in CDA documents, or in written / printed documentation).`, func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
@@ -61,12 +60,6 @@ var AllergyIntolerancePayload = Type("AllergyIntolerancePayload", func() {
 		Enum("active", "unconfirmed", "confirmed", "inactive", "resolved", "refuted", "entered-in-error")
 	})
 	//The practitioner that holds legal responsibility for ordering the diet, nutritional supplement, or formula feedings.
-	Attribute("orderer", func() {
-		//Comments:
-		//Reason for inclusion or contrainment:
-		Attribute("id", String, "xml:id (or equivalent in JSON)")
-		Attribute("reference", HL7Reference)
-	})
 	Attribute("criticality", String, "Estimate of the potential clinical harm, or seriousness, of the reaction to the identified Substance. See http://hl7.org/fhir/ValueSet/allergy-intolerance-criticality", func() {
 		//Type: code
 		//Comments:
@@ -99,7 +92,7 @@ var AllergyIntolerancePayload = Type("AllergyIntolerancePayload", func() {
 	})
 
 })
-var ReactionPayload = Type("ReactionPayload", func() {
+var Reaction = Type("Reaction", func() {
 	Description("Details about each adverse reaction event linked to exposure to the identified Substance.")
 	//Comments:
 	//Reason for inclusion or contrainment:

@@ -6,7 +6,7 @@ import (
 	. "github.com/goadesign/goa/design/apidsl"
 )
 
-var SubstancePayload = Type("SubstancePayload", func() {
+var Substance = Type("Substance", func() {
 	Description("Demographics and other administrative information about an individual or animal receiving care or other health-related services.")
 	//Comments:
 	//Reason for inclusion or contrainment:
@@ -35,7 +35,7 @@ var SubstancePayload = Type("SubstancePayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var IngredientPayload = Type("IngredientPayload", func() {
+var Ingredient = Type("Ingredient", func() {
 	Description("A substance can be composed of other substances.")
 	//TypeName("BackboneElement")
 	//Comments:
@@ -50,7 +50,7 @@ var IngredientPayload = Type("IngredientPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var InstancePayload = Type("InstancePayload", func() {
+var Instance = Type("Instance", func() {
 	Description("Substance may be used to describe a kind of substance, or a specific package/container of the substance: an instance.")
 	//Comments:
 	//Reason for inclusion or contrainment:

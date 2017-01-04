@@ -8,12 +8,11 @@ import (
 // Client is the Secure service client.
 type Client struct {
 	*goaclient.Client
-	BasicAuthSigner             goaclient.Signer
-	JWTSigner                   goaclient.Signer
-	SigninBasicAuthSigner       goaclient.Signer
-	Oauth2ClientBasicAuthSigner goaclient.Signer
-	Encoder                     *goa.HTTPEncoder
-	Decoder                     *goa.HTTPDecoder
+	BasicAuthSigner       goaclient.Signer
+	JWTSigner             goaclient.Signer
+	SigninBasicAuthSigner goaclient.Signer
+	Encoder               *goa.HTTPEncoder
+	Decoder               *goa.HTTPDecoder
 }
 
 // New instantiates the client.
@@ -48,9 +47,4 @@ func (c *Client) SetJWTSigner(signer goaclient.Signer) {
 // SetSigninBasicAuthSigner sets the request signer for the SigninBasicAuth security scheme.
 func (c *Client) SetSigninBasicAuthSigner(signer goaclient.Signer) {
 	c.SigninBasicAuthSigner = signer
-}
-
-// SetOauth2ClientBasicAuthSigner sets the request signer for the oauth2_client_basic_auth security scheme.
-func (c *Client) SetOauth2ClientBasicAuthSigner(signer goaclient.Signer) {
-	c.Oauth2ClientBasicAuthSigner = signer
 }

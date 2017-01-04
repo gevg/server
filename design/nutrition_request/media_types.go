@@ -7,9 +7,10 @@ import (
 )
 
 // NutritionRequest is the nutrition_request resource media type.--------------------------------------------------------------------------------
-var NutritionRequest = MediaType("application/vnd.nutrition_request+json", func() {
+var NutritionRequestMedia = MediaType("application/vnd.nutrition.request+json", func() {
+	TypeName("NutritionRequestMedia")
+	Reference(NutritionRequestPayload)
 	Attributes(func() {
-		Reference(NutritionRequestPayload)
 		Attribute("patient")
 		Attribute("orderer")
 		Attribute("identifier")
@@ -22,9 +23,7 @@ var NutritionRequest = MediaType("application/vnd.nutrition_request+json", func(
 		Attribute("oralDiet")
 		Attribute("supplement")
 		Attribute("enteralFormula")
-
 	})
-
 	View("default", func() {
 		Attribute("patient")
 		Attribute("orderer")
@@ -39,12 +38,11 @@ var NutritionRequest = MediaType("application/vnd.nutrition_request+json", func(
 		Attribute("supplement")
 		Attribute("enteralFormula")
 	})
-
 })
-
-var OralDiet = MediaType("application/vnd.oral_diet+json", func() {
+var OralDietMedia = MediaType("application/vnd.oral.diet+json", func() {
+	TypeName("OralDietMedia")
+	Reference(OralDietPayload)
 	Attributes(func() {
-		Reference(OralDietPayload)
 		Attribute("type")
 		Attribute("schedule")
 		Attribute("nutrient")
@@ -62,9 +60,10 @@ var OralDiet = MediaType("application/vnd.oral_diet+json", func() {
 		Attribute("instruction")
 	})
 })
-var EnteralFormula = MediaType("application/vnd.enteral_formula+json", func() {
+var EnteralFormulaMedia = MediaType("application/vnd.enteral.formula+json", func() {
+	TypeName("EnteralFormulaMedia")
+	Reference(EnteralFormulaPayload)
 	Attributes(func() {
-		Reference(EnteralFormulaPayload)
 		Attribute("baseFormulaType")
 		Attribute("baseFormulatProdcutName")
 		Attribute("additiveType")
@@ -86,9 +85,10 @@ var EnteralFormula = MediaType("application/vnd.enteral_formula+json", func() {
 		Attribute("administrativeInstruction")
 	})
 })
-var Nutrient = MediaType("application/vnd.nutrient+json", func() {
+var NutrientMedia = MediaType("application/vnd.nutrient+json", func() {
+	TypeName("NutrientMedia")
+	Reference(NutrientPayload)
 	Attributes(func() {
-		Reference(NutrientPayload)
 		Attribute("modifier")
 		Attribute("amount")
 	})
@@ -98,9 +98,10 @@ var Nutrient = MediaType("application/vnd.nutrient+json", func() {
 		Attribute("amount")
 	})
 })
-var Supplement = MediaType("application/vnd.supplement+json", func() {
+var SupplementMedia = MediaType("application/vnd.supplement+json", func() {
+	TypeName("SupplementMedia")
+	Reference(SupplementPayload)
 	Attributes(func() {
-		Reference(SupplementPayload)
 		Attribute("type")
 		Attribute("productName")
 		Attribute("quantity")
@@ -115,9 +116,10 @@ var Supplement = MediaType("application/vnd.supplement+json", func() {
 		Attribute("instruction")
 	})
 })
-var Texture = MediaType("application/vnd.texture+json", func() {
+var TextureMedia = MediaType("application/vnd.texture+json", func() {
+	TypeName("TextureMedia")
+	Reference(TexturePayload)
 	Attributes(func() {
-		Reference(TexturePayload)
 		Attribute("modifier")
 		Attribute("foodType")
 	})

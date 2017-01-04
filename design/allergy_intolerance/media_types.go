@@ -7,8 +7,9 @@ import (
 )
 
 // AllergyIntolerance is the allergy_intolerance resource media type.--------------------------------------------------------------------------------
-var AllergyIntolerance = MediaType("application/vnd.allergy_intolerance+json", func() {
+var AllergyIntoleranceMedia = MediaType("application/vnd.allergy.intolerance+json", func() {
 	Attributes(func() {
+		TypeName("AllergyIntoleranceMedia")
 		Reference(AllergyIntolerancePayload)
 		Attribute("identifier")
 		Attribute("onset")
@@ -17,7 +18,6 @@ var AllergyIntolerance = MediaType("application/vnd.allergy_intolerance+json", f
 		Attribute("patient")
 		Attribute("reporter")
 		Attribute("status")
-		Attribute("orderer")
 		Attribute("criticality")
 		Attribute("type")
 		Attribute("category")
@@ -33,7 +33,6 @@ var AllergyIntolerance = MediaType("application/vnd.allergy_intolerance+json", f
 		Attribute("patient")
 		Attribute("reporter")
 		Attribute("status")
-		Attribute("orderer")
 		Attribute("criticality")
 		Attribute("type")
 		Attribute("category")
@@ -42,8 +41,9 @@ var AllergyIntolerance = MediaType("application/vnd.allergy_intolerance+json", f
 		Attribute("reaction")
 	})
 })
-var Reaction = MediaType("application/vnd.reaction+json", func() {
+var ReactionMedia = MediaType("application/vnd.reaction+json", func() {
 	Attributes(func() {
+		TypeName("ReactionMedia")
 		Reference(ReactionPayload)
 		Attribute("substance")
 		Attribute("certainty")

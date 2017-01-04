@@ -9,8 +9,8 @@ import (
 //vital resource-----------------------------------------------------------------------------------------------------------
 var _ = Resource("NutritionRequest", func() {
 
-	DefaultMedia(NutritionRequest)
-	BasePath("nutrition_requests")
+	DefaultMedia(NutritionRequestMedia)
+	BasePath("nutrition.requests")
 	Parent("patient")
 
 	Action("list", func() {
@@ -22,7 +22,7 @@ var _ = Resource("NutritionRequest", func() {
 			Param("years", ArrayOf(Integer), "Filter by years")
 		})
 		Response(OK, func() {
-			Media(CollectionOf(NutritionRequest, func() {
+			Media(CollectionOf(NutritionRequestMedia, func() {
 				View("default")
 			}))
 		})

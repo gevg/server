@@ -6,9 +6,10 @@ import (
 )
 
 // Encounter is the Encounter resource media type------------------------------------------------------------------------------------------------
-var Encounter = MediaType("application/vnd.Encounter+json", func() {
-	Attributes(func() {		
-		Reference(EncounterPayload)
+var EncounterMedia = MediaType("application/vnd.encounter+json", func() {
+	TypeName("EncounterMedia")
+	Reference(EncounterPayload)
+	Attributes(func() {
 		Attribute("identifier")
 		Attribute("status")
 		Attribute("statusHistory")
@@ -16,7 +17,6 @@ var Encounter = MediaType("application/vnd.Encounter+json", func() {
 		Attribute("type")
 		Attribute("priority")
 		Attribute("patient")
-
 	})
 	View("default", func() {
 		Description("Default view for Encounter resource.")
@@ -29,10 +29,11 @@ var Encounter = MediaType("application/vnd.Encounter+json", func() {
 		Attribute("patient")
 	})
 })
-var StatusHistory = MediaType("application/vnd.status.history+json", func() {
-		Attributes(func() {
-			Reference(StatusHistoryPayload)
-	Attribute("status")
+var StatusHistoryMedia = MediaType("application/vnd.status.history+json", func() {
+	TypeName("StatusHistoryMedia")
+	Reference(StatusHistoryPayload)
+	Attributes(func() {
+		Attribute("status")
 		Attribute("period")
 	})
 	View("default", func() {

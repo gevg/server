@@ -59,7 +59,7 @@ func CreateAllergyIntoleranceBadRequest(t goatest.TInterface, ctx context.Contex
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/allergy_intolerance", patientID),
+		Path: fmt.Sprintf("/nosh/patients/%v/allergy.intolerance", patientID),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
@@ -136,7 +136,7 @@ func CreateAllergyIntoleranceCreated(t goatest.TInterface, ctx context.Context, 
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/allergy_intolerance", patientID),
+		Path: fmt.Sprintf("/nosh/patients/%v/allergy.intolerance", patientID),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
@@ -205,7 +205,7 @@ func CreateAllergyIntoleranceNotFound(t goatest.TInterface, ctx context.Context,
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/allergy_intolerance", patientID),
+		Path: fmt.Sprintf("/nosh/patients/%v/allergy.intolerance", patientID),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
@@ -263,7 +263,7 @@ func DeleteAllergyIntoleranceBadRequest(t goatest.TInterface, ctx context.Contex
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/allergy_intolerance/%v", patientID, allergyIntoleranceID),
+		Path: fmt.Sprintf("/nosh/patients/%v/allergy.intolerance/%v", patientID, allergyIntoleranceID),
 	}
 	req, err := http.NewRequest("DELETE", u.String(), nil)
 	if err != nil {
@@ -329,7 +329,7 @@ func DeleteAllergyIntoleranceNoContent(t goatest.TInterface, ctx context.Context
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/allergy_intolerance/%v", patientID, allergyIntoleranceID),
+		Path: fmt.Sprintf("/nosh/patients/%v/allergy.intolerance/%v", patientID, allergyIntoleranceID),
 	}
 	req, err := http.NewRequest("DELETE", u.String(), nil)
 	if err != nil {
@@ -387,7 +387,7 @@ func DeleteAllergyIntoleranceNotFound(t goatest.TInterface, ctx context.Context,
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/allergy_intolerance/%v", patientID, allergyIntoleranceID),
+		Path: fmt.Sprintf("/nosh/patients/%v/allergy.intolerance/%v", patientID, allergyIntoleranceID),
 	}
 	req, err := http.NewRequest("DELETE", u.String(), nil)
 	if err != nil {
@@ -453,7 +453,7 @@ func ListAllergyIntoleranceBadRequest(t goatest.TInterface, ctx context.Context,
 		query["years"] = sliceVal
 	}
 	u := &url.URL{
-		Path:     fmt.Sprintf("/nosh/patients/%v/allergy_intolerance", patientID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/allergy.intolerance", patientID),
 		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
@@ -534,7 +534,7 @@ func ListAllergyIntoleranceNotFound(t goatest.TInterface, ctx context.Context, s
 		query["years"] = sliceVal
 	}
 	u := &url.URL{
-		Path:     fmt.Sprintf("/nosh/patients/%v/allergy_intolerance", patientID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/allergy.intolerance", patientID),
 		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
@@ -578,7 +578,7 @@ func ListAllergyIntoleranceNotFound(t goatest.TInterface, ctx context.Context, s
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ListAllergyIntoleranceOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.AllergyIntoleranceController, patientID int, years []int) (http.ResponseWriter, app.AllergyIntoleranceCollection) {
+func ListAllergyIntoleranceOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.AllergyIntoleranceController, patientID int, years []int) (http.ResponseWriter, app.AllergyIntoleranceMediaCollection) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -607,7 +607,7 @@ func ListAllergyIntoleranceOK(t goatest.TInterface, ctx context.Context, service
 		query["years"] = sliceVal
 	}
 	u := &url.URL{
-		Path:     fmt.Sprintf("/nosh/patients/%v/allergy_intolerance", patientID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/allergy.intolerance", patientID),
 		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
@@ -642,12 +642,12 @@ func ListAllergyIntoleranceOK(t goatest.TInterface, ctx context.Context, service
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt app.AllergyIntoleranceCollection
+	var mt app.AllergyIntoleranceMediaCollection
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(app.AllergyIntoleranceCollection)
+		mt, ok = resp.(app.AllergyIntoleranceMediaCollection)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.AllergyIntoleranceCollection", resp)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.AllergyIntoleranceMediaCollection", resp)
 		}
 		err = mt.Validate()
 		if err != nil {
@@ -694,7 +694,7 @@ func RateAllergyIntoleranceBadRequest(t goatest.TInterface, ctx context.Context,
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/allergy_intolerance/%v/actions/rate", patientID, allergyIntoleranceID),
+		Path: fmt.Sprintf("/nosh/patients/%v/allergy.intolerance/%v/actions/rate", patientID, allergyIntoleranceID),
 	}
 	req, err := http.NewRequest("PUT", u.String(), nil)
 	if err != nil {
@@ -772,7 +772,7 @@ func RateAllergyIntoleranceNoContent(t goatest.TInterface, ctx context.Context, 
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/allergy_intolerance/%v/actions/rate", patientID, allergyIntoleranceID),
+		Path: fmt.Sprintf("/nosh/patients/%v/allergy.intolerance/%v/actions/rate", patientID, allergyIntoleranceID),
 	}
 	req, err := http.NewRequest("PUT", u.String(), nil)
 	if err != nil {
@@ -842,7 +842,7 @@ func RateAllergyIntoleranceNotFound(t goatest.TInterface, ctx context.Context, s
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/allergy_intolerance/%v/actions/rate", patientID, allergyIntoleranceID),
+		Path: fmt.Sprintf("/nosh/patients/%v/allergy.intolerance/%v/actions/rate", patientID, allergyIntoleranceID),
 	}
 	req, err := http.NewRequest("PUT", u.String(), nil)
 	if err != nil {
@@ -901,7 +901,7 @@ func ShowAllergyIntoleranceBadRequest(t goatest.TInterface, ctx context.Context,
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/allergy_intolerance/%v", patientID, allergyIntoleranceID),
+		Path: fmt.Sprintf("/nosh/patients/%v/allergy.intolerance/%v", patientID, allergyIntoleranceID),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -967,7 +967,7 @@ func ShowAllergyIntoleranceNotFound(t goatest.TInterface, ctx context.Context, s
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/allergy_intolerance/%v", patientID, allergyIntoleranceID),
+		Path: fmt.Sprintf("/nosh/patients/%v/allergy.intolerance/%v", patientID, allergyIntoleranceID),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -1004,7 +1004,7 @@ func ShowAllergyIntoleranceNotFound(t goatest.TInterface, ctx context.Context, s
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ShowAllergyIntoleranceOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.AllergyIntoleranceController, patientID int, allergyIntoleranceID int) (http.ResponseWriter, *app.AllergyIntolerance) {
+func ShowAllergyIntoleranceOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.AllergyIntoleranceController, patientID int, allergyIntoleranceID int) (http.ResponseWriter, *app.AllergyIntoleranceMedia) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1025,7 +1025,7 @@ func ShowAllergyIntoleranceOK(t goatest.TInterface, ctx context.Context, service
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/allergy_intolerance/%v", patientID, allergyIntoleranceID),
+		Path: fmt.Sprintf("/nosh/patients/%v/allergy.intolerance/%v", patientID, allergyIntoleranceID),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -1053,12 +1053,12 @@ func ShowAllergyIntoleranceOK(t goatest.TInterface, ctx context.Context, service
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt *app.AllergyIntolerance
+	var mt *app.AllergyIntoleranceMedia
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(*app.AllergyIntolerance)
+		mt, ok = resp.(*app.AllergyIntoleranceMedia)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.AllergyIntolerance", resp)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.AllergyIntoleranceMedia", resp)
 		}
 		err = mt.Validate()
 		if err != nil {
@@ -1105,7 +1105,7 @@ func UpdateAllergyIntoleranceBadRequest(t goatest.TInterface, ctx context.Contex
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/allergy_intolerance/%v", patientID, allergyIntoleranceID),
+		Path: fmt.Sprintf("/nosh/patients/%v/allergy.intolerance/%v", patientID, allergyIntoleranceID),
 	}
 	req, err := http.NewRequest("PATCH", u.String(), nil)
 	if err != nil {
@@ -1183,7 +1183,7 @@ func UpdateAllergyIntoleranceNoContent(t goatest.TInterface, ctx context.Context
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/allergy_intolerance/%v", patientID, allergyIntoleranceID),
+		Path: fmt.Sprintf("/nosh/patients/%v/allergy.intolerance/%v", patientID, allergyIntoleranceID),
 	}
 	req, err := http.NewRequest("PATCH", u.String(), nil)
 	if err != nil {
@@ -1253,7 +1253,7 @@ func UpdateAllergyIntoleranceNotFound(t goatest.TInterface, ctx context.Context,
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/allergy_intolerance/%v", patientID, allergyIntoleranceID),
+		Path: fmt.Sprintf("/nosh/patients/%v/allergy.intolerance/%v", patientID, allergyIntoleranceID),
 	}
 	req, err := http.NewRequest("PATCH", u.String(), nil)
 	if err != nil {
@@ -1312,7 +1312,7 @@ func WatchAllergyIntoleranceBadRequest(t goatest.TInterface, ctx context.Context
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/allergy_intolerance/%v/watch", patientID, allergyIntoleranceID),
+		Path: fmt.Sprintf("/nosh/patients/%v/allergy.intolerance/%v/watch", patientID, allergyIntoleranceID),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {

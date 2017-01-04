@@ -5,19 +5,19 @@ import (
 	. "github.com/goadesign/goa/design/apidsl"
 )
 
-var BackboneElementPayload = Type("BackboneElementPayload", func() {
+var BackboneElement = Type("BackboneElement", func() {
 	//Comments:
 	//Reason for inclusion or contrainment:
 	Attribute("element", Element)
 	Attribute("modifierExtension", Extension)
 })
-var ElementPayload = Type("ElementPayload", func() {
+var Element = Type("Element", func() {
 	//Comments:
 	//Reason for inclusion or contrainment:
 	Attribute("id", String)
 	Attribute("extension", Extension)
 })
-var ExtensionPayload = Type("ExtensionPayload", func() {
+var Extension = Type("Extension", func() {
 	//Comments:
 	//Reason for inclusion or contrainment:
 	Attribute("url", String)
@@ -55,7 +55,7 @@ var ExtensionPayload = Type("ExtensionPayload", func() {
 	Attribute("ValueUnsignedInt", Number) //uint32
 	Attribute("ValueUri", String)
 })
-var AttachmentPayload = Type("AttachmentPayload", func() {
+var Attachment = Type("Attachment", func() {
 	Description("For referring to data content defined in other formats.")
 	//Comments: When providing a summary view (for example with Observation.value[x]) Attachment should be represented with a brief display text such as "Attachment".
 	//Reason for inclusion or contrainment:
@@ -91,7 +91,7 @@ var AttachmentPayload = Type("AttachmentPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var AddressPayload = Type("AddressPayload", func() {
+var Address = Type("Address", func() {
 	Description("There is a variety of postal address formats defined around the world. This format defines a superset that is the basis for all addresses around the world.")
 	//Comments: Note: address is for postal addresses, not physical locations.
 	//Reason for inclusion or contrainment:
@@ -138,7 +138,7 @@ var AddressPayload = Type("AddressPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var AnnotationPayload = Type("AnnotationPayload", func() {
+var Annotation = Type("Annotation", func() {
 	Description("A  text note which also  contains information about who made the statement and when.")
 	//Comments: For systems that do not have structured annotations, they can simply communicate a single annotation with no author or time.
 	//This element may need to be included in narrative because of the potential for modifying information.  *Annotations SHOULD NOT* be used to communicate "modifying"
@@ -159,7 +159,7 @@ var AnnotationPayload = Type("AnnotationPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var CodingPayload = Type("CodingPayload", func() {
+var Coding = Type("Coding", func() {
 	Description("A reference to a code defined by a terminology system.")
 	//Comments: Codes may be defined very casually in enumerations or code lists, up to very formal definitions such as SNOMED CT - See the HL7 v3 Core Principles for more information.
 	//Reason for inclusion or contrainment:
@@ -192,7 +192,7 @@ var CodingPayload = Type("CodingPayload", func() {
 		//rather than inferred by the system based on some rules or language processing.
 	})
 })
-var CodeableConceptPayload = Type("CodeableConceptPayload", func() {
+var CodeableConcept = Type("CodeableConcept", func() {
 	Description("A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.")
 	//Comments:Not all terminology uses fit this general pattern. In some cases, models should not use CodeableConcept and use Coding directly and provide their own structure for managing text,
 	//codings, translations and the relationship between elements and pre- and post-coordination.
@@ -211,7 +211,7 @@ var CodeableConceptPayload = Type("CodeableConceptPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var ContactPointPayload = Type("ContactPointPayload", func() {
+var ContactPoint = Type("ContactPoint", func() {
 	Description("Details for all kinds of technology mediated contact points for a person or organization, including telephone, email, etc.")
 	//Comments:
 	//Reason for inclusion or contrainment:
@@ -235,7 +235,7 @@ var ContactPointPayload = Type("ContactPointPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var HL7ReferencePayload = Type("HL7ReferencePayload", func() {
+var HL7Reference = Type("HL7Reference", func() {
 	Description("A reference from one resource to another.")
 	//Comments:
 	//Reason for inclusion or contrainment:
@@ -252,7 +252,7 @@ var HL7ReferencePayload = Type("HL7ReferencePayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var HumanNamePayload = Type("HumanNamePayload", func() {
+var HumanName = Type("HumanName", func() {
 	Description("A human's name with the ability to identify parts and usage.")
 	//Comments:Names may be changed, or repudiated, or people may have different names in different contexts. Names may be divided into parts of different
 	//type that have variable significance depending on context, though the division into parts does not always matter. With personal names, the different
@@ -286,34 +286,44 @@ var HumanNamePayload = Type("HumanNamePayload", func() {
 		//Reason for inclusion or contrainment: Allows names to be placed in historical context.
 	})
 })
-var IdentifierPayload = Type("IdentifierPayload", func() {
+var Identifier = Type("Identifier", func() {
 	Description("A technical identifier - identifies some entity uniquely and unambiguously.")
 	//Comments:
 	//Reason for inclusion or contrainment:
 	Required("use")
-	Attribute("use", String, "Identifies the purpose for this identifier, if known.", func() {
+	Attribute("use", String, "The purpose of this identifier. Use http://hl7.org/fhir/ValueSet/identifier-use", func() {
 		//This is labeled as "Is Modifier" because applications should not mistake a temporary id for a permanent one.
 		//Applications can assume that an identifier is permanent unless it explicitly says that it is temporary.
 		Enum("usual", "official", "temp", "secondary (If known)")
-		Example("usual")
 	})
-	Attribute("CodeableConcept", CodeableConcept, "A coded type for the identifier that can be used to determine which identifier to use for a specific purpose.", func() {
+	Attribute("type", CodeableConcept, "A coded type for the identifier that can be used to determine which identifier to use for a specific purpose. See http://hl7.org/fhir/ValueSet/identifier-type", func() {
 		//Comments: This element deals only with general categories of identifiers.  It SHOULD not be used for codes that correspond 1..1 with the Identifier.system.
 		//Some identifiers may fall into multiple categories due to common usage.   Where the system is known, a type is unnecessary because the type is always part
 		//of the system definition. However systems often need to handle identifiers where the system is not known. There is not a 1:1 relationship between type and system,
 		//since many different systems have the same type.
 		//Reason for inclusion or contrainment: Allows users to make use of identifiers when the identifier system is not known.
 	})
+	Attribute("system", String, "Establishes the namespace in which set of possible id values is unique.", func() {
+		//Type: uri
+		//Comments:
+		//Reason for inclusion or contrainment:
+		Format("uri")
+	})
+	Attribute("value", String, "The portion of the identifier typically displayed to the user and which is unique within the context of the system.", func() {
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
 	Attribute("period", Period, "Time period during which identifier is/was valid for use.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
 	Attribute("assigner", HL7Reference, "Organization that issued/manages the identifier.", func() {
+		//Referece: Organization
 		//Comments: The reference may be just a text description of the assigner.
 		//Reason for inclusion or contrainment:
 	})
 })
-var MetaPayload = Type("MetaPayload", func() {
+var Meta = Type("Meta", func() {
 	Description("The metadata about a resource. This is content in the resource that is maintained by the infrastructure. Changes to the content may not always be associated with version changes to the resource.")
 	//Comments:
 	//Reason for inclusion or contrainment:
@@ -342,7 +352,7 @@ var MetaPayload = Type("MetaPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var PeriodPayload = Type("PeriodPayload", func() {
+var Period = Type("Period", func() {
 	Attribute("start", DateTime, "Starting time with inclusive boundary", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
@@ -352,7 +362,7 @@ var PeriodPayload = Type("PeriodPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var QuantityPayload = Type("QuantityPayload", func() {
+var Quantity = Type("Quantity", func() {
 	Description(`A measured amount (or an amount that can potentially be measured). Note that measured amounts include amounts that are not precisely quantified, 
 	including amounts involving arbitrary units and floating currencies.`)
 	//Comments: The context of use may frequently define what kind of quantity this is and therefore what kind of units can be used.
@@ -388,7 +398,7 @@ var QuantityPayload = Type("QuantityPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var RangePayload = Type("RangePayload", func() {
+var Range = Type("Range", func() {
 	Description("A set of ordered Quantities defined by a low and high limit.")
 	//Comments:
 	//Reason for inclusion or contrainment:
@@ -401,7 +411,7 @@ var RangePayload = Type("RangePayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var RatioPayload = Type("RatioPayload", func() {
+var Ratio = Type("Ratio", func() {
 	Description("A relationship of two Quantity values - expressed as a numerator and a denominator.")
 	//Comments:
 	//Reason for inclusion or contrainment:
@@ -414,7 +424,7 @@ var RatioPayload = Type("RatioPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var RepeatPayload = Type("RepeatPayload", func() {
+var Repeat = Type("Repeat", func() {
 	Description("Many timing schedules are determined by regular repetitions.")
 	//Comments:
 	//Reason for inclusion or contrainment: Many timing schedules are determined by regular repetitions.
@@ -470,7 +480,7 @@ var RepeatPayload = Type("RepeatPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var SampleDataPayload = Type("SampleDataPayload", func() {
+var SampleData = Type("SampleData", func() {
 	Description("A series of measurements taken by a device, with upper and lower limits. There may be more than one dimension in the data.")
 	//Comments:
 	//Reason for inclusion or contrainment:
@@ -508,7 +518,7 @@ var SampleDataPayload = Type("SampleDataPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var TimingPayload = Type("TimingPayload", func() {
+var Timing = Type("Timing", func() {
 	Description(`Specifies an event that may occur multiple times. Timing schedules are used to record when things are expected 
 	or requested to occur. The most common usage is in dosage instructions for medications. They are also used when planning care of various kinds.`)
 	//Comments: A timing schedule can be either a list of events - intervals on which the event occurs, or a single event with repeating criteria or

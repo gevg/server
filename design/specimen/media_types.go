@@ -7,9 +7,10 @@ import (
 )
 
 // Specimen is the specimen resource media type------------------------------------------------------------------------------------------------
-var Specimen = MediaType("application/vnd.specimen+json", func() {
+var SpecimenMedia = MediaType("application/vnd.specimen+json", func() {
+	TypeName("SpecimenMedia")
+	Reference(SpecimenPayload)
 	Attributes(func() {
-		Reference(SpecimenPayload)
 		Attribute("identifier")
 		Attribute("status")
 		Attribute("type")
@@ -35,9 +36,10 @@ var Specimen = MediaType("application/vnd.specimen+json", func() {
 		Attribute("container")
 	})
 })
-var Collection = MediaType("application/vnd.collection+json", func() {
+var CollectionMedia = MediaType("application/vnd.collection+json", func() {
+	TypeName("CollectionMedia")
+	Reference(CollectionPayload)
 	Attributes(func() {
-		Reference(CollectionPayload)
 		Attribute("collector")
 		Attribute("comment")
 		Attribute("collectedDateTime")
@@ -57,9 +59,10 @@ var Collection = MediaType("application/vnd.collection+json", func() {
 		Attribute("bodySite")
 	})
 })
-var Container = MediaType("application/vnd.container+json", func() {
+var ContainerMedia = MediaType("application/vnd.container+json", func() {
+	TypeName("ContainerMedia")
+	Reference(ContainerPayload)
 	Attributes(func() {
-		Reference(ContainerPayload)
 		Attribute("relationship")
 		Attribute("identifier")
 		Attribute("description")
@@ -81,9 +84,10 @@ var Container = MediaType("application/vnd.container+json", func() {
 		Attribute("additiveReference")
 	})
 })
-var Treatment = MediaType("application/vnd.treatment+json", func() {
+var TreatmentMedia = MediaType("application/vnd.treatment+json", func() {
+	TypeName("TreatmentMedia")
+	Reference(TreatmentPayload)
 	Attributes(func() {
-		Reference(TreatmentPayload)
 		Attribute("language")
 		Attribute("preferred")
 		Attribute("careProvider")

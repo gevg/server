@@ -1,9 +1,10 @@
 package design
 
 import (
+	. "github.com/goa-fhir/server/design/public"
+
 	. "github.com/goadesign/goa/design"
 	. "github.com/goadesign/goa/design/apidsl"
-	. "github.com/goa-fhir/server/design/public"
 )
 
 // BasicAuth defines a security scheme using basic authentication.

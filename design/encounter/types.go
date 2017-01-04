@@ -6,7 +6,7 @@ import (
 	. "github.com/goadesign/goa/design/apidsl"
 )
 
-var EncounterPayload = Type("EncounterPayload", func() {
+var Encounter = Type("Encounter", func() {
 	Description("Demographics and other administrative information about an individual or animal receiving care or other health-related services.")
 	//Comments:
 	//Reason for inclusion or contrainment:
@@ -40,7 +40,7 @@ var EncounterPayload = Type("EncounterPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var StatusHistoryPayload = Type("StatusHistoryPayload", func() {
+var StatusHistory = Type("StatusHistory", func() {
 	Description("The current status is always found in the current version of the resource, not the status history.")
 	//Comments:
 	//Reason for inclusion or contrainment:

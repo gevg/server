@@ -5,9 +5,10 @@ import (
 	. "github.com/goadesign/goa/design/apidsl"
 )
 
-var BackboneElement = MediaType("application/vnd.backbone.element+json", func() {
+var BackboneElementMedia = MediaType("application/vnd.backbone.element+json", func() {
+	TypeName("BackboneElementMedia")
+	Reference(BackboneElementPayload)
 	Attributes(func() {
-		Reference(BackboneElementPayload)
 		Attribute("element")
 		Attribute("modifierExtension")
 	})
@@ -17,9 +18,10 @@ var BackboneElement = MediaType("application/vnd.backbone.element+json", func() 
 		Attribute("modifierExtension")
 	})
 })
-var Element = MediaType("application/vnd.element+json", func() {
+var ElementMedia = MediaType("application/vnd.element+json", func() {
+	TypeName("ElelmentMedia")
+	Reference(ElementPayload)
 	Attributes(func() {
-		Reference(ElementPayload)
 		Attribute("id")
 		Attribute("extension")
 	})
@@ -29,10 +31,10 @@ var Element = MediaType("application/vnd.element+json", func() {
 		Attribute("extension")
 	})
 })
-var Extension = MediaType("application/vnd.extension+json", func() {
+var ExtensionMedia = MediaType("application/vnd.extension+json", func() {
+	TypeName("ExtensionMedia")
+	Reference(ExtensionPayload)
 	Attributes(func() {
-		Description("Default view for Extension element")
-		Reference(ExtensionPayload)
 		Attribute("url")
 		Attribute("ValueAddress")
 		Attribute("ValueAnnotation")
@@ -107,13 +109,10 @@ var Extension = MediaType("application/vnd.extension+json", func() {
 	})
 })
 
-
-
-
-
-var Address = MediaType("application/vnd.address+json", func() {
+var AddressMedia = MediaType("application/vnd.address+json", func() {
+	TypeName("AddressMedia")
+	Reference(AddressPayload)
 	Attributes(func() {
-		Reference(AddressPayload)
 		Attribute("use")
 		Attribute("type")
 		Attribute("line")
@@ -135,9 +134,10 @@ var Address = MediaType("application/vnd.address+json", func() {
 		Attribute("country")
 	})
 })
-var Annotation = MediaType("application/vnd.annotation+json", func() {
+var AnnotationMedia = MediaType("application/vnd.annotation+json", func() {
+	TypeName("AnnotationMedia")
+	Reference(AnnotationPayload)
 	Attributes(func() {
-		Reference(AnnotationPayload)
 		Attribute("authorReference")
 		Attribute("authorString")
 		Attribute("time")
@@ -149,9 +149,10 @@ var Annotation = MediaType("application/vnd.annotation+json", func() {
 		Attribute("time")
 	})
 })
-var Attachment = MediaType("application/vnd.attachment+json", func() {
+var AttachmentMedia = MediaType("application/vnd.attachment+json", func() {
+	TypeName("AttachmentMedia")
+	Reference(AttachmentPayload)
 	Attributes(func() {
-		Reference(AttachmentPayload)
 		Attribute("contentType")
 		Attribute("data")
 		Attribute("size")
@@ -170,9 +171,10 @@ var Attachment = MediaType("application/vnd.attachment+json", func() {
 		Attribute("creation")
 	})
 })
-var Coding = MediaType("application/vnd.coding+json", func() {
+var CodingMedia = MediaType("application/vnd.coding+json", func() {
+	TypeName("CodingMedia")
+	Reference(CodingPayload)
 	Attributes(func() {
-		Reference(CodingPayload)
 		Attribute("system")
 		Attribute("version")
 		Attribute("code")
@@ -188,9 +190,10 @@ var Coding = MediaType("application/vnd.coding+json", func() {
 		Attribute("userSelected")
 	})
 })
-var CodeableConcept = MediaType("application/vnd.codeable.concept+json", func() {
+var CodeableConceptMedia = MediaType("application/vnd.codeable.concept+json", func() {
+	TypeName("CodeableConceptMedia")
+	Reference(CodeableConceptPayload)
 	Attributes(func() {
-		Reference(CodeableConceptPayload)
 		Attribute("coding")
 		Attribute("text")
 	})
@@ -200,9 +203,11 @@ var CodeableConcept = MediaType("application/vnd.codeable.concept+json", func() 
 		Attribute("text")
 	})
 })
-var ContactPoint = MediaType("application/vnd.contact.point+json", func() {
+var ContactPointMedia = MediaType("application/vnd.contact.point+json", func() {
+	TypeName("ContactPointMedia")
+	Reference(ContactPointPayload)
+
 	Attributes(func() {
-		Reference(ContactPointPayload)
 		Attribute("system")
 		Attribute("value")
 		Attribute("use")
@@ -218,9 +223,11 @@ var ContactPoint = MediaType("application/vnd.contact.point+json", func() {
 })
 
 //Goa has a function named Reference. Changed to HL7Reference
-var HL7Reference = MediaType("application/vnd.reference+json", func() {
+var HL7ReferenceMedia = MediaType("application/vnd.reference+json", func() {
+	TypeName("HL7ReferenceMedia")
+	Reference(HL7ReferencePayload)
+
 	Attributes(func() {
-		Reference(HL7ReferencePayload)
 		Attribute("reference")
 		Attribute("display")
 	})
@@ -230,7 +237,8 @@ var HL7Reference = MediaType("application/vnd.reference+json", func() {
 		Attribute("display")
 	})
 })
-var HumanName = MediaType("application/vnd.human.name+json", func() {
+var HumanNameMedia = MediaType("application/vnd.human.name+json", func() {
+	TypeName("HumanNameMedia")
 	Reference(HumanNamePayload)
 	Attributes(func() {
 		Attribute("use")
@@ -251,23 +259,31 @@ var HumanName = MediaType("application/vnd.human.name+json", func() {
 		Attribute("period")
 	})
 })
-var Identifier = MediaType("application/vnd.identifier+json", func() {
+var IdentifierMedia = MediaType("application/vnd.identifier+json", func() {
+	TypeName("IdentifierMedia")
 	Reference(IdentifierPayload)
 	Attributes(func() {
-		Attribute("CodeableConcept")
+		Attribute("use")
+		Attribute("type")
+		Attribute("system")
+		Attribute("value")
 		Attribute("period")
 		Attribute("assigner")
 	})
 	View("default", func() {
 		Description("Default view for identifier resource")
-		Attribute("CodeableConcept")
+		Attribute("use")
+		Attribute("type")
+		Attribute("system")
+		Attribute("value")
 		Attribute("period")
 		Attribute("assigner")
 	})
 })
-var Meta = MediaType("application/vnd.meta+json", func() {
+var MetaMedia = MediaType("application/vnd.meta+json", func() {
+	TypeName("MetaMedia")
+	Reference(MetaPayload)
 	Attributes(func() {
-		Reference(MetaPayload)
 		Attribute("versionId")
 		Attribute("lastUpdated")
 		Attribute("profile")
@@ -283,10 +299,10 @@ var Meta = MediaType("application/vnd.meta+json", func() {
 		Attribute("tag")
 	})
 })
-var Period = MediaType("application/vnd.period+json", func() {
-	Description("A time period defined by a start and end date and optionally time.")
+var PeriodMedia = MediaType("application/vnd.period+json", func() {
+	TypeName("PeriodMedia")
+	Reference(PeriodPayload)
 	Attributes(func() {
-		Reference(PeriodPayload)
 		Attribute("start")
 		Attribute("end")
 	})
@@ -295,9 +311,10 @@ var Period = MediaType("application/vnd.period+json", func() {
 		Attribute("end")
 	})
 })
-var Quantity = MediaType("application/vnd.quantity+json", func() {
+var QuantityMedia = MediaType("application/vnd.quantity+json", func() {
+	TypeName("QuantityMedia")
+	Reference(QuantityPayload)
 	Attributes(func() {
-		Reference(QuantityPayload)
 		Attribute("value")
 		Attribute("comparator")
 		Attribute("unit")
@@ -314,9 +331,10 @@ var Quantity = MediaType("application/vnd.quantity+json", func() {
 		Attribute("code")
 	})
 })
-var Range = MediaType("application/vnd.range+json", func() {
+var RangeMedia = MediaType("application/vnd.range+json", func() {
+	TypeName("RangeMedia")
+	Reference(RangePayload)
 	Attributes(func() {
-		Reference(RangePayload)
 		Attribute("low")
 		Attribute("high")
 	})
@@ -326,9 +344,11 @@ var Range = MediaType("application/vnd.range+json", func() {
 		Attribute("high")
 	})
 })
-var Ratio = MediaType("application/vnd.ratio+json", func() {
+var RatioMedia = MediaType("application/vnd.ratio+json", func() {
+	TypeName("RatioMedia")
+	Reference(RatioPayload)
+
 	Attributes(func() {
-		Reference(RatioPayload)
 		Attribute("numerator")
 		Attribute("denominator")
 	})
@@ -340,9 +360,10 @@ var Ratio = MediaType("application/vnd.ratio+json", func() {
 })
 
 //This is currently an Element.
-var Repeat = MediaType("application/vnd.repeat+json", func() {
+var RepeatMedia = MediaType("application/vnd.repeat+json", func() {
+	TypeName("RepeatMedia")
+	Reference(RepeatPayload)
 	Attributes(func() {
-		Reference(RepeatPayload)
 		Attribute("bounds")
 		Attribute("count")
 		Attribute("duration")
@@ -368,9 +389,10 @@ var Repeat = MediaType("application/vnd.repeat+json", func() {
 		Attribute("when")
 	})
 })
-var SampleData = MediaType("application/vnd.sample.data+json", func() {
+var SampleDataMedia = MediaType("application/vnd.sample.data+json", func() {
+	TypeName("SampleDataMedia")
+	Reference(SampleDataPayload)
 	Attributes(func() {
-		Reference(SampleDataPayload)
 		Attribute("origin")
 		Attribute("period")
 		Attribute("factor")
@@ -390,9 +412,10 @@ var SampleData = MediaType("application/vnd.sample.data+json", func() {
 		Attribute("data")
 	})
 })
-var Timing = MediaType("application/vnd.timing+json", func() {
+var TimingMedia = MediaType("application/vnd.timing+json", func() {
+	TypeName("TimingMedia")
+	Reference(TimingPayload)
 	Attributes(func() {
-		Reference(TimingPayload)
 		Attribute("event")
 		Attribute("repeat")
 		Attribute("code")

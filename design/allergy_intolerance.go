@@ -1,16 +1,16 @@
 package design
 
 import (
+	. "github.com/goa-fhir/server/design/allergy_intolerance"
 	. "github.com/goadesign/goa/design"
 	. "github.com/goadesign/goa/design/apidsl"
-	. "github.com/goa-fhir/server/design/allergy_intolerance"
 )
 
 //vital resource-----------------------------------------------------------------------------------------------------------
 var _ = Resource("AllergyIntolerance", func() {
 
-	DefaultMedia(AllergyIntolerance)
-	BasePath("allergy_intolerance")
+	DefaultMedia(AllergyIntoleranceMedia)
+	BasePath("allergy.intolerance")
 	Parent("patient")
 
 	Action("list", func() {
@@ -22,7 +22,7 @@ var _ = Resource("AllergyIntolerance", func() {
 			Param("years", ArrayOf(Integer), "Filter by years")
 		})
 		Response(OK, func() {
-			Media(CollectionOf(AllergyIntolerance, func() {
+			Media(CollectionOf(AllergyIntoleranceMedia, func() {
 				View("default")
 			}))
 		})

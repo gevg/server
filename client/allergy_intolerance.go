@@ -15,49 +15,36 @@ import (
 type CreateAllergyIntolerancePayload struct {
 	// Category of the identified Substance. See http://hl7.org/fhir/ValueSet/allergy-intolerance-category
 	Category *string `form:"category,omitempty" json:"category,omitempty" xml:"category,omitempty"`
-	// Date of creation
-	CreatedAt *time.Time `form:"created_at,omitempty" json:"created_at,omitempty" xml:"created_at,omitempty"`
 	// Estimate of the potential clinical harm, or seriousness, of the reaction to the identified Substance. See http://hl7.org/fhir/ValueSet/allergy-intolerance-criticality
 	Criticality *string `form:"criticality,omitempty" json:"criticality,omitempty" xml:"criticality,omitempty"`
-	// API href of nutrition request
-	Href string `form:"href" json:"href" xml:"href"`
-	// ID of nutrition request
-	ID int `form:"id" json:"id" xml:"id"`
 	// This records identifiers associated with this allergy/intolerance concern that are defined by business processes and/or
 	// 		used to refer to it when a direct URL reference to the resource itself is not appropriate (e.g. in CDA documents, or in written / printed documentation).
-	Identifier *Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
+	Identifier []*Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
 	// Represents the date and/or time of the last known occurrence of a reaction event.
 	LastOccurence *time.Time `form:"lastOccurence,omitempty" json:"lastOccurence,omitempty" xml:"lastOccurence,omitempty"`
 	// Additional narrative about the propensity for the Adverse Reaction, not captured in other fields..
 	Note *Annotation `form:"note,omitempty" json:"note,omitempty" xml:"note,omitempty"`
 	// Record of the date and/or time of the onset of the Allergy or Intolerance.
-	Onset   *time.Time `form:"onset,omitempty" json:"onset,omitempty" xml:"onset,omitempty"`
-	Orderer *struct {
-		// xml:id (or equivalent in JSON)
-		ID        *string    `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
-		Reference *Reference `form:"reference,omitempty" json:"reference,omitempty" xml:"reference,omitempty"`
-	} `form:"orderer,omitempty" json:"orderer,omitempty" xml:"orderer,omitempty"`
+	Onset *time.Time `form:"onset,omitempty" json:"onset,omitempty" xml:"onset,omitempty"`
 	// The patient who has the allergy or intolerance.
-	Patient *Reference `form:"patient,omitempty" json:"patient,omitempty" xml:"patient,omitempty"`
+	Patient *HL7Reference `form:"patient,omitempty" json:"patient,omitempty" xml:"patient,omitempty"`
 	// Details about each adverse reaction event linked to exposure to the identified Substance.
 	Reaction *Reaction `form:"reaction,omitempty" json:"reaction,omitempty" xml:"reaction,omitempty"`
 	// Date when the sensitivity was recorded.
 	RecordedDate *time.Time `form:"recordedDate,omitempty" json:"recordedDate,omitempty" xml:"recordedDate,omitempty"`
 	// Individual who recorded the record and takes responsibility for its conten.
-	Recorder *Reference `form:"recorder,omitempty" json:"recorder,omitempty" xml:"recorder,omitempty"`
+	Recorder *HL7Reference `form:"recorder,omitempty" json:"recorder,omitempty" xml:"recorder,omitempty"`
 	// The source of the information about the allergy that is recorded.
-	Reporter *Reference `form:"reporter,omitempty" json:"reporter,omitempty" xml:"reporter,omitempty"`
+	Reporter *HL7Reference `form:"reporter,omitempty" json:"reporter,omitempty" xml:"reporter,omitempty"`
 	// Assertion about certainty associated with a propensity, or potential risk, of a reaction to the identified Substance. See http://hl7.org/fhir/ValueSet/allergy-intolerance-status
-	Status string `form:"status" json:"status" xml:"status"`
+	Status *string `form:"status,omitempty" json:"status,omitempty" xml:"status,omitempty"`
 	// Identification of the underlying physiological mechanism for the reaction risk. See http://hl7.org/fhir/ValueSet/allergy-intolerance-type
-	Type string `form:"type" json:"type" xml:"type"`
-	// Date of last update
-	UpdatedAt *time.Time `form:"updated_at,omitempty" json:"updated_at,omitempty" xml:"updated_at,omitempty"`
+	Type *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
 }
 
 // CreateAllergyIntolerancePath computes a request path to the create action of AllergyIntolerance.
 func CreateAllergyIntolerancePath(patientID int) string {
-	return fmt.Sprintf("/nosh/patients/%v/allergy_intolerance", patientID)
+	return fmt.Sprintf("/nosh/patients/%v/allergy.intolerance", patientID)
 }
 
 // Record new vital
@@ -90,7 +77,7 @@ func (c *Client) NewCreateAllergyIntoleranceRequest(ctx context.Context, path st
 
 // DeleteAllergyIntolerancePath computes a request path to the delete action of AllergyIntolerance.
 func DeleteAllergyIntolerancePath(patientID int, allergyIntoleranceID int) string {
-	return fmt.Sprintf("/nosh/patients/%v/allergy_intolerance/%v", patientID, allergyIntoleranceID)
+	return fmt.Sprintf("/nosh/patients/%v/allergy.intolerance/%v", patientID, allergyIntoleranceID)
 }
 
 // DeleteAllergyIntolerance makes a request to the delete action endpoint of the AllergyIntolerance resource
@@ -118,7 +105,7 @@ func (c *Client) NewDeleteAllergyIntoleranceRequest(ctx context.Context, path st
 
 // ListAllergyIntolerancePath computes a request path to the list action of AllergyIntolerance.
 func ListAllergyIntolerancePath(patientID int) string {
-	return fmt.Sprintf("/nosh/patients/%v/allergy_intolerance", patientID)
+	return fmt.Sprintf("/nosh/patients/%v/allergy.intolerance", patientID)
 }
 
 // List all allergy_intolerances in patient optionally filtering by year
@@ -157,7 +144,7 @@ type RateAllergyIntolerancePayload struct {
 
 // RateAllergyIntolerancePath computes a request path to the rate action of AllergyIntolerance.
 func RateAllergyIntolerancePath(patientID int, allergyIntoleranceID int) string {
-	return fmt.Sprintf("/nosh/patients/%v/allergy_intolerance/%v/actions/rate", patientID, allergyIntoleranceID)
+	return fmt.Sprintf("/nosh/patients/%v/allergy.intolerance/%v/actions/rate", patientID, allergyIntoleranceID)
 }
 
 // RateAllergyIntolerance makes a request to the rate action endpoint of the AllergyIntolerance resource
@@ -190,7 +177,7 @@ func (c *Client) NewRateAllergyIntoleranceRequest(ctx context.Context, path stri
 
 // ShowAllergyIntolerancePath computes a request path to the show action of AllergyIntolerance.
 func ShowAllergyIntolerancePath(patientID int, allergyIntoleranceID int) string {
-	return fmt.Sprintf("/nosh/patients/%v/allergy_intolerance/%v", patientID, allergyIntoleranceID)
+	return fmt.Sprintf("/nosh/patients/%v/allergy.intolerance/%v", patientID, allergyIntoleranceID)
 }
 
 // Retrieve vital with given id
@@ -218,7 +205,7 @@ func (c *Client) NewShowAllergyIntoleranceRequest(ctx context.Context, path stri
 
 // UpdateAllergyIntolerancePath computes a request path to the update action of AllergyIntolerance.
 func UpdateAllergyIntolerancePath(patientID int, allergyIntoleranceID int) string {
-	return fmt.Sprintf("/nosh/patients/%v/allergy_intolerance/%v", patientID, allergyIntoleranceID)
+	return fmt.Sprintf("/nosh/patients/%v/allergy.intolerance/%v", patientID, allergyIntoleranceID)
 }
 
 // UpdateAllergyIntolerance makes a request to the update action endpoint of the AllergyIntolerance resource
@@ -251,7 +238,7 @@ func (c *Client) NewUpdateAllergyIntoleranceRequest(ctx context.Context, path st
 
 // WatchAllergyIntolerancePath computes a request path to the watch action of AllergyIntolerance.
 func WatchAllergyIntolerancePath(patientID int, allergyIntoleranceID int) string {
-	return fmt.Sprintf("/nosh/patients/%v/allergy_intolerance/%v/watch", patientID, allergyIntoleranceID)
+	return fmt.Sprintf("/nosh/patients/%v/allergy.intolerance/%v/watch", patientID, allergyIntoleranceID)
 }
 
 // Retrieve vital with given id

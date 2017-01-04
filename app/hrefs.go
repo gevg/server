@@ -19,14 +19,14 @@ import (
 func AllergyIntoleranceHref(patientID, allergyIntoleranceID interface{}) string {
 	parampatientID := strings.TrimLeftFunc(fmt.Sprintf("%v", patientID), func(r rune) bool { return r == '/' })
 	paramallergyIntoleranceID := strings.TrimLeftFunc(fmt.Sprintf("%v", allergyIntoleranceID), func(r rune) bool { return r == '/' })
-	return fmt.Sprintf("/nosh/patients/%v/allergy_intolerance/%v", parampatientID, paramallergyIntoleranceID)
+	return fmt.Sprintf("/nosh/patients/%v/allergy.intolerance/%v", parampatientID, paramallergyIntoleranceID)
 }
 
 // NutritionRequestHref returns the resource href.
 func NutritionRequestHref(patientID, nutritionRequestID interface{}) string {
 	parampatientID := strings.TrimLeftFunc(fmt.Sprintf("%v", patientID), func(r rune) bool { return r == '/' })
 	paramnutritionRequestID := strings.TrimLeftFunc(fmt.Sprintf("%v", nutritionRequestID), func(r rune) bool { return r == '/' })
-	return fmt.Sprintf("/nosh/patients/%v/nutrition_requests/%v", parampatientID, paramnutritionRequestID)
+	return fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", parampatientID, paramnutritionRequestID)
 }
 
 // ObservationHref returns the resource href.

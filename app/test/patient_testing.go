@@ -350,7 +350,7 @@ func DeletePatientNotFound(t goatest.TInterface, ctx context.Context, service *g
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ListPatientOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, fail *bool) (http.ResponseWriter, app.PatientCollection) {
+func ListPatientOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, fail *bool) (http.ResponseWriter, app.PatientMediaCollection) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -407,12 +407,12 @@ func ListPatientOK(t goatest.TInterface, ctx context.Context, service *goa.Servi
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt app.PatientCollection
+	var mt app.PatientMediaCollection
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(app.PatientCollection)
+		mt, ok = resp.(app.PatientMediaCollection)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.PatientCollection", resp)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.PatientMediaCollection", resp)
 		}
 		err = mt.Validate()
 		if err != nil {
@@ -428,7 +428,7 @@ func ListPatientOK(t goatest.TInterface, ctx context.Context, service *goa.Servi
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ListPatientOKLink(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, fail *bool) (http.ResponseWriter, app.PatientLinkCollection) {
+func ListPatientOKLink(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, fail *bool) (http.ResponseWriter, app.PatientMediaLinkCollection) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -485,12 +485,12 @@ func ListPatientOKLink(t goatest.TInterface, ctx context.Context, service *goa.S
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt app.PatientLinkCollection
+	var mt app.PatientMediaLinkCollection
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(app.PatientLinkCollection)
+		mt, ok = resp.(app.PatientMediaLinkCollection)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.PatientLinkCollection", resp)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.PatientMediaLinkCollection", resp)
 		}
 	}
 
@@ -502,7 +502,7 @@ func ListPatientOKLink(t goatest.TInterface, ctx context.Context, service *goa.S
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ListPatientOK1(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, fail *bool) (http.ResponseWriter, app.PatientCollection) {
+func ListPatientOK1(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, fail *bool) (http.ResponseWriter, app.PatientMediaCollection) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -559,12 +559,12 @@ func ListPatientOK1(t goatest.TInterface, ctx context.Context, service *goa.Serv
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt app.PatientCollection
+	var mt app.PatientMediaCollection
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(app.PatientCollection)
+		mt, ok = resp.(app.PatientMediaCollection)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.PatientCollection", resp)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.PatientMediaCollection", resp)
 		}
 		err = mt.Validate()
 		if err != nil {
@@ -580,7 +580,7 @@ func ListPatientOK1(t goatest.TInterface, ctx context.Context, service *goa.Serv
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ListPatientOK1Link(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, fail *bool) (http.ResponseWriter, app.PatientLinkCollection) {
+func ListPatientOK1Link(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, fail *bool) (http.ResponseWriter, app.PatientMediaLinkCollection) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -637,12 +637,12 @@ func ListPatientOK1Link(t goatest.TInterface, ctx context.Context, service *goa.
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt app.PatientLinkCollection
+	var mt app.PatientMediaLinkCollection
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(app.PatientLinkCollection)
+		mt, ok = resp.(app.PatientMediaLinkCollection)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.PatientLinkCollection", resp)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.PatientMediaLinkCollection", resp)
 		}
 	}
 
@@ -908,7 +908,7 @@ func ShowPatientNotFound(t goatest.TInterface, ctx context.Context, service *goa
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ShowPatientOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, patientID int) (http.ResponseWriter, *app.Patient) {
+func ShowPatientOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, patientID int) (http.ResponseWriter, *app.PatientMedia) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -956,12 +956,12 @@ func ShowPatientOK(t goatest.TInterface, ctx context.Context, service *goa.Servi
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt *app.Patient
+	var mt *app.PatientMedia
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(*app.Patient)
+		mt, ok = resp.(*app.PatientMedia)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.Patient", resp)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.PatientMedia", resp)
 		}
 		err = mt.Validate()
 		if err != nil {
@@ -977,7 +977,7 @@ func ShowPatientOK(t goatest.TInterface, ctx context.Context, service *goa.Servi
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ShowPatientOKLink(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, patientID int) (http.ResponseWriter, *app.PatientLink) {
+func ShowPatientOKLink(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, patientID int) (http.ResponseWriter, *app.PatientMediaLink) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1025,12 +1025,12 @@ func ShowPatientOKLink(t goatest.TInterface, ctx context.Context, service *goa.S
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt *app.PatientLink
+	var mt *app.PatientMediaLink
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(*app.PatientLink)
+		mt, ok = resp.(*app.PatientMediaLink)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.PatientLink", resp)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.PatientMediaLink", resp)
 		}
 	}
 

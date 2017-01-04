@@ -6,11 +6,11 @@ import (
 	. "github.com/goadesign/goa/design/apidsl"
 )
 
-// NutritionRequestPayload defines the data structure used in the create vital request body.
+// NutritionRequest defines the data structure used in the create vital request body.
 // It is also the base type for the vital media type used to render bottles.
-var NutritionRequestPayload = Type("NutritionRequestPayload", func() {
+var NutritionRequest = Type("NutritionRequest", func() {
 	Description("A nutrition request from the patient")
-	//Reference(NutritionRequestPayload)
+	//Reference(NutritionRequest)
 	//Local Start-------------------------------------------------------------------------------
 	Required("id", "href", "status")
 
@@ -76,7 +76,7 @@ var NutritionRequestPayload = Type("NutritionRequestPayload", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("oralDiet", CollectionOf(OralDiet), "Diet given orally in contrast to enteral (tube) feeding.", func() {
+	Attribute("oralDiet", CollectionOf(OralDietMedia), "Diet given orally in contrast to enteral (tube) feeding.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
@@ -84,14 +84,14 @@ var NutritionRequestPayload = Type("NutritionRequestPayload", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("enteralFormula", CollectionOf(EnteralFormula), "Feeding provided through the gastrointestinal tract via a tube, catheter, or stoma that delivers nutrition distal to the oral cavity.", func() {
+	Attribute("enteralFormula", CollectionOf(EnteralFormulaMedia), "Feeding provided through the gastrointestinal tract via a tube, catheter, or stoma that delivers nutrition distal to the oral cavity.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
 })
-var EnteralFormulaPayload = Type("EnteralFormulaPayload", func() {
+var EnteralFormula = Type("EnteralFormula", func() {
 	Description("Feeding provided through the gastrointestinal tract via a tube, catheter, or stoma that delivers nutrition distal to the oral cavity.")
-	//Reference(NutritionRequestPayload)
+	//Reference(NutritionRequest)
 	Attribute("baseFormulaType", CodeableConcept, "The type of enteral or infant formula such as an adult standard formula with fiber or a soy-based infant formula.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
@@ -128,9 +128,9 @@ var EnteralFormulaPayload = Type("EnteralFormulaPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var NutrientPayload = Type("NutrientPayload", func() {
+var Nutrient = Type("Nutrient", func() {
 	Description("A nutrition request from the patient")
-	//Reference(NutritionRequestPayload)
+	//Reference(NutritionRequest)
 	Attribute("modifier", CodeableConcept, "The nutrient that is being modified such as carbohydrate or sodium. See http://hl7.org/fhir/ValueSet/nutrient-code", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
@@ -140,9 +140,9 @@ var NutrientPayload = Type("NutrientPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var OralDietPayload = Type("OralDietPayload", func() {
+var OralDiet = Type("OralDiet", func() {
 	Description("A nutrition request from the patient")
-	//Reference(NutritionRequestPayload)
+	//Reference(NutritionRequest)
 	Attribute("type", CodeableConcept, "The kind of diet or dietary restriction such as fiber restricted diet or diabetic diet. See http://hl7.org/fhir/ValueSet/diet-type", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
@@ -168,9 +168,9 @@ var OralDietPayload = Type("OralDietPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var SupplementPayload = Type("SupplementPayload", func() {
+var Supplement = Type("Supplement", func() {
 	Description("Oral nutritional products given in order to add further nutritional value to the patient's diet.")
-	//Reference(NutritionRequestPayload)
+	//Reference(NutritionRequest)
 	Attribute("type", CodeableConcept, "The kind of nutritional supplement product required such as a high protein or pediatric clear liquid supplement.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
@@ -188,9 +188,9 @@ var SupplementPayload = Type("SupplementPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var TexturePayload = Type("TexturePayload", func() {
+var Texture = Type("Texture", func() {
 	Description("A nutrition request from the patient")
-	//Reference(NutritionRequestPayload)
+	//Reference(NutritionRequest)
 	Attribute("modifier", CodeableConcept, "Any texture modifications (for solid foods) that should be made, e.g. easy to chew, chopped, ground, and pureed. See http://hl7.org/fhir/ValueSet/texture-code", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:

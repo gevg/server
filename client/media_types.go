@@ -17,10 +17,10 @@ import (
 	"unicode/utf8"
 )
 
-// Address media type (default view)
+// AddressMedia media type (default view)
 //
 // Identifier: application/vnd.address+json; view=default
-type Address struct {
+type AddressMedia struct {
 	// The name of the city, town, village or other community or delivery center.
 	City *string `form:"city,omitempty" json:"city,omitempty" xml:"city,omitempty"`
 	// Country (can be ISO 3166 3 letter code)
@@ -39,8 +39,8 @@ type Address struct {
 	Use *string `form:"use,omitempty" json:"use,omitempty" xml:"use,omitempty"`
 }
 
-// Validate validates the Address media type instance.
-func (mt *Address) Validate() (err error) {
+// Validate validates the AddressMedia media type instance.
+func (mt *AddressMedia) Validate() (err error) {
 	if mt.Type != nil {
 		if !(*mt.Type == "postal" || *mt.Type == "physical" || *mt.Type == "both") {
 			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.type`, *mt.Type, []interface{}{"postal", "physical", "both"}))
@@ -54,53 +54,48 @@ func (mt *Address) Validate() (err error) {
 	return
 }
 
-// DecodeAddress decodes the Address instance encoded in resp body.
-func (c *Client) DecodeAddress(resp *http.Response) (*Address, error) {
-	var decoded Address
+// DecodeAddressMedia decodes the AddressMedia instance encoded in resp body.
+func (c *Client) DecodeAddressMedia(resp *http.Response) (*AddressMedia, error) {
+	var decoded AddressMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Allergy_intolerance media type (default view)
+// AllergyIntoleranceMedia media type (default view)
 //
-// Identifier: application/vnd.allergy_intolerance+json; view=default
-type AllergyIntolerance struct {
+// Identifier: application/vnd.allergy.intolerance+json; view=default
+type AllergyIntoleranceMedia struct {
 	// Category of the identified Substance. See http://hl7.org/fhir/ValueSet/allergy-intolerance-category
 	Category *string `form:"category,omitempty" json:"category,omitempty" xml:"category,omitempty"`
 	// Estimate of the potential clinical harm, or seriousness, of the reaction to the identified Substance. See http://hl7.org/fhir/ValueSet/allergy-intolerance-criticality
 	Criticality *string `form:"criticality,omitempty" json:"criticality,omitempty" xml:"criticality,omitempty"`
 	// This records identifiers associated with this allergy/intolerance concern that are defined by business processes and/or
 	// 		used to refer to it when a direct URL reference to the resource itself is not appropriate (e.g. in CDA documents, or in written / printed documentation).
-	Identifier *Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
+	Identifier []*Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
 	// Represents the date and/or time of the last known occurrence of a reaction event.
 	LastOccurence *time.Time `form:"lastOccurence,omitempty" json:"lastOccurence,omitempty" xml:"lastOccurence,omitempty"`
 	// Additional narrative about the propensity for the Adverse Reaction, not captured in other fields..
 	Note *Annotation `form:"note,omitempty" json:"note,omitempty" xml:"note,omitempty"`
 	// Record of the date and/or time of the onset of the Allergy or Intolerance.
-	Onset   *time.Time `form:"onset,omitempty" json:"onset,omitempty" xml:"onset,omitempty"`
-	Orderer *struct {
-		// xml:id (or equivalent in JSON)
-		ID        *string    `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
-		Reference *Reference `form:"reference,omitempty" json:"reference,omitempty" xml:"reference,omitempty"`
-	} `form:"orderer,omitempty" json:"orderer,omitempty" xml:"orderer,omitempty"`
+	Onset *time.Time `form:"onset,omitempty" json:"onset,omitempty" xml:"onset,omitempty"`
 	// The patient who has the allergy or intolerance.
-	Patient *Reference `form:"patient,omitempty" json:"patient,omitempty" xml:"patient,omitempty"`
+	Patient *HL7Reference `form:"patient,omitempty" json:"patient,omitempty" xml:"patient,omitempty"`
 	// Details about each adverse reaction event linked to exposure to the identified Substance.
 	Reaction *Reaction `form:"reaction,omitempty" json:"reaction,omitempty" xml:"reaction,omitempty"`
 	// Date when the sensitivity was recorded.
 	RecordedDate *time.Time `form:"recordedDate,omitempty" json:"recordedDate,omitempty" xml:"recordedDate,omitempty"`
 	// Individual who recorded the record and takes responsibility for its conten.
-	Recorder *Reference `form:"recorder,omitempty" json:"recorder,omitempty" xml:"recorder,omitempty"`
+	Recorder *HL7Reference `form:"recorder,omitempty" json:"recorder,omitempty" xml:"recorder,omitempty"`
 	// The source of the information about the allergy that is recorded.
-	Reporter *Reference `form:"reporter,omitempty" json:"reporter,omitempty" xml:"reporter,omitempty"`
+	Reporter *HL7Reference `form:"reporter,omitempty" json:"reporter,omitempty" xml:"reporter,omitempty"`
 	// Assertion about certainty associated with a propensity, or potential risk, of a reaction to the identified Substance. See http://hl7.org/fhir/ValueSet/allergy-intolerance-status
 	Status *string `form:"status,omitempty" json:"status,omitempty" xml:"status,omitempty"`
 	// Identification of the underlying physiological mechanism for the reaction risk. See http://hl7.org/fhir/ValueSet/allergy-intolerance-type
 	Type *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
 }
 
-// Validate validates the AllergyIntolerance media type instance.
-func (mt *AllergyIntolerance) Validate() (err error) {
+// Validate validates the AllergyIntoleranceMedia media type instance.
+func (mt *AllergyIntoleranceMedia) Validate() (err error) {
 	if mt.Category != nil {
 		if !(*mt.Category == "food" || *mt.Category == "medication" || *mt.Category == "environment" || *mt.Category == "other") {
 			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.category`, *mt.Category, []interface{}{"food", "medication", "environment", "other"}))
@@ -109,6 +104,13 @@ func (mt *AllergyIntolerance) Validate() (err error) {
 	if mt.Criticality != nil {
 		if !(*mt.Criticality == "CRITL" || *mt.Criticality == "CRITH" || *mt.Criticality == "CRITU") {
 			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.criticality`, *mt.Criticality, []interface{}{"CRITL", "CRITH", "CRITU"}))
+		}
+	}
+	for _, e := range mt.Identifier {
+		if e != nil {
+			if err2 := e.Validate(); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
 		}
 	}
 	if mt.Reaction != nil {
@@ -129,20 +131,20 @@ func (mt *AllergyIntolerance) Validate() (err error) {
 	return
 }
 
-// DecodeAllergyIntolerance decodes the AllergyIntolerance instance encoded in resp body.
-func (c *Client) DecodeAllergyIntolerance(resp *http.Response) (*AllergyIntolerance, error) {
-	var decoded AllergyIntolerance
+// DecodeAllergyIntoleranceMedia decodes the AllergyIntoleranceMedia instance encoded in resp body.
+func (c *Client) DecodeAllergyIntoleranceMedia(resp *http.Response) (*AllergyIntoleranceMedia, error) {
+	var decoded AllergyIntoleranceMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Allergy_intoleranceCollection is the media type for an array of Allergy_intolerance (default view)
+// AllergyIntoleranceMediaCollection is the media type for an array of AllergyIntoleranceMedia (default view)
 //
-// Identifier: application/vnd.allergy_intolerance+json; type=collection; view=default
-type AllergyIntoleranceCollection []*AllergyIntolerance
+// Identifier: application/vnd.allergy.intolerance+json; type=collection; view=default
+type AllergyIntoleranceMediaCollection []*AllergyIntoleranceMedia
 
-// Validate validates the AllergyIntoleranceCollection media type instance.
-func (mt AllergyIntoleranceCollection) Validate() (err error) {
+// Validate validates the AllergyIntoleranceMediaCollection media type instance.
+func (mt AllergyIntoleranceMediaCollection) Validate() (err error) {
 	for _, e := range mt {
 		if e != nil {
 			if err2 := e.Validate(); err2 != nil {
@@ -153,52 +155,55 @@ func (mt AllergyIntoleranceCollection) Validate() (err error) {
 	return
 }
 
-// DecodeAllergyIntoleranceCollection decodes the AllergyIntoleranceCollection instance encoded in resp body.
-func (c *Client) DecodeAllergyIntoleranceCollection(resp *http.Response) (AllergyIntoleranceCollection, error) {
-	var decoded AllergyIntoleranceCollection
+// DecodeAllergyIntoleranceMediaCollection decodes the AllergyIntoleranceMediaCollection instance encoded in resp body.
+func (c *Client) DecodeAllergyIntoleranceMediaCollection(resp *http.Response) (AllergyIntoleranceMediaCollection, error) {
+	var decoded AllergyIntoleranceMediaCollection
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return decoded, err
 }
 
-// Animal media type (default view)
+// AnimalMedia media type (default view)
 //
 // Identifier: application/vnd.animal+json; view=default
-type Animal struct {
-	Breed        *string `form:"breed,omitempty" json:"breed,omitempty" xml:"breed,omitempty"`
-	GenderStatus *string `form:"genderStatus,omitempty" json:"genderStatus,omitempty" xml:"genderStatus,omitempty"`
-	Species      *string `form:"species,omitempty" json:"species,omitempty" xml:"species,omitempty"`
+type AnimalMedia struct {
+	// Identifies the detailed categorization of the kind of animal. See http://hl7.org/fhir/ValueSet/animal-breeds
+	Breed *CodeableConcept `form:"breed,omitempty" json:"breed,omitempty" xml:"breed,omitempty"`
+	// Indicates the current state of the animal's reproductive organs. See http://hl7.org/fhir/ValueSet/animal-genderstatus
+	GenderStatus *CodeableConcept `form:"genderStatus,omitempty" json:"genderStatus,omitempty" xml:"genderStatus,omitempty"`
+	// Identifies the high level taxonomic categorization of the kind of animal. See http://hl7.org/fhir/ValueSet/animal-species
+	Species *CodeableConcept `form:"species,omitempty" json:"species,omitempty" xml:"species,omitempty"`
 }
 
-// DecodeAnimal decodes the Animal instance encoded in resp body.
-func (c *Client) DecodeAnimal(resp *http.Response) (*Animal, error) {
-	var decoded Animal
+// DecodeAnimalMedia decodes the AnimalMedia instance encoded in resp body.
+func (c *Client) DecodeAnimalMedia(resp *http.Response) (*AnimalMedia, error) {
+	var decoded AnimalMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Annotation media type (default view)
+// AnnotationMedia media type (default view)
 //
 // Identifier: application/vnd.annotation+json; view=default
-type Annotation struct {
+type AnnotationMedia struct {
 	// The individual responsible for making the annotation.
-	AuthorReference *Reference `form:"authorReference,omitempty" json:"authorReference,omitempty" xml:"authorReference,omitempty"`
+	AuthorReference *HL7Reference `form:"authorReference,omitempty" json:"authorReference,omitempty" xml:"authorReference,omitempty"`
 	// The individual responsible for making the annotation.
 	AuthorString *string `form:"authorString,omitempty" json:"authorString,omitempty" xml:"authorString,omitempty"`
 	// Indicates when this particular annotation was made.
 	Time *time.Time `form:"time,omitempty" json:"time,omitempty" xml:"time,omitempty"`
 }
 
-// DecodeAnnotation decodes the Annotation instance encoded in resp body.
-func (c *Client) DecodeAnnotation(resp *http.Response) (*Annotation, error) {
-	var decoded Annotation
+// DecodeAnnotationMedia decodes the AnnotationMedia instance encoded in resp body.
+func (c *Client) DecodeAnnotationMedia(resp *http.Response) (*AnnotationMedia, error) {
+	var decoded AnnotationMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Attachment media type (default view)
+// AttachmentMedia media type (default view)
 //
 // Identifier: application/vnd.attachment+json; view=default
-type Attachment struct {
+type AttachmentMedia struct {
 	// Identifies the type of the data in the attachment and allows a method to be chosen to interpret or render the data.
 	// 				Includes mime type parameters such as charset where appropriate. See http://www.rfc-editor.org/bcp/bcp13.txt
 	ContentType *string `form:"contentType,omitempty" json:"contentType,omitempty" xml:"contentType,omitempty"`
@@ -214,23 +219,23 @@ type Attachment struct {
 	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
 }
 
-// DecodeAttachment decodes the Attachment instance encoded in resp body.
-func (c *Client) DecodeAttachment(resp *http.Response) (*Attachment, error) {
-	var decoded Attachment
+// DecodeAttachmentMedia decodes the AttachmentMedia instance encoded in resp body.
+func (c *Client) DecodeAttachmentMedia(resp *http.Response) (*AttachmentMedia, error) {
+	var decoded AttachmentMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// BackboneElement media type (default view)
+// BackboneElementMedia media type (default view)
 //
 // Identifier: application/vnd.backbone.element+json; view=default
-type BackboneElement struct {
+type BackboneElementMedia struct {
 	Element           *Element   `form:"element,omitempty" json:"element,omitempty" xml:"element,omitempty"`
 	ModifierExtension *Extension `form:"modifierExtension,omitempty" json:"modifierExtension,omitempty" xml:"modifierExtension,omitempty"`
 }
 
-// Validate validates the BackboneElement media type instance.
-func (mt *BackboneElement) Validate() (err error) {
+// Validate validates the BackboneElementMedia media type instance.
+func (mt *BackboneElementMedia) Validate() (err error) {
 	if mt.Element != nil {
 		if err2 := mt.Element.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -244,17 +249,17 @@ func (mt *BackboneElement) Validate() (err error) {
 	return
 }
 
-// DecodeBackboneElement decodes the BackboneElement instance encoded in resp body.
-func (c *Client) DecodeBackboneElement(resp *http.Response) (*BackboneElement, error) {
-	var decoded BackboneElement
+// DecodeBackboneElementMedia decodes the BackboneElementMedia instance encoded in resp body.
+func (c *Client) DecodeBackboneElementMedia(resp *http.Response) (*BackboneElementMedia, error) {
+	var decoded BackboneElementMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// CodeableConcept media type (default view)
+// CodeableConceptMedia media type (default view)
 //
 // Identifier: application/vnd.codeable.concept+json; view=default
-type CodeableConcept struct {
+type CodeableConceptMedia struct {
 	// A concept that may be defined by a formal reference to a terminology or ontology or may be provided by text.
 	Coding []*Coding `form:"coding,omitempty" json:"coding,omitempty" xml:"coding,omitempty"`
 	// The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the
@@ -263,17 +268,17 @@ type CodeableConcept struct {
 	Text *string `form:"text,omitempty" json:"text,omitempty" xml:"text,omitempty"`
 }
 
-// DecodeCodeableConcept decodes the CodeableConcept instance encoded in resp body.
-func (c *Client) DecodeCodeableConcept(resp *http.Response) (*CodeableConcept, error) {
-	var decoded CodeableConcept
+// DecodeCodeableConceptMedia decodes the CodeableConceptMedia instance encoded in resp body.
+func (c *Client) DecodeCodeableConceptMedia(resp *http.Response) (*CodeableConceptMedia, error) {
+	var decoded CodeableConceptMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Coding media type (default view)
+// CodingMedia media type (default view)
 //
 // Identifier: application/vnd.coding+json; view=default
-type Coding struct {
+type CodingMedia struct {
 	// A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).
 	Code *string `form:"code,omitempty" json:"code,omitempty" xml:"code,omitempty"`
 	// A representation of the meaning of the code in the system, following the rules of the system.
@@ -288,34 +293,37 @@ type Coding struct {
 	Version *string `form:"version,omitempty" json:"version,omitempty" xml:"version,omitempty"`
 }
 
-// DecodeCoding decodes the Coding instance encoded in resp body.
-func (c *Client) DecodeCoding(resp *http.Response) (*Coding, error) {
-	var decoded Coding
+// DecodeCodingMedia decodes the CodingMedia instance encoded in resp body.
+func (c *Client) DecodeCodingMedia(resp *http.Response) (*CodingMedia, error) {
+	var decoded CodingMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Communication media type (default view)
+// CommunicationMedia media type (default view)
 //
 // Identifier: application/vnd.communication+json; view=default
-type Communication struct {
-	CareProvider *string `form:"careProvider,omitempty" json:"careProvider,omitempty" xml:"careProvider,omitempty"`
-	Language     *string `form:"language,omitempty" json:"language,omitempty" xml:"language,omitempty"`
-	Preferred    *string `form:"preferred,omitempty" json:"preferred,omitempty" xml:"preferred,omitempty"`
+type CommunicationMedia struct {
+	// Patient's nominated care provider.
+	CareProvider *HL7Reference `form:"careProvider,omitempty" json:"careProvider,omitempty" xml:"careProvider,omitempty"`
+	// The ISO-639-1 alpha 2 code in lower case for the language, optionally followed by a hyphen
+	// 		and the ISO-3166-1 alpha 2 code for the region in upper case; e.g. "en" for English, or "en-US" for American English versus "en-EN" for England English.
+	Language *CodeableConcept `form:"language,omitempty" json:"language,omitempty" xml:"language,omitempty"`
+	// Indicates whether or not the patient prefers this language (over other languages he masters up a certain level).
+	Preferred *bool `form:"preferred,omitempty" json:"preferred,omitempty" xml:"preferred,omitempty"`
 }
 
-// DecodeCommunication decodes the Communication instance encoded in resp body.
-func (c *Client) DecodeCommunication(resp *http.Response) (*Communication, error) {
-	var decoded Communication
+// DecodeCommunicationMedia decodes the CommunicationMedia instance encoded in resp body.
+func (c *Client) DecodeCommunicationMedia(resp *http.Response) (*CommunicationMedia, error) {
+	var decoded CommunicationMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Some observations have multiple component observations.  These component observations are expressed as separate code value pairs that share the same attributes.
-// 	Examples include systolic and diastolic component observations for blood pressure measurement and multiple component observations for genetics observations. (default view)
+// ComponentMedia media type (default view)
 //
 // Identifier: application/vnd.component+json; view=default
-type Component struct {
+type ComponentMedia struct {
 	// Describes what was observed. Sometimes this is called the observation 'code'. See http://hl7.org/fhir/ValueSet/observation-codes
 	Code *CodeableConcept `form:"code,omitempty" json:"code,omitempty" xml:"code,omitempty"`
 	// Provides a reason why the expected value in the element Observation.value[x] is missing. See http://hl7.org/fhir/ValueSet/observation-valueabsentreason
@@ -332,10 +340,15 @@ type Component struct {
 	ValueTime            *time.Time       `form:"valueTime,omitempty" json:"valueTime,omitempty" xml:"valueTime,omitempty"`
 }
 
-// Validate validates the Component media type instance.
-func (mt *Component) Validate() (err error) {
+// Validate validates the ComponentMedia media type instance.
+func (mt *ComponentMedia) Validate() (err error) {
 	if mt.ReferenceRange != nil {
 		if err2 := mt.ReferenceRange.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	if mt.ValueAttachment != nil {
+		if err2 := mt.ValueAttachment.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
 		}
 	}
@@ -357,20 +370,20 @@ func (mt *Component) Validate() (err error) {
 	return
 }
 
-// DecodeComponent decodes the Component instance encoded in resp body.
-func (c *Client) DecodeComponent(resp *http.Response) (*Component, error) {
-	var decoded Component
+// DecodeComponentMedia decodes the ComponentMedia instance encoded in resp body.
+func (c *Client) DecodeComponentMedia(resp *http.Response) (*ComponentMedia, error) {
+	var decoded ComponentMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// ComponentCollection is the media type for an array of Component (default view)
+// ComponentMediaCollection is the media type for an array of ComponentMedia (default view)
 //
 // Identifier: application/vnd.component+json; type=collection; view=default
-type ComponentCollection []*Component
+type ComponentMediaCollection []*ComponentMedia
 
-// Validate validates the ComponentCollection media type instance.
-func (mt ComponentCollection) Validate() (err error) {
+// Validate validates the ComponentMediaCollection media type instance.
+func (mt ComponentMediaCollection) Validate() (err error) {
 	for _, e := range mt {
 		if e != nil {
 			if err2 := e.Validate(); err2 != nil {
@@ -381,37 +394,69 @@ func (mt ComponentCollection) Validate() (err error) {
 	return
 }
 
-// DecodeComponentCollection decodes the ComponentCollection instance encoded in resp body.
-func (c *Client) DecodeComponentCollection(resp *http.Response) (ComponentCollection, error) {
-	var decoded ComponentCollection
+// DecodeComponentMediaCollection decodes the ComponentMediaCollection instance encoded in resp body.
+func (c *Client) DecodeComponentMediaCollection(resp *http.Response) (ComponentMediaCollection, error) {
+	var decoded ComponentMediaCollection
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return decoded, err
 }
 
-// Contact media type (default view)
+// HL7ContactMedia media type (default view)
 //
 // Identifier: application/vnd.contact+json; view=default
-type Contact struct {
-	Address      *string `form:"address,omitempty" json:"address,omitempty" xml:"address,omitempty"`
-	Gender       *string `form:"gender,omitempty" json:"gender,omitempty" xml:"gender,omitempty"`
-	Name         *string `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
-	Organization *string `form:"organization,omitempty" json:"organization,omitempty" xml:"organization,omitempty"`
-	Period       *string `form:"period,omitempty" json:"period,omitempty" xml:"period,omitempty"`
-	Relationship *string `form:"relationship,omitempty" json:"relationship,omitempty" xml:"relationship,omitempty"`
-	Telecom      *string `form:"telecom,omitempty" json:"telecom,omitempty" xml:"telecom,omitempty"`
+type HL7ContactMedia struct {
+	// Patient's nominated care provider.
+	Address *Address `form:"address,omitempty" json:"address,omitempty" xml:"address,omitempty"`
+	// Administrative Gender - the gender that the contact person is considered to have for administration and record keeping purposes.
+	Gender *string `form:"gender,omitempty" json:"gender,omitempty" xml:"gender,omitempty"`
+	// A name associated with the contact person.
+	Name *HumanName `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
+	// Organization on behalf of which the contact is acting or for which the contact is working.
+	Organization *HL7Reference `form:"organization,omitempty" json:"organization,omitempty" xml:"organization,omitempty"`
+	// The period during which this contact person or organization is valid to be contacted relating to this patient.
+	Period *Period `form:"period,omitempty" json:"period,omitempty" xml:"period,omitempty"`
+	// The nature of the relationship between the patient and the contact person.
+	Relationship *CodeableConcept `form:"relationship,omitempty" json:"relationship,omitempty" xml:"relationship,omitempty"`
+	// Address for the contact person.
+	Telecom *ContactPoint `form:"telecom,omitempty" json:"telecom,omitempty" xml:"telecom,omitempty"`
 }
 
-// DecodeContact decodes the Contact instance encoded in resp body.
-func (c *Client) DecodeContact(resp *http.Response) (*Contact, error) {
-	var decoded Contact
+// Validate validates the HL7ContactMedia media type instance.
+func (mt *HL7ContactMedia) Validate() (err error) {
+	if mt.Address != nil {
+		if err2 := mt.Address.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	if mt.Gender != nil {
+		if !(*mt.Gender == "male" || *mt.Gender == "female" || *mt.Gender == "other" || *mt.Gender == "unknown") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.gender`, *mt.Gender, []interface{}{"male", "female", "other", "unknown"}))
+		}
+	}
+	if mt.Name != nil {
+		if err2 := mt.Name.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	if mt.Telecom != nil {
+		if err2 := mt.Telecom.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	return
+}
+
+// DecodeHL7ContactMedia decodes the HL7ContactMedia instance encoded in resp body.
+func (c *Client) DecodeHL7ContactMedia(resp *http.Response) (*HL7ContactMedia, error) {
+	var decoded HL7ContactMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// ContactPoint media type (default view)
+// ContactPointMedia media type (default view)
 //
 // Identifier: application/vnd.contact.point+json; view=default
-type ContactPoint struct {
+type ContactPointMedia struct {
 	// Specifies a preferred order in which to use a set of contacts. Contacts are ranked with lower values coming before higher values.
 	Rank *int `form:"rank,omitempty" json:"rank,omitempty" xml:"rank,omitempty"`
 	// Telecommunications form for contact point - what communications system is required to make use of the contact.
@@ -422,8 +467,8 @@ type ContactPoint struct {
 	Value *string `form:"value,omitempty" json:"value,omitempty" xml:"value,omitempty"`
 }
 
-// Validate validates the ContactPoint media type instance.
-func (mt *ContactPoint) Validate() (err error) {
+// Validate validates the ContactPointMedia media type instance.
+func (mt *ContactPointMedia) Validate() (err error) {
 	if mt.System != nil {
 		if !(*mt.System == "phone" || *mt.System == "fax" || *mt.System == "email" || *mt.System == "pager" || *mt.System == "other") {
 			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.system`, *mt.System, []interface{}{"phone", "fax", "email", "pager", "other"}))
@@ -437,23 +482,23 @@ func (mt *ContactPoint) Validate() (err error) {
 	return
 }
 
-// DecodeContactPoint decodes the ContactPoint instance encoded in resp body.
-func (c *Client) DecodeContactPoint(resp *http.Response) (*ContactPoint, error) {
-	var decoded ContactPoint
+// DecodeContactPointMedia decodes the ContactPointMedia instance encoded in resp body.
+func (c *Client) DecodeContactPointMedia(resp *http.Response) (*ContactPointMedia, error) {
+	var decoded ContactPointMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Element media type (default view)
+// ElelmentMedia media type (default view)
 //
 // Identifier: application/vnd.element+json; view=default
-type Element struct {
+type ElelmentMedia struct {
 	Extension *Extension `form:"extension,omitempty" json:"extension,omitempty" xml:"extension,omitempty"`
 	ID        *string    `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
 }
 
-// Validate validates the Element media type instance.
-func (mt *Element) Validate() (err error) {
+// Validate validates the ElelmentMedia media type instance.
+func (mt *ElelmentMedia) Validate() (err error) {
 	if mt.Extension != nil {
 		if err2 := mt.Extension.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -462,16 +507,16 @@ func (mt *Element) Validate() (err error) {
 	return
 }
 
-// DecodeElement decodes the Element instance encoded in resp body.
-func (c *Client) DecodeElement(resp *http.Response) (*Element, error) {
-	var decoded Element
+// DecodeElelmentMedia decodes the ElelmentMedia instance encoded in resp body.
+func (c *Client) DecodeElelmentMedia(resp *http.Response) (*ElelmentMedia, error) {
+	var decoded ElelmentMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Enteral_formula media type (default view)
+// EnteralFormula media type (default view)
 //
-// Identifier: application/vnd.enteral_formula+json; view=default
+// Identifier: application/vnd.enteral.formula+json; view=default
 type EnteralFormula struct {
 	// Product or brand name of the enteral or infant formula
 	AdditiveProductName *string `form:"additiveProductName,omitempty" json:"additiveProductName,omitempty" xml:"additiveProductName,omitempty"`
@@ -515,9 +560,9 @@ func (c *Client) DecodeEnteralFormula(resp *http.Response) (*EnteralFormula, err
 	return &decoded, err
 }
 
-// Enteral_formulaCollection is the media type for an array of Enteral_formula (default view)
+// EnteralFormulaCollection is the media type for an array of EnteralFormula (default view)
 //
-// Identifier: application/vnd.enteral_formula+json; type=collection; view=default
+// Identifier: application/vnd.enteral.formula+json; type=collection; view=default
 type EnteralFormulaCollection []*EnteralFormula
 
 // Validate validates the EnteralFormulaCollection media type instance.
@@ -539,10 +584,10 @@ func (c *Client) DecodeEnteralFormulaCollection(resp *http.Response) (EnteralFor
 	return decoded, err
 }
 
-// Default view for Extension element (default view)
+// ExtensionMedia media type (default view)
 //
 // Identifier: application/vnd.extension+json; view=default
-type Extension struct {
+type ExtensionMedia struct {
 	ValueAddress         *Address         `form:"ValueAddress,omitempty" json:"ValueAddress,omitempty" xml:"ValueAddress,omitempty"`
 	ValueAnnotation      *Annotation      `form:"ValueAnnotation,omitempty" json:"ValueAnnotation,omitempty" xml:"ValueAnnotation,omitempty"`
 	ValueAttachment      *Attachment      `form:"ValueAttachment,omitempty" json:"ValueAttachment,omitempty" xml:"ValueAttachment,omitempty"`
@@ -568,7 +613,7 @@ type Extension struct {
 	ValueQuantity        *Quantity        `form:"ValueQuantity,omitempty" json:"ValueQuantity,omitempty" xml:"ValueQuantity,omitempty"`
 	ValueRange           *string          `form:"ValueRange,omitempty" json:"ValueRange,omitempty" xml:"ValueRange,omitempty"`
 	ValueRatio           *int             `form:"ValueRatio,omitempty" json:"ValueRatio,omitempty" xml:"ValueRatio,omitempty"`
-	ValueReference       *Reference       `form:"ValueReference,omitempty" json:"ValueReference,omitempty" xml:"ValueReference,omitempty"`
+	ValueReference       *HL7Reference    `form:"ValueReference,omitempty" json:"ValueReference,omitempty" xml:"ValueReference,omitempty"`
 	ValueSampledData     *string          `form:"ValueSampledData,omitempty" json:"ValueSampledData,omitempty" xml:"ValueSampledData,omitempty"`
 	ValueSignature       *string          `form:"ValueSignature,omitempty" json:"ValueSignature,omitempty" xml:"ValueSignature,omitempty"`
 	ValueString          *string          `form:"ValueString,omitempty" json:"ValueString,omitempty" xml:"ValueString,omitempty"`
@@ -579,15 +624,25 @@ type Extension struct {
 	URL                  *string          `form:"url,omitempty" json:"url,omitempty" xml:"url,omitempty"`
 }
 
-// Validate validates the Extension media type instance.
-func (mt *Extension) Validate() (err error) {
+// Validate validates the ExtensionMedia media type instance.
+func (mt *ExtensionMedia) Validate() (err error) {
 	if mt.ValueAddress != nil {
 		if err2 := mt.ValueAddress.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
 		}
 	}
+	if mt.ValueAttachment != nil {
+		if err2 := mt.ValueAttachment.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
 	if mt.ValueHumanName != nil {
 		if err2 := mt.ValueHumanName.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	if mt.ValueIdentifier != nil {
+		if err2 := mt.ValueIdentifier.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
 		}
 	}
@@ -604,9 +659,9 @@ func (mt *Extension) Validate() (err error) {
 	return
 }
 
-// DecodeExtension decodes the Extension instance encoded in resp body.
-func (c *Client) DecodeExtension(resp *http.Response) (*Extension, error) {
-	var decoded Extension
+// DecodeExtensionMedia decodes the ExtensionMedia instance encoded in resp body.
+func (c *Client) DecodeExtensionMedia(resp *http.Response) (*ExtensionMedia, error) {
+	var decoded ExtensionMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
@@ -614,134 +669,6 @@ func (c *Client) DecodeExtension(resp *http.Response) (*Extension, error) {
 // DecodeErrorResponse decodes the ErrorResponse instance encoded in resp body.
 func (c *Client) DecodeErrorResponse(resp *http.Response) (*goa.ErrorResponse, error) {
 	var decoded goa.ErrorResponse
-	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
-	return &decoded, err
-}
-
-// OAuth2 error response, see https://tools.ietf.org/html/rfc6749#section-5.2 (default view)
-//
-// Identifier: application/vnd.goa.example.oauth2.error+json; view=default
-type OAuth2ErrorMedia struct {
-	// Error returned by authorization server
-	Error string `form:"error" json:"error" xml:"error"`
-	// Human readable ASCII text providing additional information
-	ErrorDescription *string `form:"error_description,omitempty" json:"error_description,omitempty" xml:"error_description,omitempty"`
-	// A URI identifying a human-readable web page with information about the error
-	ErrorURI *string `form:"error_uri,omitempty" json:"error_uri,omitempty" xml:"error_uri,omitempty"`
-}
-
-// Validate validates the OAuth2ErrorMedia media type instance.
-func (mt *OAuth2ErrorMedia) Validate() (err error) {
-	if mt.Error == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "error"))
-	}
-	if !(mt.Error == "invalid_request" || mt.Error == "invalid_client" || mt.Error == "invalid_grant" || mt.Error == "unauthorized_client" || mt.Error == "unsupported_grant_type") {
-		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.error`, mt.Error, []interface{}{"invalid_request", "invalid_client", "invalid_grant", "unauthorized_client", "unsupported_grant_type"}))
-	}
-	return
-}
-
-// DecodeOAuth2ErrorMedia decodes the OAuth2ErrorMedia instance encoded in resp body.
-func (c *Client) DecodeOAuth2ErrorMedia(resp *http.Response) (*OAuth2ErrorMedia, error) {
-	var decoded OAuth2ErrorMedia
-	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
-	return &decoded, err
-}
-
-// OAuth2 access token request successful response, see https://tools.ietf.org/html/rfc6749#section-5.1 (default view)
-//
-// Identifier: application/vnd.goa.example.oauth2.token+json; view=default
-type TokenMedia struct {
-	// The access token issued by the authorization server
-	AccessToken string `form:"access_token" json:"access_token" xml:"access_token"`
-	// The lifetime in seconds of the access token
-	ExpiresIn *int `form:"expires_in,omitempty" json:"expires_in,omitempty" xml:"expires_in,omitempty"`
-	// The refresh token
-	RefreshToken *string `form:"refresh_token,omitempty" json:"refresh_token,omitempty" xml:"refresh_token,omitempty"`
-	// The scope of the access token
-	Scope *string `form:"scope,omitempty" json:"scope,omitempty" xml:"scope,omitempty"`
-	// The type of the token issued, e.g. "bearer" or "mac"
-	TokenType string `form:"token_type" json:"token_type" xml:"token_type"`
-}
-
-// Validate validates the TokenMedia media type instance.
-func (mt *TokenMedia) Validate() (err error) {
-	if mt.AccessToken == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "access_token"))
-	}
-	if mt.TokenType == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "token_type"))
-	}
-	return
-}
-
-// DecodeTokenMedia decodes the TokenMedia instance encoded in resp body.
-func (c *Client) DecodeTokenMedia(resp *http.Response) (*TokenMedia, error) {
-	var decoded TokenMedia
-	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
-	return &decoded, err
-}
-
-// OAuth2 error response, See https://tools.ietf.org/html/rfc6749#section-5.2 (default view)
-//
-// Identifier: application/vnd.goa.fhir.oauth2.error+json; view=default
-type OAuth2ErrorMedia struct {
-	// Error returned by authorization server
-	Error string `form:"error" json:"error" xml:"error"`
-	// Human readable ASCII text providing additional information
-	ErrorDescription *string `form:"error_description,omitempty" json:"error_description,omitempty" xml:"error_description,omitempty"`
-	// A URI identifying a human-readable web page with information about the error
-	ErrorURI *string `form:"error_uri,omitempty" json:"error_uri,omitempty" xml:"error_uri,omitempty"`
-}
-
-// Validate validates the OAuth2ErrorMedia media type instance.
-func (mt *OAuth2ErrorMedia) Validate() (err error) {
-	if mt.Error == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "error"))
-	}
-	if !(mt.Error == "invalid_request" || mt.Error == "invalid_client" || mt.Error == "invalid_grant" || mt.Error == "unauthorized_client" || mt.Error == "unsupported_grant_type") {
-		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.error`, mt.Error, []interface{}{"invalid_request", "invalid_client", "invalid_grant", "unauthorized_client", "unsupported_grant_type"}))
-	}
-	return
-}
-
-// DecodeOAuth2ErrorMedia decodes the OAuth2ErrorMedia instance encoded in resp body.
-func (c *Client) DecodeOAuth2ErrorMedia(resp *http.Response) (*OAuth2ErrorMedia, error) {
-	var decoded OAuth2ErrorMedia
-	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
-	return &decoded, err
-}
-
-// OAuth2 access token request successful response, See https://tools.ietf.org/html/rfc6749#section-5.1 (default view)
-//
-// Identifier: application/vnd.goa.fhir.oauth2.token+json; view=default
-type TokenMedia struct {
-	// The access token issued by the authorization server
-	AccessToken string `form:"access_token" json:"access_token" xml:"access_token"`
-	// The lifetime in seconds of the access token
-	ExpiresIn *int `form:"expires_in,omitempty" json:"expires_in,omitempty" xml:"expires_in,omitempty"`
-	// The refresh token
-	RefreshToken *string `form:"refresh_token,omitempty" json:"refresh_token,omitempty" xml:"refresh_token,omitempty"`
-	// The scope of the access token
-	Scope *string `form:"scope,omitempty" json:"scope,omitempty" xml:"scope,omitempty"`
-	// The type of the token issued, e.g. "bearer" or "mac"
-	TokenType string `form:"token_type" json:"token_type" xml:"token_type"`
-}
-
-// Validate validates the TokenMedia media type instance.
-func (mt *TokenMedia) Validate() (err error) {
-	if mt.AccessToken == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "access_token"))
-	}
-	if mt.TokenType == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "token_type"))
-	}
-	return
-}
-
-// DecodeTokenMedia decodes the TokenMedia instance encoded in resp body.
-func (c *Client) DecodeTokenMedia(resp *http.Response) (*TokenMedia, error) {
-	var decoded TokenMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
@@ -761,10 +688,10 @@ func (c *Client) DecodeSuccess(resp *http.Response) (*Success, error) {
 	return &decoded, err
 }
 
-// HumanName media type (default view)
+// HumanNameMedia media type (default view)
 //
 // Identifier: application/vnd.human.name+json; view=default
-type HumanName struct {
+type HumanNameMedia struct {
 	// The part of a name that links to the genealogy. In some cultures (e.g. Eritrea) the family name of a son is the first name of his father.
 	Family []string `form:"family,omitempty" json:"family,omitempty" xml:"family,omitempty"`
 	// Given names (not always 'first'). Includes middle names
@@ -779,8 +706,8 @@ type HumanName struct {
 	Use *string `form:"use,omitempty" json:"use,omitempty" xml:"use,omitempty"`
 }
 
-// Validate validates the HumanName media type instance.
-func (mt *HumanName) Validate() (err error) {
+// Validate validates the HumanNameMedia media type instance.
+func (mt *HumanNameMedia) Validate() (err error) {
 	if mt.Use != nil {
 		if !(*mt.Use == "usual" || *mt.Use == "official" || *mt.Use == "temp" || *mt.Use == "nickname" || *mt.Use == "anonymous" || *mt.Use == "old" || *mt.Use == "maiden") {
 			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.use`, *mt.Use, []interface{}{"usual", "official", "temp", "nickname", "anonymous", "old", "maiden"}))
@@ -789,51 +716,84 @@ func (mt *HumanName) Validate() (err error) {
 	return
 }
 
-// DecodeHumanName decodes the HumanName instance encoded in resp body.
-func (c *Client) DecodeHumanName(resp *http.Response) (*HumanName, error) {
-	var decoded HumanName
+// DecodeHumanNameMedia decodes the HumanNameMedia instance encoded in resp body.
+func (c *Client) DecodeHumanNameMedia(resp *http.Response) (*HumanNameMedia, error) {
+	var decoded HumanNameMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Identifier media type (default view)
+// IdentifierMedia media type (default view)
 //
 // Identifier: application/vnd.identifier+json; view=default
-type Identifier struct {
-	// A coded type for the identifier that can be used to determine which identifier to use for a specific purpose.
-	CodeableConcept *CodeableConcept `form:"CodeableConcept,omitempty" json:"CodeableConcept,omitempty" xml:"CodeableConcept,omitempty"`
+type IdentifierMedia struct {
 	// Organization that issued/manages the identifier.
-	Assigner *Reference `form:"assigner,omitempty" json:"assigner,omitempty" xml:"assigner,omitempty"`
+	Assigner *HL7Reference `form:"assigner,omitempty" json:"assigner,omitempty" xml:"assigner,omitempty"`
 	// Time period during which identifier is/was valid for use.
 	Period *Period `form:"period,omitempty" json:"period,omitempty" xml:"period,omitempty"`
+	// Establishes the namespace in which set of possible id values is unique.
+	System *string `form:"system,omitempty" json:"system,omitempty" xml:"system,omitempty"`
+	// A coded type for the identifier that can be used to determine which identifier to use for a specific purpose. See http://hl7.org/fhir/ValueSet/identifier-type
+	Type *CodeableConcept `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
+	// The purpose of this identifier. Use http://hl7.org/fhir/ValueSet/identifier-use
+	Use *string `form:"use,omitempty" json:"use,omitempty" xml:"use,omitempty"`
+	// The portion of the identifier typically displayed to the user and which is unique within the context of the system.
+	Value *string `form:"value,omitempty" json:"value,omitempty" xml:"value,omitempty"`
 }
 
-// DecodeIdentifier decodes the Identifier instance encoded in resp body.
-func (c *Client) DecodeIdentifier(resp *http.Response) (*Identifier, error) {
-	var decoded Identifier
+// Validate validates the IdentifierMedia media type instance.
+func (mt *IdentifierMedia) Validate() (err error) {
+	if mt.System != nil {
+		if err2 := goa.ValidateFormat(goa.FormatURI, *mt.System); err2 != nil {
+			err = goa.MergeErrors(err, goa.InvalidFormatError(`response.system`, *mt.System, goa.FormatURI, err2))
+		}
+	}
+	if mt.Use != nil {
+		if !(*mt.Use == "usual" || *mt.Use == "official" || *mt.Use == "temp" || *mt.Use == "secondary (If known)") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.use`, *mt.Use, []interface{}{"usual", "official", "temp", "secondary (If known)"}))
+		}
+	}
+	return
+}
+
+// DecodeIdentifierMedia decodes the IdentifierMedia instance encoded in resp body.
+func (c *Client) DecodeIdentifierMedia(resp *http.Response) (*IdentifierMedia, error) {
+	var decoded IdentifierMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Link media type (default view)
+// HL7LinkMedia media type (default view)
 //
 // Identifier: application/vnd.link+json; view=default
-type Link struct {
-	Other *string `form:"other,omitempty" json:"other,omitempty" xml:"other,omitempty"`
-	Type  *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
+type HL7LinkMedia struct {
+	// The other patient resource that the link refers to.
+	Other *HL7Reference `form:"other,omitempty" json:"other,omitempty" xml:"other,omitempty"`
+	// The type of link between this patient resource and another patient resource. See http://hl7.org/fhir/ValueSet/link-type
+	Type *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
 }
 
-// DecodeLink decodes the Link instance encoded in resp body.
-func (c *Client) DecodeLink(resp *http.Response) (*Link, error) {
-	var decoded Link
+// Validate validates the HL7LinkMedia media type instance.
+func (mt *HL7LinkMedia) Validate() (err error) {
+	if mt.Type != nil {
+		if !(*mt.Type == "replace" || *mt.Type == "refer" || *mt.Type == "See also") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.type`, *mt.Type, []interface{}{"replace", "refer", "See also"}))
+		}
+	}
+	return
+}
+
+// DecodeHL7LinkMedia decodes the HL7LinkMedia instance encoded in resp body.
+func (c *Client) DecodeHL7LinkMedia(resp *http.Response) (*HL7LinkMedia, error) {
+	var decoded HL7LinkMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Meta media type (default view)
+// MetaMedia media type (default view)
 //
 // Identifier: application/vnd.meta+json; view=default
-type Meta struct {
+type MetaMedia struct {
 	// When the resource last changed - e.g. when the version changed.
 	LastUpdated *time.Time `form:"lastUpdated,omitempty" json:"lastUpdated,omitempty" xml:"lastUpdated,omitempty"`
 	// A list of profiles [[[StructureDefinition]]]s that this resource claims to conform to. The URL is a reference to [[[StructureDefinition.url]]].
@@ -846,8 +806,8 @@ type Meta struct {
 	VersionID *string `form:"versionId,omitempty" json:"versionId,omitempty" xml:"versionId,omitempty"`
 }
 
-// Validate validates the Meta media type instance.
-func (mt *Meta) Validate() (err error) {
+// Validate validates the MetaMedia media type instance.
+func (mt *MetaMedia) Validate() (err error) {
 	if mt.Profile != nil {
 		if err2 := goa.ValidateFormat(goa.FormatURI, *mt.Profile); err2 != nil {
 			err = goa.MergeErrors(err, goa.InvalidFormatError(`response.profile`, *mt.Profile, goa.FormatURI, err2))
@@ -856,25 +816,25 @@ func (mt *Meta) Validate() (err error) {
 	return
 }
 
-// DecodeMeta decodes the Meta instance encoded in resp body.
-func (c *Client) DecodeMeta(resp *http.Response) (*Meta, error) {
-	var decoded Meta
+// DecodeMetaMedia decodes the MetaMedia instance encoded in resp body.
+func (c *Client) DecodeMetaMedia(resp *http.Response) (*MetaMedia, error) {
+	var decoded MetaMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Nutrient media type (default view)
+// NutrientMedia media type (default view)
 //
 // Identifier: application/vnd.nutrient+json; view=default
-type Nutrient struct {
+type NutrientMedia struct {
 	// The quantity of the specified nutrient to include in diet.
 	Amount *Quantity `form:"amount,omitempty" json:"amount,omitempty" xml:"amount,omitempty"`
 	// The nutrient that is being modified such as carbohydrate or sodium. See http://hl7.org/fhir/ValueSet/nutrient-code
 	Modifier *CodeableConcept `form:"modifier,omitempty" json:"modifier,omitempty" xml:"modifier,omitempty"`
 }
 
-// Validate validates the Nutrient media type instance.
-func (mt *Nutrient) Validate() (err error) {
+// Validate validates the NutrientMedia media type instance.
+func (mt *NutrientMedia) Validate() (err error) {
 	if mt.Amount != nil {
 		if err2 := mt.Amount.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -883,23 +843,23 @@ func (mt *Nutrient) Validate() (err error) {
 	return
 }
 
-// DecodeNutrient decodes the Nutrient instance encoded in resp body.
-func (c *Client) DecodeNutrient(resp *http.Response) (*Nutrient, error) {
-	var decoded Nutrient
+// DecodeNutrientMedia decodes the NutrientMedia instance encoded in resp body.
+func (c *Client) DecodeNutrientMedia(resp *http.Response) (*NutrientMedia, error) {
+	var decoded NutrientMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Nutrition_request media type (default view)
+// NutritionRequestMedia media type (default view)
 //
-// Identifier: application/vnd.nutrition_request+json; view=default
-type NutritionRequest struct {
+// Identifier: application/vnd.nutrition.request+json; view=default
+type NutritionRequestMedia struct {
 	// A link to a record of allergies or intolerances  which should be included in the nutrition order.
-	AllergyIntolerance []*Reference `form:"allergyIntolerance,omitempty" json:"allergyIntolerance,omitempty" xml:"allergyIntolerance,omitempty"`
+	AllergyIntolerance []*HL7Reference `form:"allergyIntolerance,omitempty" json:"allergyIntolerance,omitempty" xml:"allergyIntolerance,omitempty"`
 	// The date and time that this nutrition order was requested.
 	DateTime *time.Time `form:"dateTime,omitempty" json:"dateTime,omitempty" xml:"dateTime,omitempty"`
 	// An encounter that provides additional information about the healthcare context in which this request is made.
-	Encounter *Reference `form:"encounter,omitempty" json:"encounter,omitempty" xml:"encounter,omitempty"`
+	Encounter *HL7Reference `form:"encounter,omitempty" json:"encounter,omitempty" xml:"encounter,omitempty"`
 	// Feeding provided through the gastrointestinal tract via a tube, catheter, or stoma that delivers nutrition distal to the oral cavity.
 	EnteralFormula EnteralFormulaCollection `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
 	// This modifier is used to convey order-specific modifiers about the type of food that should NOT be given. These can be derived from
@@ -915,21 +875,28 @@ type NutritionRequest struct {
 	// Identifiers assigned to this order by the order sender or by the order receiver.
 	Identifier []*Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
 	// Diet given orally in contrast to enteral (tube) feeding.
-	OralDiet OralDietCollection `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
+	OralDiet OralDietMediaCollection `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
 	// The practitioner that holds legal responsibility for ordering the diet, nutritional supplement, or formula feedings.
-	Orderer *Reference `form:"orderer,omitempty" json:"orderer,omitempty" xml:"orderer,omitempty"`
+	Orderer *HL7Reference `form:"orderer,omitempty" json:"orderer,omitempty" xml:"orderer,omitempty"`
 	// The person (patient) who needs the nutrition order for an oral diet, nutritional supplement and/or enteral or formula feeding.
-	Patient *Reference `form:"patient,omitempty" json:"patient,omitempty" xml:"patient,omitempty"`
+	Patient *HL7Reference `form:"patient,omitempty" json:"patient,omitempty" xml:"patient,omitempty"`
 	// The workflow status of the nutrition order/request. See http://hl7.org/fhir/nutrition-request-status
 	Status *string `form:"status,omitempty" json:"status,omitempty" xml:"status,omitempty"`
 	// Oral nutritional products given in order to add further nutritional value to the patient's diet.
 	Supplement []*Supplement `form:"supplement,omitempty" json:"supplement,omitempty" xml:"supplement,omitempty"`
 }
 
-// Validate validates the NutritionRequest media type instance.
-func (mt *NutritionRequest) Validate() (err error) {
+// Validate validates the NutritionRequestMedia media type instance.
+func (mt *NutritionRequestMedia) Validate() (err error) {
 	if err2 := mt.EnteralFormula.Validate(); err2 != nil {
 		err = goa.MergeErrors(err, err2)
+	}
+	for _, e := range mt.Identifier {
+		if e != nil {
+			if err2 := e.Validate(); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
 	}
 	if err2 := mt.OralDiet.Validate(); err2 != nil {
 		err = goa.MergeErrors(err, err2)
@@ -949,20 +916,20 @@ func (mt *NutritionRequest) Validate() (err error) {
 	return
 }
 
-// DecodeNutritionRequest decodes the NutritionRequest instance encoded in resp body.
-func (c *Client) DecodeNutritionRequest(resp *http.Response) (*NutritionRequest, error) {
-	var decoded NutritionRequest
+// DecodeNutritionRequestMedia decodes the NutritionRequestMedia instance encoded in resp body.
+func (c *Client) DecodeNutritionRequestMedia(resp *http.Response) (*NutritionRequestMedia, error) {
+	var decoded NutritionRequestMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Nutrition_requestCollection is the media type for an array of Nutrition_request (default view)
+// NutritionRequestMediaCollection is the media type for an array of NutritionRequestMedia (default view)
 //
-// Identifier: application/vnd.nutrition_request+json; type=collection; view=default
-type NutritionRequestCollection []*NutritionRequest
+// Identifier: application/vnd.nutrition.request+json; type=collection; view=default
+type NutritionRequestMediaCollection []*NutritionRequestMedia
 
-// Validate validates the NutritionRequestCollection media type instance.
-func (mt NutritionRequestCollection) Validate() (err error) {
+// Validate validates the NutritionRequestMediaCollection media type instance.
+func (mt NutritionRequestMediaCollection) Validate() (err error) {
 	for _, e := range mt {
 		if e != nil {
 			if err2 := e.Validate(); err2 != nil {
@@ -973,17 +940,17 @@ func (mt NutritionRequestCollection) Validate() (err error) {
 	return
 }
 
-// DecodeNutritionRequestCollection decodes the NutritionRequestCollection instance encoded in resp body.
-func (c *Client) DecodeNutritionRequestCollection(resp *http.Response) (NutritionRequestCollection, error) {
-	var decoded NutritionRequestCollection
+// DecodeNutritionRequestMediaCollection decodes the NutritionRequestMediaCollection instance encoded in resp body.
+func (c *Client) DecodeNutritionRequestMediaCollection(resp *http.Response) (NutritionRequestMediaCollection, error) {
+	var decoded NutritionRequestMediaCollection
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return decoded, err
 }
 
-// Demographics and other administrative information about an individual or animal receiving care or other health-related services. (default view)
+// ObservationMedia media type (default view)
 //
 // Identifier: application/vnd.observation+json; view=default
-type Observation struct {
+type ObservationMedia struct {
 	// Indicates the site on the subject's body where the observation was made (i.e. the target site). See http://hl7.org/fhir/ValueSet/body-site
 	BodySite *CodeableConcept `form:"bodySite,omitempty" json:"bodySite,omitempty" xml:"bodySite,omitempty"`
 	// A code that classifies the general type of observation being made.  This is used  for searching, sorting and display purposes. See http://hl7.org/fhir/ValueSet/observation-category
@@ -995,11 +962,11 @@ type Observation struct {
 	// Some observations have multiple component observations.  These component observations are expressed as separate code
 	// 		value pairs that share the same attributes.  Examples include systolic and diastolic component observations for blood pressure measurement and multiple
 	// 		component observations for genetics observations.
-	Component ComponentCollection `form:"component,omitempty" json:"component,omitempty" xml:"component,omitempty"`
+	Component ComponentMediaCollection `form:"component,omitempty" json:"component,omitempty" xml:"component,omitempty"`
 	// Provides a reason why the expected value in the element Observation.value[x] is missing. See http://hl7.org/fhir/ValueSet/observation-valueabsentreason
 	DateAbsentReason *CodeableConcept `form:"dateAbsentReason,omitempty" json:"dateAbsentReason,omitempty" xml:"dateAbsentReason,omitempty"`
 	// The device used to generate the observation data.
-	Device *Reference `form:"device,omitempty" json:"device,omitempty" xml:"device,omitempty"`
+	Device *HL7Reference `form:"device,omitempty" json:"device,omitempty" xml:"device,omitempty"`
 	// The time or time-period the observed value is asserted as being true. For biological subjects - e.g. human patients -
 	// 		this is usually called the "physiologically relevant time". This is usually either the time of the procedure or of specimen collection,
 	// 		but very often the source of the date/time is not known, only the date/time itself.
@@ -1009,7 +976,7 @@ type Observation struct {
 	// 		but very often the source of the date/time is not known, only the date/time itself.
 	EffectivePeriod *Period `form:"effectivePeriod,omitempty" json:"effectivePeriod,omitempty" xml:"effectivePeriod,omitempty"`
 	// The healthcare event  (e.g. a patient and healthcare provider interaction) during which this observation is made.
-	Encounter *Reference `form:"encounter,omitempty" json:"encounter,omitempty" xml:"encounter,omitempty"`
+	Encounter *HL7Reference `form:"encounter,omitempty" json:"encounter,omitempty" xml:"encounter,omitempty"`
 	// A unique identifier for the simple observation instance.
 	Identifier []*Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
 	// The assessment made based on the result of the observation.  Intended as a simple compact code often
@@ -1021,13 +988,13 @@ type Observation struct {
 	// Indicates the mechanism used to perform the observation. See http://hl7.org/fhir/ValueSet/observation-methods
 	Method *CodeableConcept `form:"method,omitempty" json:"method,omitempty" xml:"method,omitempty"`
 	// Who was responsible for asserting the observed value as 'true'.
-	Performer []*Reference `form:"performer,omitempty" json:"performer,omitempty" xml:"performer,omitempty"`
+	Performer []*HL7Reference `form:"performer,omitempty" json:"performer,omitempty" xml:"performer,omitempty"`
 	// Guidance on how to interpret the value by comparison to a normal or recommended range.
-	ReferenceRange ReferenceRangeCollection `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
+	ReferenceRange ReferenceRangeMediaCollection `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
 	// A  reference to another resource (usually another Observation but could  also be a QuestionnaireAnswer) whose relationship is defined by the relationship type code.
-	Related RelatedCollection `form:"related,omitempty" json:"related,omitempty" xml:"related,omitempty"`
+	Related RelatedMediaCollection `form:"related,omitempty" json:"related,omitempty" xml:"related,omitempty"`
 	// The specimen that was used when this observation was made.
-	Specimen *Reference `form:"specimen,omitempty" json:"specimen,omitempty" xml:"specimen,omitempty"`
+	Specimen *HL7Reference `form:"specimen,omitempty" json:"specimen,omitempty" xml:"specimen,omitempty"`
 	// The status of the result value. See http://hl7.org/fhir/ValueSet/observation-status
 	Status               *string          `form:"status,omitempty" json:"status,omitempty" xml:"status,omitempty"`
 	ValueAttachment      *Attachment      `form:"valueAttachment,omitempty" json:"valueAttachment,omitempty" xml:"valueAttachment,omitempty"`
@@ -1041,10 +1008,17 @@ type Observation struct {
 	ValueTime            *time.Time       `form:"valueTime,omitempty" json:"valueTime,omitempty" xml:"valueTime,omitempty"`
 }
 
-// Validate validates the Observation media type instance.
-func (mt *Observation) Validate() (err error) {
+// Validate validates the ObservationMedia media type instance.
+func (mt *ObservationMedia) Validate() (err error) {
 	if err2 := mt.Component.Validate(); err2 != nil {
 		err = goa.MergeErrors(err, err2)
+	}
+	for _, e := range mt.Identifier {
+		if e != nil {
+			if err2 := e.Validate(); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
 	}
 	if err2 := mt.ReferenceRange.Validate(); err2 != nil {
 		err = goa.MergeErrors(err, err2)
@@ -1052,6 +1026,11 @@ func (mt *Observation) Validate() (err error) {
 	if mt.Status != nil {
 		if !(*mt.Status == "registered" || *mt.Status == "preliminary" || *mt.Status == "final" || *mt.Status == "amended +") {
 			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.status`, *mt.Status, []interface{}{"registered", "preliminary", "final", "amended +"}))
+		}
+	}
+	if mt.ValueAttachment != nil {
+		if err2 := mt.ValueAttachment.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
 		}
 	}
 	if mt.ValueQuantity != nil {
@@ -1072,17 +1051,41 @@ func (mt *Observation) Validate() (err error) {
 	return
 }
 
-// DecodeObservation decodes the Observation instance encoded in resp body.
-func (c *Client) DecodeObservation(resp *http.Response) (*Observation, error) {
-	var decoded Observation
+// DecodeObservationMedia decodes the ObservationMedia instance encoded in resp body.
+func (c *Client) DecodeObservationMedia(resp *http.Response) (*ObservationMedia, error) {
+	var decoded ObservationMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Oral_diet media type (default view)
+// ObservationMediaCollection is the media type for an array of ObservationMedia (default view)
 //
-// Identifier: application/vnd.oral_diet+json; view=default
-type OralDiet struct {
+// Identifier: application/vnd.observation+json; type=collection; view=default
+type ObservationMediaCollection []*ObservationMedia
+
+// Validate validates the ObservationMediaCollection media type instance.
+func (mt ObservationMediaCollection) Validate() (err error) {
+	for _, e := range mt {
+		if e != nil {
+			if err2 := e.Validate(); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
+	}
+	return
+}
+
+// DecodeObservationMediaCollection decodes the ObservationMediaCollection instance encoded in resp body.
+func (c *Client) DecodeObservationMediaCollection(resp *http.Response) (ObservationMediaCollection, error) {
+	var decoded ObservationMediaCollection
+	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
+	return decoded, err
+}
+
+// OralDietMedia media type (default view)
+//
+// Identifier: application/vnd.oral.diet+json; view=default
+type OralDietMedia struct {
 	// The required consistency (e.g. honey-thick, nectar-thick, thin, thickened.) of liquids or fluids served to the patient. See http://hl7.org/fhir/ValueSet/consistency-type
 	FluidConsistencyType *CodeableConcept `form:"fluidConsistencyType,omitempty" json:"fluidConsistencyType,omitempty" xml:"fluidConsistencyType,omitempty"`
 	// Free text or additional instructions or information pertaining to the oral diet.
@@ -1097,8 +1100,8 @@ type OralDiet struct {
 	Type *CodeableConcept `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
 }
 
-// Validate validates the OralDiet media type instance.
-func (mt *OralDiet) Validate() (err error) {
+// Validate validates the OralDietMedia media type instance.
+func (mt *OralDietMedia) Validate() (err error) {
 	if mt.Nutrient != nil {
 		if err2 := mt.Nutrient.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -1112,20 +1115,20 @@ func (mt *OralDiet) Validate() (err error) {
 	return
 }
 
-// DecodeOralDiet decodes the OralDiet instance encoded in resp body.
-func (c *Client) DecodeOralDiet(resp *http.Response) (*OralDiet, error) {
-	var decoded OralDiet
+// DecodeOralDietMedia decodes the OralDietMedia instance encoded in resp body.
+func (c *Client) DecodeOralDietMedia(resp *http.Response) (*OralDietMedia, error) {
+	var decoded OralDietMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Oral_dietCollection is the media type for an array of Oral_diet (default view)
+// OralDietMediaCollection is the media type for an array of OralDietMedia (default view)
 //
-// Identifier: application/vnd.oral_diet+json; type=collection; view=default
-type OralDietCollection []*OralDiet
+// Identifier: application/vnd.oral.diet+json; type=collection; view=default
+type OralDietMediaCollection []*OralDietMedia
 
-// Validate validates the OralDietCollection media type instance.
-func (mt OralDietCollection) Validate() (err error) {
+// Validate validates the OralDietMediaCollection media type instance.
+func (mt OralDietMediaCollection) Validate() (err error) {
 	for _, e := range mt {
 		if e != nil {
 			if err2 := e.Validate(); err2 != nil {
@@ -1136,77 +1139,150 @@ func (mt OralDietCollection) Validate() (err error) {
 	return
 }
 
-// DecodeOralDietCollection decodes the OralDietCollection instance encoded in resp body.
-func (c *Client) DecodeOralDietCollection(resp *http.Response) (OralDietCollection, error) {
-	var decoded OralDietCollection
+// DecodeOralDietMediaCollection decodes the OralDietMediaCollection instance encoded in resp body.
+func (c *Client) DecodeOralDietMediaCollection(resp *http.Response) (OralDietMediaCollection, error) {
+	var decoded OralDietMediaCollection
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return decoded, err
 }
 
-// Patient media type (default view)
+// PatientMedia media type (default view)
 //
 // Identifier: application/vnd.patient+json; view=default
-type Patient struct {
-	Active               *string `form:"active,omitempty" json:"active,omitempty" xml:"active,omitempty"`
-	Address              *string `form:"address,omitempty" json:"address,omitempty" xml:"address,omitempty"`
-	Animal               *string `form:"animal,omitempty" json:"animal,omitempty" xml:"animal,omitempty"`
-	BirthDate            *string `form:"birthDate,omitempty" json:"birthDate,omitempty" xml:"birthDate,omitempty"`
-	CareProvider         *string `form:"careProvider,omitempty" json:"careProvider,omitempty" xml:"careProvider,omitempty"`
-	Communication        *string `form:"communication,omitempty" json:"communication,omitempty" xml:"communication,omitempty"`
-	Contact              *string `form:"contact,omitempty" json:"contact,omitempty" xml:"contact,omitempty"`
-	CreatedAt            *string `form:"created_at,omitempty" json:"created_at,omitempty" xml:"created_at,omitempty"`
-	CreatedBy            *string `form:"created_by,omitempty" json:"created_by,omitempty" xml:"created_by,omitempty"`
-	DeceasedBoolean      *string `form:"deceasedBoolean,omitempty" json:"deceasedBoolean,omitempty" xml:"deceasedBoolean,omitempty"`
-	DeceasedDateTime     *string `form:"deceasedDateTime,omitempty" json:"deceasedDateTime,omitempty" xml:"deceasedDateTime,omitempty"`
-	Gender               string  `form:"gender" json:"gender" xml:"gender"`
-	Href                 *string `form:"href,omitempty" json:"href,omitempty" xml:"href,omitempty"`
-	ID                   *string `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
-	Identifier           *string `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
-	Link                 *string `form:"link,omitempty" json:"link,omitempty" xml:"link,omitempty"`
-	ManagingOrganization *string `form:"managingOrganization,omitempty" json:"managingOrganization,omitempty" xml:"managingOrganization,omitempty"`
-	MultipleBirthBoolean *string `form:"multipleBirthBoolean,omitempty" json:"multipleBirthBoolean,omitempty" xml:"multipleBirthBoolean,omitempty"`
-	MultipleBirthInteger *string `form:"multipleBirthInteger,omitempty" json:"multipleBirthInteger,omitempty" xml:"multipleBirthInteger,omitempty"`
-	Name                 *string `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
-	Photo                *string `form:"photo,omitempty" json:"photo,omitempty" xml:"photo,omitempty"`
+type PatientMedia struct {
+	// Whether this patient record is in active use.
+	Active *bool `form:"active,omitempty" json:"active,omitempty" xml:"active,omitempty"`
+	// Addresses for the individual.
+	Address []*Address `form:"address,omitempty" json:"address,omitempty" xml:"address,omitempty"`
+	// This patient is known to be an animal.
+	Animal *Animal `form:"animal,omitempty" json:"animal,omitempty" xml:"animal,omitempty"`
+	// The date of birth for the individual.
+	BirthDate *time.Time `form:"birthDate,omitempty" json:"birthDate,omitempty" xml:"birthDate,omitempty"`
+	// Patient's nominated primary care provider
+	CareProvider *HL7Reference `form:"careProvider,omitempty" json:"careProvider,omitempty" xml:"careProvider,omitempty"`
+	// Languages which may be used to communicate with the patient about his or her health.
+	Communication []*Communication `form:"communication,omitempty" json:"communication,omitempty" xml:"communication,omitempty"`
+	// A contact party (e.g. guardian, partner, friend) for the patient.
+	Contact []*HL7Contact `form:"contact,omitempty" json:"contact,omitempty" xml:"contact,omitempty"`
+	// Date of creation
+	CreatedAt *time.Time `form:"created_at,omitempty" json:"created_at,omitempty" xml:"created_at,omitempty"`
+	// Email of patient owner
+	CreatedBy *string `form:"created_by,omitempty" json:"created_by,omitempty" xml:"created_by,omitempty"`
+	// Indicates if the individual is deceased or not.
+	DeceasedBoolean *bool `form:"deceasedBoolean,omitempty" json:"deceasedBoolean,omitempty" xml:"deceasedBoolean,omitempty"`
+	// Indicates if the individual is deceased or not.
+	DeceasedDateTime *time.Time `form:"deceasedDateTime,omitempty" json:"deceasedDateTime,omitempty" xml:"deceasedDateTime,omitempty"`
+	// Administrative Gender - the gender that the patient is considered to have for administration and record keeping purposes. See http://hl7.org/fhir/ValueSet/administrative-gender
+	Gender string `form:"gender" json:"gender" xml:"gender"`
+	// API href of patient
+	Href *string `form:"href,omitempty" json:"href,omitempty" xml:"href,omitempty"`
+	// ID of patient
+	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+	// Patient identifer
+	Identifier []*Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
+	// Link to another patient resource that concerns the same actual patient.
+	Link []*HL7Link `form:"link,omitempty" json:"link,omitempty" xml:"link,omitempty"`
+	// Organization that is the custodian of the patient record.
+	ManagingOrganization *HL7Reference `form:"managingOrganization,omitempty" json:"managingOrganization,omitempty" xml:"managingOrganization,omitempty"`
+	// Indicates whether the patient is part of a multiple or indicates the actual birth order..
+	MultipleBirthBoolean *bool `form:"multipleBirthBoolean,omitempty" json:"multipleBirthBoolean,omitempty" xml:"multipleBirthBoolean,omitempty"`
+	// Indicates whether the patient is part of a multiple or indicates the actual birth order..
+	MultipleBirthInteger *int `form:"multipleBirthInteger,omitempty" json:"multipleBirthInteger,omitempty" xml:"multipleBirthInteger,omitempty"`
+	// A name associated with the individual.
+	Name []*HumanName `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
+	// Image of the patient.
+	Photo []*Attachment `form:"photo,omitempty" json:"photo,omitempty" xml:"photo,omitempty"`
 }
 
-// Validate validates the Patient media type instance.
-func (mt *Patient) Validate() (err error) {
+// Validate validates the PatientMedia media type instance.
+func (mt *PatientMedia) Validate() (err error) {
 	if mt.Gender == "" {
 		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "gender"))
 	}
+	for _, e := range mt.Address {
+		if e != nil {
+			if err2 := e.Validate(); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
+	}
+	for _, e := range mt.Contact {
+		if e != nil {
+			if err2 := e.Validate(); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
+	}
+	if mt.CreatedBy != nil {
+		if err2 := goa.ValidateFormat(goa.FormatEmail, *mt.CreatedBy); err2 != nil {
+			err = goa.MergeErrors(err, goa.InvalidFormatError(`response.created_by`, *mt.CreatedBy, goa.FormatEmail, err2))
+		}
+	}
+	if !(mt.Gender == "male" || mt.Gender == "female" || mt.Gender == "other" || mt.Gender == "unknown") {
+		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.gender`, mt.Gender, []interface{}{"male", "female", "other", "unknown"}))
+	}
+	for _, e := range mt.Identifier {
+		if e != nil {
+			if err2 := e.Validate(); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
+	}
+	for _, e := range mt.Link {
+		if e != nil {
+			if err2 := e.Validate(); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
+	}
+	for _, e := range mt.Name {
+		if e != nil {
+			if err2 := e.Validate(); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
+	}
+	for _, e := range mt.Photo {
+		if e != nil {
+			if err2 := e.Validate(); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
+	}
 	return
 }
 
-// Patient media type (link view)
+// PatientMedia media type (link view)
 //
 // Identifier: application/vnd.patient+json; view=link
-type PatientLink struct {
+type PatientMediaLink struct {
+	// API href of patient
 	Href *string `form:"href,omitempty" json:"href,omitempty" xml:"href,omitempty"`
-	ID   *string `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+	// ID of patient
+	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
 }
 
-// DecodePatient decodes the Patient instance encoded in resp body.
-func (c *Client) DecodePatient(resp *http.Response) (*Patient, error) {
-	var decoded Patient
+// DecodePatientMedia decodes the PatientMedia instance encoded in resp body.
+func (c *Client) DecodePatientMedia(resp *http.Response) (*PatientMedia, error) {
+	var decoded PatientMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// DecodePatientLink decodes the PatientLink instance encoded in resp body.
-func (c *Client) DecodePatientLink(resp *http.Response) (*PatientLink, error) {
-	var decoded PatientLink
+// DecodePatientMediaLink decodes the PatientMediaLink instance encoded in resp body.
+func (c *Client) DecodePatientMediaLink(resp *http.Response) (*PatientMediaLink, error) {
+	var decoded PatientMediaLink
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// PatientCollection is the media type for an array of Patient (default view)
+// PatientMediaCollection is the media type for an array of PatientMedia (default view)
 //
 // Identifier: application/vnd.patient+json; type=collection; view=default
-type PatientCollection []*Patient
+type PatientMediaCollection []*PatientMedia
 
-// Validate validates the PatientCollection media type instance.
-func (mt PatientCollection) Validate() (err error) {
+// Validate validates the PatientMediaCollection media type instance.
+func (mt PatientMediaCollection) Validate() (err error) {
 	for _, e := range mt {
 		if e != nil {
 			if err2 := e.Validate(); err2 != nil {
@@ -1217,46 +1293,46 @@ func (mt PatientCollection) Validate() (err error) {
 	return
 }
 
-// PatientCollection is the media type for an array of Patient (link view)
+// PatientMediaCollection is the media type for an array of PatientMedia (link view)
 //
 // Identifier: application/vnd.patient+json; type=collection; view=link
-type PatientLinkCollection []*PatientLink
+type PatientMediaLinkCollection []*PatientMediaLink
 
-// DecodePatientCollection decodes the PatientCollection instance encoded in resp body.
-func (c *Client) DecodePatientCollection(resp *http.Response) (PatientCollection, error) {
-	var decoded PatientCollection
+// DecodePatientMediaCollection decodes the PatientMediaCollection instance encoded in resp body.
+func (c *Client) DecodePatientMediaCollection(resp *http.Response) (PatientMediaCollection, error) {
+	var decoded PatientMediaCollection
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return decoded, err
 }
 
-// DecodePatientLinkCollection decodes the PatientLinkCollection instance encoded in resp body.
-func (c *Client) DecodePatientLinkCollection(resp *http.Response) (PatientLinkCollection, error) {
-	var decoded PatientLinkCollection
+// DecodePatientMediaLinkCollection decodes the PatientMediaLinkCollection instance encoded in resp body.
+func (c *Client) DecodePatientMediaLinkCollection(resp *http.Response) (PatientMediaLinkCollection, error) {
+	var decoded PatientMediaLinkCollection
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return decoded, err
 }
 
-// A time period defined by a start and end date and optionally time. (default view)
+// PeriodMedia media type (default view)
 //
 // Identifier: application/vnd.period+json; view=default
-type Period struct {
+type PeriodMedia struct {
 	// End time with inclusive boundary, if not ongoing
 	End *time.Time `form:"end,omitempty" json:"end,omitempty" xml:"end,omitempty"`
 	// Starting time with inclusive boundary
 	Start *time.Time `form:"start,omitempty" json:"start,omitempty" xml:"start,omitempty"`
 }
 
-// DecodePeriod decodes the Period instance encoded in resp body.
-func (c *Client) DecodePeriod(resp *http.Response) (*Period, error) {
-	var decoded Period
+// DecodePeriodMedia decodes the PeriodMedia instance encoded in resp body.
+func (c *Client) DecodePeriodMedia(resp *http.Response) (*PeriodMedia, error) {
+	var decoded PeriodMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Quantity media type (default view)
+// QuantityMedia media type (default view)
 //
 // Identifier: application/vnd.quantity+json; view=default
-type Quantity struct {
+type QuantityMedia struct {
 	// A computer processable form of the unit in some unit representation system.
 	Code *string `form:"code,omitempty" json:"code,omitempty" xml:"code,omitempty"`
 	// How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues;
@@ -1270,8 +1346,8 @@ type Quantity struct {
 	Value *float64 `form:"value,omitempty" json:"value,omitempty" xml:"value,omitempty"`
 }
 
-// Validate validates the Quantity media type instance.
-func (mt *Quantity) Validate() (err error) {
+// Validate validates the QuantityMedia media type instance.
+func (mt *QuantityMedia) Validate() (err error) {
 	if mt.Comparator != nil {
 		if !(*mt.Comparator == "<" || *mt.Comparator == "<=" || *mt.Comparator == ">=" || *mt.Comparator == ">") {
 			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.comparator`, *mt.Comparator, []interface{}{"<", "<=", ">=", ">"}))
@@ -1285,25 +1361,25 @@ func (mt *Quantity) Validate() (err error) {
 	return
 }
 
-// DecodeQuantity decodes the Quantity instance encoded in resp body.
-func (c *Client) DecodeQuantity(resp *http.Response) (*Quantity, error) {
-	var decoded Quantity
+// DecodeQuantityMedia decodes the QuantityMedia instance encoded in resp body.
+func (c *Client) DecodeQuantityMedia(resp *http.Response) (*QuantityMedia, error) {
+	var decoded QuantityMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Range media type (default view)
+// RangeMedia media type (default view)
 //
 // Identifier: application/vnd.range+json; view=default
-type Range struct {
+type RangeMedia struct {
 	// The high limit. The boundary is inclusive.
 	High *Quantity `form:"high,omitempty" json:"high,omitempty" xml:"high,omitempty"`
 	// The low limit. The boundary is inclusive.
 	Low *Quantity `form:"low,omitempty" json:"low,omitempty" xml:"low,omitempty"`
 }
 
-// Validate validates the Range media type instance.
-func (mt *Range) Validate() (err error) {
+// Validate validates the RangeMedia media type instance.
+func (mt *RangeMedia) Validate() (err error) {
 	if mt.High != nil {
 		if err2 := mt.High.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -1317,25 +1393,25 @@ func (mt *Range) Validate() (err error) {
 	return
 }
 
-// DecodeRange decodes the Range instance encoded in resp body.
-func (c *Client) DecodeRange(resp *http.Response) (*Range, error) {
-	var decoded Range
+// DecodeRangeMedia decodes the RangeMedia instance encoded in resp body.
+func (c *Client) DecodeRangeMedia(resp *http.Response) (*RangeMedia, error) {
+	var decoded RangeMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Ratio media type (default view)
+// RatioMedia media type (default view)
 //
 // Identifier: application/vnd.ratio+json; view=default
-type Ratio struct {
+type RatioMedia struct {
 	// The value of the denominator.
 	Denominator *Quantity `form:"denominator,omitempty" json:"denominator,omitempty" xml:"denominator,omitempty"`
 	// The value of the numerator.
 	Numerator *Quantity `form:"numerator,omitempty" json:"numerator,omitempty" xml:"numerator,omitempty"`
 }
 
-// Validate validates the Ratio media type instance.
-func (mt *Ratio) Validate() (err error) {
+// Validate validates the RatioMedia media type instance.
+func (mt *RatioMedia) Validate() (err error) {
 	if mt.Denominator != nil {
 		if err2 := mt.Denominator.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -1349,17 +1425,17 @@ func (mt *Ratio) Validate() (err error) {
 	return
 }
 
-// DecodeRatio decodes the Ratio instance encoded in resp body.
-func (c *Client) DecodeRatio(resp *http.Response) (*Ratio, error) {
-	var decoded Ratio
+// DecodeRatioMedia decodes the RatioMedia instance encoded in resp body.
+func (c *Client) DecodeRatioMedia(resp *http.Response) (*RatioMedia, error) {
+	var decoded RatioMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Reaction media type (default view)
+// ReactionMedia media type (default view)
 //
 // Identifier: application/vnd.reaction+json; view=default
-type Reaction struct {
+type ReactionMedia struct {
 	// Statement about the degree of clinical certainty that the specific substance was the cause of the manifestation in this reaction event. See http://hl7.org/fhir/ValueSet/reaction-event-certainty
 	Certainty *string `form:"certainty,omitempty" json:"certainty,omitempty" xml:"certainty,omitempty"`
 	// Text description about the reaction as a whole, including details of the manifestation if required.
@@ -1381,8 +1457,8 @@ type Reaction struct {
 	Substance *CodeableConcept `form:"substance,omitempty" json:"substance,omitempty" xml:"substance,omitempty"`
 }
 
-// Validate validates the Reaction media type instance.
-func (mt *Reaction) Validate() (err error) {
+// Validate validates the ReactionMedia media type instance.
+func (mt *ReactionMedia) Validate() (err error) {
 	if mt.Certainty != nil {
 		if !(*mt.Certainty == "unlikely" || *mt.Certainty == "likely" || *mt.Certainty == "confirmed") {
 			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.certainty`, *mt.Certainty, []interface{}{"unlikely", "likely", "confirmed"}))
@@ -1396,17 +1472,17 @@ func (mt *Reaction) Validate() (err error) {
 	return
 }
 
-// DecodeReaction decodes the Reaction instance encoded in resp body.
-func (c *Client) DecodeReaction(resp *http.Response) (*Reaction, error) {
-	var decoded Reaction
+// DecodeReactionMedia decodes the ReactionMedia instance encoded in resp body.
+func (c *Client) DecodeReactionMedia(resp *http.Response) (*ReactionMedia, error) {
+	var decoded ReactionMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Reference media type (default view)
+// HL7ReferenceMedia media type (default view)
 //
 // Identifier: application/vnd.reference+json; view=default
-type Reference struct {
+type HL7ReferenceMedia struct {
 	// Plain text narrative that identifies the resource in addition to the resource reference.
 	Display *string `form:"display,omitempty" json:"display,omitempty" xml:"display,omitempty"`
 	// A reference to a location at which the other resource is found. The reference may be a relative reference, in which case it is relative to
@@ -1415,17 +1491,17 @@ type Reference struct {
 	Reference *string `form:"reference,omitempty" json:"reference,omitempty" xml:"reference,omitempty"`
 }
 
-// DecodeReference decodes the Reference instance encoded in resp body.
-func (c *Client) DecodeReference(resp *http.Response) (*Reference, error) {
-	var decoded Reference
+// DecodeHL7ReferenceMedia decodes the HL7ReferenceMedia instance encoded in resp body.
+func (c *Client) DecodeHL7ReferenceMedia(resp *http.Response) (*HL7ReferenceMedia, error) {
+	var decoded HL7ReferenceMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Details concerning the observation collection. (default view)
+// ReferenceRangeMedia media type (default view)
 //
 // Identifier: application/vnd.reference.range+json; view=default
-type ReferenceRange struct {
+type ReferenceRangeMedia struct {
 	// Time when observation was collected from subject - the physiologically relevant time.
 	Age *Range `form:"age,omitempty" json:"age,omitempty" xml:"age,omitempty"`
 	// The value of the high bound of the reference range.  The high bound of the reference range endpoint is inclusive of the value
@@ -1441,8 +1517,8 @@ type ReferenceRange struct {
 	Text *string `form:"text,omitempty" json:"text,omitempty" xml:"text,omitempty"`
 }
 
-// Validate validates the ReferenceRange media type instance.
-func (mt *ReferenceRange) Validate() (err error) {
+// Validate validates the ReferenceRangeMedia media type instance.
+func (mt *ReferenceRangeMedia) Validate() (err error) {
 	if mt.Age != nil {
 		if err2 := mt.Age.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -1461,20 +1537,20 @@ func (mt *ReferenceRange) Validate() (err error) {
 	return
 }
 
-// DecodeReferenceRange decodes the ReferenceRange instance encoded in resp body.
-func (c *Client) DecodeReferenceRange(resp *http.Response) (*ReferenceRange, error) {
-	var decoded ReferenceRange
+// DecodeReferenceRangeMedia decodes the ReferenceRangeMedia instance encoded in resp body.
+func (c *Client) DecodeReferenceRangeMedia(resp *http.Response) (*ReferenceRangeMedia, error) {
+	var decoded ReferenceRangeMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// ReferenceRangeCollection is the media type for an array of ReferenceRange (default view)
+// ReferenceRangeMediaCollection is the media type for an array of ReferenceRangeMedia (default view)
 //
 // Identifier: application/vnd.reference.range+json; type=collection; view=default
-type ReferenceRangeCollection []*ReferenceRange
+type ReferenceRangeMediaCollection []*ReferenceRangeMedia
 
-// Validate validates the ReferenceRangeCollection media type instance.
-func (mt ReferenceRangeCollection) Validate() (err error) {
+// Validate validates the ReferenceRangeMediaCollection media type instance.
+func (mt ReferenceRangeMediaCollection) Validate() (err error) {
 	for _, e := range mt {
 		if e != nil {
 			if err2 := e.Validate(); err2 != nil {
@@ -1485,46 +1561,46 @@ func (mt ReferenceRangeCollection) Validate() (err error) {
 	return
 }
 
-// DecodeReferenceRangeCollection decodes the ReferenceRangeCollection instance encoded in resp body.
-func (c *Client) DecodeReferenceRangeCollection(resp *http.Response) (ReferenceRangeCollection, error) {
-	var decoded ReferenceRangeCollection
+// DecodeReferenceRangeMediaCollection decodes the ReferenceRangeMediaCollection instance encoded in resp body.
+func (c *Client) DecodeReferenceRangeMediaCollection(resp *http.Response) (ReferenceRangeMediaCollection, error) {
+	var decoded ReferenceRangeMediaCollection
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return decoded, err
 }
 
-// A  reference to another resource (usually another Observation but could  also be a QuestionnaireAnswer) whose relationship is defined by the relationship type code. (default view)
+// RelatedMedia media type (default view)
 //
 // Identifier: application/vnd.related+json; view=default
-type Related struct {
+type RelatedMedia struct {
 	// A reference to the observation or [[[QuestionnaireResponse]]] resource that is related to this observation.
 	Target *CodeableConcept `form:"target,omitempty" json:"target,omitempty" xml:"target,omitempty"`
 	// A code specifying the kind of relationship that exists with the target resource. See http://hl7.org/fhir/ValueSet/observation-relationshiptypes
 	Type *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
 }
 
-// DecodeRelated decodes the Related instance encoded in resp body.
-func (c *Client) DecodeRelated(resp *http.Response) (*Related, error) {
-	var decoded Related
+// DecodeRelatedMedia decodes the RelatedMedia instance encoded in resp body.
+func (c *Client) DecodeRelatedMedia(resp *http.Response) (*RelatedMedia, error) {
+	var decoded RelatedMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// RelatedCollection is the media type for an array of Related (default view)
+// RelatedMediaCollection is the media type for an array of RelatedMedia (default view)
 //
 // Identifier: application/vnd.related+json; type=collection; view=default
-type RelatedCollection []*Related
+type RelatedMediaCollection []*RelatedMedia
 
-// DecodeRelatedCollection decodes the RelatedCollection instance encoded in resp body.
-func (c *Client) DecodeRelatedCollection(resp *http.Response) (RelatedCollection, error) {
-	var decoded RelatedCollection
+// DecodeRelatedMediaCollection decodes the RelatedMediaCollection instance encoded in resp body.
+func (c *Client) DecodeRelatedMediaCollection(resp *http.Response) (RelatedMediaCollection, error) {
+	var decoded RelatedMediaCollection
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return decoded, err
 }
 
-// Repeat media type (default view)
+// RepeatMedia media type (default view)
 //
 // Identifier: application/vnd.repeat+json; view=default
-type Repeat struct {
+type RepeatMedia struct {
 	// Length/Range of lengths, or (Start and/or end) limits
 	Bounds *interface{} `form:"bounds,omitempty" json:"bounds,omitempty" xml:"bounds,omitempty"`
 	// A total count of the desired number of repetitions.
@@ -1547,8 +1623,8 @@ type Repeat struct {
 	When *string `form:"when,omitempty" json:"when,omitempty" xml:"when,omitempty"`
 }
 
-// Validate validates the Repeat media type instance.
-func (mt *Repeat) Validate() (err error) {
+// Validate validates the RepeatMedia media type instance.
+func (mt *RepeatMedia) Validate() (err error) {
 	if mt.DurationUnits != nil {
 		if !(*mt.DurationUnits == "s" || *mt.DurationUnits == "min" || *mt.DurationUnits == "h" || *mt.DurationUnits == "d" || *mt.DurationUnits == "wk" || *mt.DurationUnits == "mo" || *mt.DurationUnits == "a") {
 			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.durationUnits`, *mt.DurationUnits, []interface{}{"s", "min", "h", "d", "wk", "mo", "a"}))
@@ -1562,17 +1638,17 @@ func (mt *Repeat) Validate() (err error) {
 	return
 }
 
-// DecodeRepeat decodes the Repeat instance encoded in resp body.
-func (c *Client) DecodeRepeat(resp *http.Response) (*Repeat, error) {
-	var decoded Repeat
+// DecodeRepeatMedia decodes the RepeatMedia instance encoded in resp body.
+func (c *Client) DecodeRepeatMedia(resp *http.Response) (*RepeatMedia, error) {
+	var decoded RepeatMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// SampleData media type (default view)
+// SampleDataMedia media type (default view)
 //
 // Identifier: application/vnd.sample.data+json; view=default
-type SampleData struct {
+type SampleDataMedia struct {
 	// A series of data points which are decimal values separated by a single space (character u20). The special values 'E' (error), 'L' (below detection limit) and 'U' (above detection limit) can also be used in place of a decimal value.
 	Data *string `form:"data,omitempty" json:"data,omitempty" xml:"data,omitempty"`
 	// The upper limit of detection of the measured points. This is needed if any of the data points have the value 'U' (higher than detection limit).
@@ -1589,8 +1665,8 @@ type SampleData struct {
 	UpperLimit *float64 `form:"upperLimit,omitempty" json:"upperLimit,omitempty" xml:"upperLimit,omitempty"`
 }
 
-// Validate validates the SampleData media type instance.
-func (mt *SampleData) Validate() (err error) {
+// Validate validates the SampleDataMedia media type instance.
+func (mt *SampleDataMedia) Validate() (err error) {
 	if mt.Origin != nil {
 		if err2 := mt.Origin.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -1599,17 +1675,17 @@ func (mt *SampleData) Validate() (err error) {
 	return
 }
 
-// DecodeSampleData decodes the SampleData instance encoded in resp body.
-func (c *Client) DecodeSampleData(resp *http.Response) (*SampleData, error) {
-	var decoded SampleData
+// DecodeSampleDataMedia decodes the SampleDataMedia instance encoded in resp body.
+func (c *Client) DecodeSampleDataMedia(resp *http.Response) (*SampleDataMedia, error) {
+	var decoded SampleDataMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Supplement media type (default view)
+// SupplementMedia media type (default view)
 //
 // Identifier: application/vnd.supplement+json; view=default
-type Supplement struct {
+type SupplementMedia struct {
 	// Free text or additional instructions or information pertaining to the oral supplement.
 	Instruction *string `form:"instruction,omitempty" json:"instruction,omitempty" xml:"instruction,omitempty"`
 	// The product or brand name of the nutritional supplement such as 'Acme Protein Shake'.
@@ -1620,8 +1696,8 @@ type Supplement struct {
 	Type *CodeableConcept `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
 }
 
-// Validate validates the Supplement media type instance.
-func (mt *Supplement) Validate() (err error) {
+// Validate validates the SupplementMedia media type instance.
+func (mt *SupplementMedia) Validate() (err error) {
 	if mt.Quantity != nil {
 		if err2 := mt.Quantity.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -1630,34 +1706,34 @@ func (mt *Supplement) Validate() (err error) {
 	return
 }
 
-// DecodeSupplement decodes the Supplement instance encoded in resp body.
-func (c *Client) DecodeSupplement(resp *http.Response) (*Supplement, error) {
-	var decoded Supplement
+// DecodeSupplementMedia decodes the SupplementMedia instance encoded in resp body.
+func (c *Client) DecodeSupplementMedia(resp *http.Response) (*SupplementMedia, error) {
+	var decoded SupplementMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Texture media type (default view)
+// TextureMedia media type (default view)
 //
 // Identifier: application/vnd.texture+json; view=default
-type Texture struct {
+type TextureMedia struct {
 	// The food type(s) (e.g. meats, all foods)  that the texture modification applies to.  This could be all foods types. See http://hl7.org/fhir/ValueSet/modified-foodtype
 	FoodType *CodeableConcept `form:"foodType,omitempty" json:"foodType,omitempty" xml:"foodType,omitempty"`
 	// Any texture modifications (for solid foods) that should be made, e.g. easy to chew, chopped, ground, and pureed. See http://hl7.org/fhir/ValueSet/texture-code
 	Modifier *CodeableConcept `form:"modifier,omitempty" json:"modifier,omitempty" xml:"modifier,omitempty"`
 }
 
-// DecodeTexture decodes the Texture instance encoded in resp body.
-func (c *Client) DecodeTexture(resp *http.Response) (*Texture, error) {
-	var decoded Texture
+// DecodeTextureMedia decodes the TextureMedia instance encoded in resp body.
+func (c *Client) DecodeTextureMedia(resp *http.Response) (*TextureMedia, error) {
+	var decoded TextureMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// Timing media type (default view)
+// TimingMedia media type (default view)
 //
 // Identifier: application/vnd.timing+json; view=default
-type Timing struct {
+type TimingMedia struct {
 	// A code for the timing pattern. Some codes such as BID are ubiquitous, but many institutions define their own additional codes. See http://hl7.org/fhir/ValueSet/timing-abbreviation
 	Code *string `form:"code,omitempty" json:"code,omitempty" xml:"code,omitempty"`
 	// Identifies specific times when the event occurs.
@@ -1666,8 +1742,8 @@ type Timing struct {
 	Repeat *Element `form:"repeat,omitempty" json:"repeat,omitempty" xml:"repeat,omitempty"`
 }
 
-// Validate validates the Timing media type instance.
-func (mt *Timing) Validate() (err error) {
+// Validate validates the TimingMedia media type instance.
+func (mt *TimingMedia) Validate() (err error) {
 	if mt.Code != nil {
 		if !(*mt.Code == "QD" || *mt.Code == "QOD" || *mt.Code == "Q4H" || *mt.Code == "Q6H" || *mt.Code == "BID" || *mt.Code == "TID" || *mt.Code == "QID" || *mt.Code == "AM" || *mt.Code == "PM +") {
 			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.code`, *mt.Code, []interface{}{"QD", "QOD", "Q4H", "Q6H", "BID", "TID", "QID", "AM", "PM +"}))
@@ -1681,9 +1757,9 @@ func (mt *Timing) Validate() (err error) {
 	return
 }
 
-// DecodeTiming decodes the Timing instance encoded in resp body.
-func (c *Client) DecodeTiming(resp *http.Response) (*Timing, error) {
-	var decoded Timing
+// DecodeTimingMedia decodes the TimingMedia instance encoded in resp body.
+func (c *Client) DecodeTimingMedia(resp *http.Response) (*TimingMedia, error) {
+	var decoded TimingMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }

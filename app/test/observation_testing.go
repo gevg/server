@@ -574,6 +574,91 @@ func ListObservationNotFound(t goatest.TInterface, ctx context.Context, service 
 	return rw
 }
 
+// ListObservationOK runs the method List of the given controller with the given parameters.
+// It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
+// If ctx is nil then context.Background() is used.
+// If service is nil then a default service is created.
+func ListObservationOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, years []int) (http.ResponseWriter, app.ObservationMediaCollection) {
+	// Setup service
+	var (
+		logBuf bytes.Buffer
+		resp   interface{}
+
+		respSetter goatest.ResponseSetterFunc = func(r interface{}) { resp = r }
+	)
+	if service == nil {
+		service = goatest.Service(&logBuf, respSetter)
+	} else {
+		logger := log.New(&logBuf, "", log.Ltime)
+		service.WithLogger(goa.NewLogger(logger))
+		newEncoder := func(io.Writer) goa.Encoder { return respSetter }
+		service.Encoder = goa.NewHTTPEncoder() // Make sure the code ends up using this decoder
+		service.Encoder.Register(newEncoder, "*/*")
+	}
+
+	// Setup request context
+	rw := httptest.NewRecorder()
+	query := url.Values{}
+	{
+		sliceVal := make([]string, len(years))
+		for i, v := range years {
+			sliceVal[i] = fmt.Sprintf("%v", v)
+		}
+		query["years"] = sliceVal
+	}
+	u := &url.URL{
+		Path:     fmt.Sprintf("/nosh/patients/%v/observation", patientID),
+		RawQuery: query.Encode(),
+	}
+	req, err := http.NewRequest("GET", u.String(), nil)
+	if err != nil {
+		panic("invalid test " + err.Error()) // bug
+	}
+	prms := url.Values{}
+	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
+	{
+		sliceVal := make([]string, len(years))
+		for i, v := range years {
+			sliceVal[i] = fmt.Sprintf("%v", v)
+		}
+		prms["years"] = sliceVal
+	}
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	goaCtx := goa.NewContext(goa.WithAction(ctx, "ObservationTest"), rw, req, prms)
+	listCtx, err := app.NewListObservationContext(goaCtx, service)
+	if err != nil {
+		panic("invalid test data " + err.Error()) // bug
+	}
+
+	// Perform action
+	err = ctrl.List(listCtx)
+
+	// Validate response
+	if err != nil {
+		t.Fatalf("controller returned %s, logs:\n%s", err, logBuf.String())
+	}
+	if rw.Code != 200 {
+		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
+	}
+	var mt app.ObservationMediaCollection
+	if resp != nil {
+		var ok bool
+		mt, ok = resp.(app.ObservationMediaCollection)
+		if !ok {
+			t.Fatalf("invalid response media: got %+v, expected instance of app.ObservationMediaCollection", resp)
+		}
+		err = mt.Validate()
+		if err != nil {
+			t.Errorf("invalid response media type: %s", err)
+		}
+	}
+
+	// Return results
+	return rw, mt
+}
+
 // RateObservationBadRequest runs the method Rate of the given controller with the given parameters.
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
@@ -884,7 +969,7 @@ func ShowObservationNotFound(t goatest.TInterface, ctx context.Context, service 
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ShowObservationOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int) (http.ResponseWriter, *app.Observation) {
+func ShowObservationOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int) (http.ResponseWriter, *app.ObservationMedia) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -933,12 +1018,12 @@ func ShowObservationOK(t goatest.TInterface, ctx context.Context, service *goa.S
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt *app.Observation
+	var mt *app.ObservationMedia
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(*app.Observation)
+		mt, ok = resp.(*app.ObservationMedia)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.Observation", resp)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.ObservationMedia", resp)
 		}
 		err = mt.Validate()
 		if err != nil {

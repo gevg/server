@@ -6,9 +6,9 @@ import (
 	. "github.com/goadesign/goa/design/apidsl"
 )
 
-// PatientPayload defines the data structure used in the create vital request body.
+// Patient defines the data structure used in the create vital request body.
 // It is also the base type for the vital media type used to render bottles.
-var PatientPayload = Type("PatientPayload", func() {
+var Patient = Type("Patient", func() {
 	Description("Demographics and other administrative information about an individual or animal receiving care or other health-related services.")
 	//Comments:
 	//Reason for inclusion or contrainment:
@@ -119,7 +119,7 @@ var PatientPayload = Type("PatientPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var AnimalPayload = Type("AnimalPayload", func() {
+var Animal = Type("Animal", func() {
 	Description("This patient is known to be an animal.")
 	//Comments: The animal element is labeled "Is Modifier" since patients may be non-human. Systems SHALL either handle patient details appropriately (e.g. inform users patient is not human) or reject declared animal records.
 	//Reason for inclusion or contrainment: Many clinical systems are extended to care for animal patients as well as human.
@@ -136,7 +136,7 @@ var AnimalPayload = Type("AnimalPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var CommunicationPayload = Type("CommunicationPayload", func() {
+var Communication = Type("Communication", func() {
 	Description("Languages which may be used to communicate with the patient about his or her health.")
 	//Comments:
 	//Reason for inclusion or contrainment:
@@ -154,7 +154,7 @@ var CommunicationPayload = Type("CommunicationPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var HL7ContactPayload = Type("HL7ContactPayload", func() {
+var HL7Contact = Type("HL7Contact", func() {
 	Description("A contact party (e.g. guardian, partner, friend) for the patient.")
 	//Comments:
 	//Reason for inclusion or contrainment:
@@ -202,7 +202,7 @@ var HL7ContactPayload = Type("HL7ContactPayload", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
-var HL7LinkPayload = Type("HL7LinkPayload", func() {
+var HL7Link = Type("HL7Link", func() {
 	Description("Link to another patient resource that concerns the same actual patient.")
 	//Comments: There is no assumption that linked patient records have mutual links.
 	//Reason for inclusion or contrainment:There are multiple usecases: * Duplicate patient records due to the clerical errors associated with the difficulties of identifying humans consistently, and * Distribution of patient information across multiple servers.

@@ -59,7 +59,7 @@ func CreateNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context,
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition_requests", patientID),
+		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests", patientID),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
@@ -136,7 +136,7 @@ func CreateNutritionRequestCreated(t goatest.TInterface, ctx context.Context, se
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition_requests", patientID),
+		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests", patientID),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
@@ -205,7 +205,7 @@ func CreateNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, s
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition_requests", patientID),
+		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests", patientID),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
@@ -263,7 +263,7 @@ func DeleteNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context,
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition_requests/%v", patientID, nutritionRequestID),
+		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
 	}
 	req, err := http.NewRequest("DELETE", u.String(), nil)
 	if err != nil {
@@ -329,7 +329,7 @@ func DeleteNutritionRequestNoContent(t goatest.TInterface, ctx context.Context, 
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition_requests/%v", patientID, nutritionRequestID),
+		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
 	}
 	req, err := http.NewRequest("DELETE", u.String(), nil)
 	if err != nil {
@@ -387,7 +387,7 @@ func DeleteNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, s
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition_requests/%v", patientID, nutritionRequestID),
+		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
 	}
 	req, err := http.NewRequest("DELETE", u.String(), nil)
 	if err != nil {
@@ -453,7 +453,7 @@ func ListNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, s
 		query["years"] = sliceVal
 	}
 	u := &url.URL{
-		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition_requests", patientID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition.requests", patientID),
 		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
@@ -534,7 +534,7 @@ func ListNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, ser
 		query["years"] = sliceVal
 	}
 	u := &url.URL{
-		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition_requests", patientID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition.requests", patientID),
 		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
@@ -578,7 +578,7 @@ func ListNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, ser
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ListNutritionRequestOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, years []int) (http.ResponseWriter, app.NutritionRequestCollection) {
+func ListNutritionRequestOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, years []int) (http.ResponseWriter, app.NutritionRequestMediaCollection) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -607,7 +607,7 @@ func ListNutritionRequestOK(t goatest.TInterface, ctx context.Context, service *
 		query["years"] = sliceVal
 	}
 	u := &url.URL{
-		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition_requests", patientID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition.requests", patientID),
 		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
@@ -642,12 +642,12 @@ func ListNutritionRequestOK(t goatest.TInterface, ctx context.Context, service *
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt app.NutritionRequestCollection
+	var mt app.NutritionRequestMediaCollection
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(app.NutritionRequestCollection)
+		mt, ok = resp.(app.NutritionRequestMediaCollection)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.NutritionRequestCollection", resp)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.NutritionRequestMediaCollection", resp)
 		}
 		err = mt.Validate()
 		if err != nil {
@@ -694,7 +694,7 @@ func RateNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, s
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition_requests/%v/actions/rate", patientID, nutritionRequestID),
+		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v/actions/rate", patientID, nutritionRequestID),
 	}
 	req, err := http.NewRequest("PUT", u.String(), nil)
 	if err != nil {
@@ -772,7 +772,7 @@ func RateNutritionRequestNoContent(t goatest.TInterface, ctx context.Context, se
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition_requests/%v/actions/rate", patientID, nutritionRequestID),
+		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v/actions/rate", patientID, nutritionRequestID),
 	}
 	req, err := http.NewRequest("PUT", u.String(), nil)
 	if err != nil {
@@ -842,7 +842,7 @@ func RateNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, ser
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition_requests/%v/actions/rate", patientID, nutritionRequestID),
+		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v/actions/rate", patientID, nutritionRequestID),
 	}
 	req, err := http.NewRequest("PUT", u.String(), nil)
 	if err != nil {
@@ -901,7 +901,7 @@ func ShowNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, s
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition_requests/%v", patientID, nutritionRequestID),
+		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -967,7 +967,7 @@ func ShowNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, ser
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition_requests/%v", patientID, nutritionRequestID),
+		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -1004,7 +1004,7 @@ func ShowNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, ser
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ShowNutritionRequestOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int) (http.ResponseWriter, *app.NutritionRequest) {
+func ShowNutritionRequestOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int) (http.ResponseWriter, *app.NutritionRequestMedia) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1025,7 +1025,7 @@ func ShowNutritionRequestOK(t goatest.TInterface, ctx context.Context, service *
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition_requests/%v", patientID, nutritionRequestID),
+		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -1053,12 +1053,12 @@ func ShowNutritionRequestOK(t goatest.TInterface, ctx context.Context, service *
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt *app.NutritionRequest
+	var mt *app.NutritionRequestMedia
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(*app.NutritionRequest)
+		mt, ok = resp.(*app.NutritionRequestMedia)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.NutritionRequest", resp)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.NutritionRequestMedia", resp)
 		}
 		err = mt.Validate()
 		if err != nil {
@@ -1105,7 +1105,7 @@ func UpdateNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context,
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition_requests/%v", patientID, nutritionRequestID),
+		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
 	}
 	req, err := http.NewRequest("PATCH", u.String(), nil)
 	if err != nil {
@@ -1183,7 +1183,7 @@ func UpdateNutritionRequestNoContent(t goatest.TInterface, ctx context.Context, 
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition_requests/%v", patientID, nutritionRequestID),
+		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
 	}
 	req, err := http.NewRequest("PATCH", u.String(), nil)
 	if err != nil {
@@ -1253,7 +1253,7 @@ func UpdateNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, s
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition_requests/%v", patientID, nutritionRequestID),
+		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
 	}
 	req, err := http.NewRequest("PATCH", u.String(), nil)
 	if err != nil {
@@ -1312,7 +1312,7 @@ func WatchNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, 
 	// Setup request context
 	rw := httptest.NewRecorder()
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition_requests/%v/watch", patientID, nutritionRequestID),
+		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v/watch", patientID, nutritionRequestID),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {

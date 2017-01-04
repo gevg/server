@@ -7,9 +7,10 @@ import (
 )
 
 // Substance is the substance resource media type------------------------------------------------------------------------------------------------
-var Substance = MediaType("application/vnd.substance+json", func() {
+var SubstanceMedia = MediaType("application/vnd.substance+json", func() {
+	TypeName("SubstanceMedia")
+	Reference(SubstancePayload)
 	Attributes(func() {
-		Reference(SubstancePayload)
 		Attribute("identifier")
 		Attribute("category")
 		Attribute("code")
@@ -17,7 +18,6 @@ var Substance = MediaType("application/vnd.substance+json", func() {
 		Attribute("instance")
 		Attribute("ingredient")
 	})
-
 	View("default", func() {
 		Description("Default view for Substance resource.")
 		Attribute("identifier")
@@ -28,10 +28,10 @@ var Substance = MediaType("application/vnd.substance+json", func() {
 		Attribute("ingredient")
 	})
 })
-
-var Ingredient = MediaType("application/vnd.ingredient+json", func() {
+var IngredientMedia = MediaType("application/vnd.ingredient+json", func() {
+	TypeName("IngredientMedia")
+	Reference(IngredientPayload)
 	Attributes(func() {
-		Reference(IngredientPayload)
 		Attribute("quantity")
 		Attribute("substance")
 	})
@@ -41,14 +41,14 @@ var Ingredient = MediaType("application/vnd.ingredient+json", func() {
 		Attribute("substance")
 	})
 })
-var Instance = MediaType("application/vnd.instance+json", func() {
+var InstanceMedia = MediaType("application/vnd.instance+json", func() {
+	TypeName("InstanceMedia")
+	Reference(InstancePayload)
 	Attributes(func() {
-		Reference(InstancePayload)
 		Attribute("identifier")
 		Attribute("expiry")
 		Attribute("quantity")
 	})
-
 	View("default", func() {
 		Description("Default view for Instance element.")
 		Attribute("identifier")

@@ -11,7 +11,8 @@ import (
 
 // CreatePatientPayload is the patient create action payload.
 type CreatePatientPayload struct {
-	Name string `form:"name" json:"name" xml:"name"`
+	// A name associated with the individual.
+	Name []*HumanName `form:"name" json:"name" xml:"name"`
 }
 
 // CreatePatientPath computes a request path to the create action of patient.
@@ -144,7 +145,8 @@ func (c *Client) NewShowPatientRequest(ctx context.Context, path string) (*http.
 
 // UpdatePatientPayload is the patient update action payload.
 type UpdatePatientPayload struct {
-	Name string `form:"name" json:"name" xml:"name"`
+	// A name associated with the individual.
+	Name []*HumanName `form:"name" json:"name" xml:"name"`
 }
 
 // UpdatePatientPath computes a request path to the update action of patient.

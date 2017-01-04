@@ -5,8 +5,11 @@ import (
 	. "github.com/goadesign/goa/design"
 	. "github.com/goadesign/goa/design/apidsl"
 )
+
 // Patient is the patient resource media type------------------------------------------------------------------------------------------------
-var Patient = MediaType("application/vnd.patient+json", func() {
+var PatientMedia = MediaType("application/vnd.patient+json", func() {
+	TypeName("PatientMedia")
+	Reference(PatientPayload)
 	Attributes(func() {
 		Attribute("created_at")
 		Attribute("created_by")
@@ -61,13 +64,15 @@ var Patient = MediaType("application/vnd.patient+json", func() {
 		Attribute("careProvider")
 		Attribute("managingOrganization")
 		Attribute("link")
-	})	
+	})
 	View("link", func() {
 		Attribute("id")
 		Attribute("href")
 	})
 })
-var Animal = MediaType("application/vnd.animal+json", func() {
+var AnimalMedia = MediaType("application/vnd.animal+json", func() {
+	TypeName("AnimalMedia")
+	Reference(AnimalPayload)
 	Attributes(func() {
 		Attribute("species")
 		Attribute("breed")
@@ -80,7 +85,9 @@ var Animal = MediaType("application/vnd.animal+json", func() {
 		Attribute("genderStatus")
 	})
 })
-var Communication = MediaType("application/vnd.communication+json", func() {
+var CommunicationMedia = MediaType("application/vnd.communication+json", func() {
+	TypeName("CommunicationMedia")
+	Reference(CommunicationPayload)
 	Attributes(func() {
 		Attribute("language")
 		Attribute("preferred")
@@ -93,7 +100,9 @@ var Communication = MediaType("application/vnd.communication+json", func() {
 		Attribute("careProvider")
 	})
 })
-var HL7Contact = MediaType("application/vnd.contact+json", func() {
+var HL7ContactMedia = MediaType("application/vnd.contact+json", func() {
+	TypeName("HL7ContactMedia")
+	Reference(HL7ContactPayload)
 	Attributes(func() {
 		Attribute("relationship")
 		Attribute("name")
@@ -114,7 +123,9 @@ var HL7Contact = MediaType("application/vnd.contact+json", func() {
 		Attribute("period")
 	})
 })
-var HL7Link = MediaType("application/vnd.link+json", func() {
+var HL7LinkMedia = MediaType("application/vnd.link+json", func() {
+	TypeName("HL7LinkMedia")
+	Reference(HL7LinkPayload)
 	Attributes(func() {
 		Attribute("other")
 		Attribute("type")

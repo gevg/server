@@ -1,7 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
+	"net/http"
 
 	"github.com/goa-fhir/server/app"
 	"github.com/goadesign/goa"
@@ -54,12 +57,14 @@ func (c *PatientController) Show(ctx *app.ShowPatientContext) error {
 	fmt.Printf("%s\n %s\n", "hi", ctx.Payload)
 	// Put your logic here
 
-	phone := "14158586273"
+	//phone := "14158586273"
 	// QueryEscape escapes the phone string so
 	// it can be safely placed inside a URL query
-	safePhone := url.QueryEscape(phone)
-//http://sqlonfhir-stu3.azurewebsites.net/fhir/
-	url := fmt.Sprintf("http://apilayer.net/api/validate?access_key=YOUR_ACCESS_KEY&number=%s", safePhone)
+	//safePhone := url.QueryEscape(phone)
+	//http://sqlonfhir-stu3.azurewebsites.net/fhir/
+	//url := fmt.Sprintf("http://apilayer.net/api/validate?access_key=YOUR_ACCESS_KEY&number=%s", safePhone)
+	//url := fmt.Sprintf("http://sqlonfhir-stu3.azurewebsites.net/fhir/patient")
+	url := fmt.Sprintf("http://demo.oridashi.com.au:8291/patient")
 
 	// Build the request
 	req, err := http.NewRequest("GET", url, nil)
@@ -96,11 +101,11 @@ func (c *PatientController) Show(ctx *app.ShowPatientContext) error {
 		log.Println(err)
 	}
 
-	fmt.Println("Phone No. = ", record.InternationalFormat)
-	fmt.Println("Country   = ", record.CountryName)
-	fmt.Println("Location  = ", record.Location)
-	fmt.Println("Carrier   = ", record.Carrier)
-	fmt.Println("LineType  = ", record.LineType)
+	fmt.Println("Gender = ", record.gender)
+	fmt.Println("Birth Date   = ", record.birthDate)
+	// fmt.Println("Location  = ", record.Location)
+	// fmt.Println("Carrier   = ", record.Carrier)
+	// fmt.Println("LineType  = ", record.LineType)
 
 	// PatientController_Show: end_implement
 	res := &app.Success{}

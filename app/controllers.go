@@ -44,10 +44,10 @@ type AllergyIntoleranceController interface {
 func MountAllergyIntoleranceController(service *goa.Service, ctrl AllergyIntoleranceController) {
 	initService(service)
 	var h goa.Handler
-	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/allergy_intolerance", ctrl.MuxHandler("preflight", handleAllergyIntoleranceOrigin(cors.HandlePreflight()), nil))
-	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/allergy_intolerance/:allergy_intoleranceID", ctrl.MuxHandler("preflight", handleAllergyIntoleranceOrigin(cors.HandlePreflight()), nil))
-	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/allergy_intolerance/:allergy_intoleranceID/actions/rate", ctrl.MuxHandler("preflight", handleAllergyIntoleranceOrigin(cors.HandlePreflight()), nil))
-	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/allergy_intolerance/:allergy_intoleranceID/watch", ctrl.MuxHandler("preflight", handleAllergyIntoleranceOrigin(cors.HandlePreflight()), nil))
+	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/allergy.intolerance", ctrl.MuxHandler("preflight", handleAllergyIntoleranceOrigin(cors.HandlePreflight()), nil))
+	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID", ctrl.MuxHandler("preflight", handleAllergyIntoleranceOrigin(cors.HandlePreflight()), nil))
+	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID/actions/rate", ctrl.MuxHandler("preflight", handleAllergyIntoleranceOrigin(cors.HandlePreflight()), nil))
+	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID/watch", ctrl.MuxHandler("preflight", handleAllergyIntoleranceOrigin(cors.HandlePreflight()), nil))
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -68,8 +68,8 @@ func MountAllergyIntoleranceController(service *goa.Service, ctrl AllergyIntoler
 		return ctrl.Create(rctx)
 	}
 	h = handleAllergyIntoleranceOrigin(h)
-	service.Mux.Handle("POST", "/nosh/patients/:patientID/allergy_intolerance", ctrl.MuxHandler("Create", h, unmarshalCreateAllergyIntolerancePayload))
-	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Create", "route", "POST /nosh/patients/:patientID/allergy_intolerance")
+	service.Mux.Handle("POST", "/nosh/patients/:patientID/allergy.intolerance", ctrl.MuxHandler("Create", h, unmarshalCreateAllergyIntolerancePayload))
+	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Create", "route", "POST /nosh/patients/:patientID/allergy.intolerance")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -84,8 +84,8 @@ func MountAllergyIntoleranceController(service *goa.Service, ctrl AllergyIntoler
 		return ctrl.Delete(rctx)
 	}
 	h = handleAllergyIntoleranceOrigin(h)
-	service.Mux.Handle("DELETE", "/nosh/patients/:patientID/allergy_intolerance/:allergy_intoleranceID", ctrl.MuxHandler("Delete", h, nil))
-	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Delete", "route", "DELETE /nosh/patients/:patientID/allergy_intolerance/:allergy_intoleranceID")
+	service.Mux.Handle("DELETE", "/nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID", ctrl.MuxHandler("Delete", h, nil))
+	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Delete", "route", "DELETE /nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -100,8 +100,8 @@ func MountAllergyIntoleranceController(service *goa.Service, ctrl AllergyIntoler
 		return ctrl.List(rctx)
 	}
 	h = handleAllergyIntoleranceOrigin(h)
-	service.Mux.Handle("GET", "/nosh/patients/:patientID/allergy_intolerance", ctrl.MuxHandler("List", h, nil))
-	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "List", "route", "GET /nosh/patients/:patientID/allergy_intolerance")
+	service.Mux.Handle("GET", "/nosh/patients/:patientID/allergy.intolerance", ctrl.MuxHandler("List", h, nil))
+	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "List", "route", "GET /nosh/patients/:patientID/allergy.intolerance")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -122,8 +122,8 @@ func MountAllergyIntoleranceController(service *goa.Service, ctrl AllergyIntoler
 		return ctrl.Rate(rctx)
 	}
 	h = handleAllergyIntoleranceOrigin(h)
-	service.Mux.Handle("PUT", "/nosh/patients/:patientID/allergy_intolerance/:allergy_intoleranceID/actions/rate", ctrl.MuxHandler("Rate", h, unmarshalRateAllergyIntolerancePayload))
-	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Rate", "route", "PUT /nosh/patients/:patientID/allergy_intolerance/:allergy_intoleranceID/actions/rate")
+	service.Mux.Handle("PUT", "/nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID/actions/rate", ctrl.MuxHandler("Rate", h, unmarshalRateAllergyIntolerancePayload))
+	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Rate", "route", "PUT /nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID/actions/rate")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -138,8 +138,8 @@ func MountAllergyIntoleranceController(service *goa.Service, ctrl AllergyIntoler
 		return ctrl.Show(rctx)
 	}
 	h = handleAllergyIntoleranceOrigin(h)
-	service.Mux.Handle("GET", "/nosh/patients/:patientID/allergy_intolerance/:allergy_intoleranceID", ctrl.MuxHandler("Show", h, nil))
-	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Show", "route", "GET /nosh/patients/:patientID/allergy_intolerance/:allergy_intoleranceID")
+	service.Mux.Handle("GET", "/nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID", ctrl.MuxHandler("Show", h, nil))
+	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Show", "route", "GET /nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -160,8 +160,8 @@ func MountAllergyIntoleranceController(service *goa.Service, ctrl AllergyIntoler
 		return ctrl.Update(rctx)
 	}
 	h = handleAllergyIntoleranceOrigin(h)
-	service.Mux.Handle("PATCH", "/nosh/patients/:patientID/allergy_intolerance/:allergy_intoleranceID", ctrl.MuxHandler("Update", h, unmarshalUpdateAllergyIntolerancePayload))
-	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Update", "route", "PATCH /nosh/patients/:patientID/allergy_intolerance/:allergy_intoleranceID")
+	service.Mux.Handle("PATCH", "/nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID", ctrl.MuxHandler("Update", h, unmarshalUpdateAllergyIntolerancePayload))
+	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Update", "route", "PATCH /nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -176,8 +176,8 @@ func MountAllergyIntoleranceController(service *goa.Service, ctrl AllergyIntoler
 		return ctrl.Watch(rctx)
 	}
 	h = handleAllergyIntoleranceOrigin(h)
-	service.Mux.Handle("GET", "/nosh/patients/:patientID/allergy_intolerance/:allergy_intoleranceID/watch", ctrl.MuxHandler("Watch", h, nil))
-	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Watch", "route", "GET /nosh/patients/:patientID/allergy_intolerance/:allergy_intoleranceID/watch")
+	service.Mux.Handle("GET", "/nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID/watch", ctrl.MuxHandler("Watch", h, nil))
+	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Watch", "route", "GET /nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID/watch")
 }
 
 // handleAllergyIntoleranceOrigin applies the CORS response headers corresponding to the origin.
@@ -283,10 +283,10 @@ type NutritionRequestController interface {
 func MountNutritionRequestController(service *goa.Service, ctrl NutritionRequestController) {
 	initService(service)
 	var h goa.Handler
-	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/nutrition_requests", ctrl.MuxHandler("preflight", handleNutritionRequestOrigin(cors.HandlePreflight()), nil))
-	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/nutrition_requests/:nutrition_requestID", ctrl.MuxHandler("preflight", handleNutritionRequestOrigin(cors.HandlePreflight()), nil))
-	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/nutrition_requests/:nutrition_requestID/actions/rate", ctrl.MuxHandler("preflight", handleNutritionRequestOrigin(cors.HandlePreflight()), nil))
-	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/nutrition_requests/:nutrition_requestID/watch", ctrl.MuxHandler("preflight", handleNutritionRequestOrigin(cors.HandlePreflight()), nil))
+	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/nutrition.requests", ctrl.MuxHandler("preflight", handleNutritionRequestOrigin(cors.HandlePreflight()), nil))
+	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/nutrition.requests/:nutrition_requestID", ctrl.MuxHandler("preflight", handleNutritionRequestOrigin(cors.HandlePreflight()), nil))
+	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/nutrition.requests/:nutrition_requestID/actions/rate", ctrl.MuxHandler("preflight", handleNutritionRequestOrigin(cors.HandlePreflight()), nil))
+	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/nutrition.requests/:nutrition_requestID/watch", ctrl.MuxHandler("preflight", handleNutritionRequestOrigin(cors.HandlePreflight()), nil))
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -307,8 +307,8 @@ func MountNutritionRequestController(service *goa.Service, ctrl NutritionRequest
 		return ctrl.Create(rctx)
 	}
 	h = handleNutritionRequestOrigin(h)
-	service.Mux.Handle("POST", "/nosh/patients/:patientID/nutrition_requests", ctrl.MuxHandler("Create", h, unmarshalCreateNutritionRequestPayload))
-	service.LogInfo("mount", "ctrl", "NutritionRequest", "action", "Create", "route", "POST /nosh/patients/:patientID/nutrition_requests")
+	service.Mux.Handle("POST", "/nosh/patients/:patientID/nutrition.requests", ctrl.MuxHandler("Create", h, unmarshalCreateNutritionRequestPayload))
+	service.LogInfo("mount", "ctrl", "NutritionRequest", "action", "Create", "route", "POST /nosh/patients/:patientID/nutrition.requests")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -323,8 +323,8 @@ func MountNutritionRequestController(service *goa.Service, ctrl NutritionRequest
 		return ctrl.Delete(rctx)
 	}
 	h = handleNutritionRequestOrigin(h)
-	service.Mux.Handle("DELETE", "/nosh/patients/:patientID/nutrition_requests/:nutrition_requestID", ctrl.MuxHandler("Delete", h, nil))
-	service.LogInfo("mount", "ctrl", "NutritionRequest", "action", "Delete", "route", "DELETE /nosh/patients/:patientID/nutrition_requests/:nutrition_requestID")
+	service.Mux.Handle("DELETE", "/nosh/patients/:patientID/nutrition.requests/:nutrition_requestID", ctrl.MuxHandler("Delete", h, nil))
+	service.LogInfo("mount", "ctrl", "NutritionRequest", "action", "Delete", "route", "DELETE /nosh/patients/:patientID/nutrition.requests/:nutrition_requestID")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -339,8 +339,8 @@ func MountNutritionRequestController(service *goa.Service, ctrl NutritionRequest
 		return ctrl.List(rctx)
 	}
 	h = handleNutritionRequestOrigin(h)
-	service.Mux.Handle("GET", "/nosh/patients/:patientID/nutrition_requests", ctrl.MuxHandler("List", h, nil))
-	service.LogInfo("mount", "ctrl", "NutritionRequest", "action", "List", "route", "GET /nosh/patients/:patientID/nutrition_requests")
+	service.Mux.Handle("GET", "/nosh/patients/:patientID/nutrition.requests", ctrl.MuxHandler("List", h, nil))
+	service.LogInfo("mount", "ctrl", "NutritionRequest", "action", "List", "route", "GET /nosh/patients/:patientID/nutrition.requests")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -361,8 +361,8 @@ func MountNutritionRequestController(service *goa.Service, ctrl NutritionRequest
 		return ctrl.Rate(rctx)
 	}
 	h = handleNutritionRequestOrigin(h)
-	service.Mux.Handle("PUT", "/nosh/patients/:patientID/nutrition_requests/:nutrition_requestID/actions/rate", ctrl.MuxHandler("Rate", h, unmarshalRateNutritionRequestPayload))
-	service.LogInfo("mount", "ctrl", "NutritionRequest", "action", "Rate", "route", "PUT /nosh/patients/:patientID/nutrition_requests/:nutrition_requestID/actions/rate")
+	service.Mux.Handle("PUT", "/nosh/patients/:patientID/nutrition.requests/:nutrition_requestID/actions/rate", ctrl.MuxHandler("Rate", h, unmarshalRateNutritionRequestPayload))
+	service.LogInfo("mount", "ctrl", "NutritionRequest", "action", "Rate", "route", "PUT /nosh/patients/:patientID/nutrition.requests/:nutrition_requestID/actions/rate")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -377,8 +377,8 @@ func MountNutritionRequestController(service *goa.Service, ctrl NutritionRequest
 		return ctrl.Show(rctx)
 	}
 	h = handleNutritionRequestOrigin(h)
-	service.Mux.Handle("GET", "/nosh/patients/:patientID/nutrition_requests/:nutrition_requestID", ctrl.MuxHandler("Show", h, nil))
-	service.LogInfo("mount", "ctrl", "NutritionRequest", "action", "Show", "route", "GET /nosh/patients/:patientID/nutrition_requests/:nutrition_requestID")
+	service.Mux.Handle("GET", "/nosh/patients/:patientID/nutrition.requests/:nutrition_requestID", ctrl.MuxHandler("Show", h, nil))
+	service.LogInfo("mount", "ctrl", "NutritionRequest", "action", "Show", "route", "GET /nosh/patients/:patientID/nutrition.requests/:nutrition_requestID")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -399,8 +399,8 @@ func MountNutritionRequestController(service *goa.Service, ctrl NutritionRequest
 		return ctrl.Update(rctx)
 	}
 	h = handleNutritionRequestOrigin(h)
-	service.Mux.Handle("PATCH", "/nosh/patients/:patientID/nutrition_requests/:nutrition_requestID", ctrl.MuxHandler("Update", h, unmarshalUpdateNutritionRequestPayload))
-	service.LogInfo("mount", "ctrl", "NutritionRequest", "action", "Update", "route", "PATCH /nosh/patients/:patientID/nutrition_requests/:nutrition_requestID")
+	service.Mux.Handle("PATCH", "/nosh/patients/:patientID/nutrition.requests/:nutrition_requestID", ctrl.MuxHandler("Update", h, unmarshalUpdateNutritionRequestPayload))
+	service.LogInfo("mount", "ctrl", "NutritionRequest", "action", "Update", "route", "PATCH /nosh/patients/:patientID/nutrition.requests/:nutrition_requestID")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -415,8 +415,8 @@ func MountNutritionRequestController(service *goa.Service, ctrl NutritionRequest
 		return ctrl.Watch(rctx)
 	}
 	h = handleNutritionRequestOrigin(h)
-	service.Mux.Handle("GET", "/nosh/patients/:patientID/nutrition_requests/:nutrition_requestID/watch", ctrl.MuxHandler("Watch", h, nil))
-	service.LogInfo("mount", "ctrl", "NutritionRequest", "action", "Watch", "route", "GET /nosh/patients/:patientID/nutrition_requests/:nutrition_requestID/watch")
+	service.Mux.Handle("GET", "/nosh/patients/:patientID/nutrition.requests/:nutrition_requestID/watch", ctrl.MuxHandler("Watch", h, nil))
+	service.LogInfo("mount", "ctrl", "NutritionRequest", "action", "Watch", "route", "GET /nosh/patients/:patientID/nutrition.requests/:nutrition_requestID/watch")
 }
 
 // handleNutritionRequestOrigin applies the CORS response headers corresponding to the origin.

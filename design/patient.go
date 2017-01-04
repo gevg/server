@@ -9,7 +9,7 @@ import (
 //patient resource---------------------------------------------------------------------------------------------------------------
 var _ = Resource("patient", func() {
 
-	DefaultMedia(Patient)
+	DefaultMedia(PatientMedia)
 	BasePath("/patients")
 
 	Description("This resource uses JWT to secure its endpoints")
@@ -33,7 +33,7 @@ var _ = Resource("patient", func() {
 			GET(""),
 		)
 		Description("Retrieve all patients.")
-		Response(OK, CollectionOf(Patient))
+		Response(OK, CollectionOf(PatientMedia))
 	})
 
 	Action("show", func() {

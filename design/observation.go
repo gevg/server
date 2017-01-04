@@ -1,15 +1,15 @@
 package design
 
 import (
+	. "github.com/goa-fhir/server/design/observation"
 	. "github.com/goadesign/goa/design"
 	. "github.com/goadesign/goa/design/apidsl"
-	. "github.com/goa-fhir/server/design/observation"
 )
 
 //vital resource-----------------------------------------------------------------------------------------------------------
 var _ = Resource("Observation", func() {
 
-	DefaultMedia(Observation)
+	DefaultMedia(ObservationMedia)
 	BasePath("observation")
 	Parent("patient")
 
@@ -21,12 +21,12 @@ var _ = Resource("Observation", func() {
 		Params(func() {
 			Param("years", ArrayOf(Integer), "Filter by years")
 		})
-		// Response(OK, func() {
-		// 	Media(CollectionOf(Observation, func() {
-		// 		View("default")
-		// 		View("tiny")
-		// 	}))
-		// })
+		Response(OK, func() {
+			Media(CollectionOf(ObservationMedia, func() {
+				View("default")
+				//View("tiny")
+			}))
+		})
 		Response(NotFound)
 		Response(BadRequest, ErrorMedia)
 	})
