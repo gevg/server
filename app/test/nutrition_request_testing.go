@@ -22,13 +22,15 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strconv"
+	"time"
 )
 
 // CreateNutritionRequestBadRequest runs the method Create of the given controller with the given parameters and payload.
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func CreateNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, payload *app.CreateNutritionRequestPayload) (http.ResponseWriter, error) {
+func CreateNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.CreateNutritionRequestPayload) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -58,8 +60,82 @@ func CreateNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context,
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests", patientID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition.requests", patientID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
@@ -67,6 +143,78 @@ func CreateNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context,
 	}
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -104,7 +252,7 @@ func CreateNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context,
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func CreateNutritionRequestCreated(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, payload *app.CreateNutritionRequestPayload) http.ResponseWriter {
+func CreateNutritionRequestCreated(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.CreateNutritionRequestPayload) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -135,8 +283,82 @@ func CreateNutritionRequestCreated(t goatest.TInterface, ctx context.Context, se
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests", patientID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition.requests", patientID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
@@ -144,6 +366,78 @@ func CreateNutritionRequestCreated(t goatest.TInterface, ctx context.Context, se
 	}
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -173,7 +467,7 @@ func CreateNutritionRequestCreated(t goatest.TInterface, ctx context.Context, se
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func CreateNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, payload *app.CreateNutritionRequestPayload) http.ResponseWriter {
+func CreateNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.CreateNutritionRequestPayload) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -204,8 +498,82 @@ func CreateNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, s
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests", patientID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition.requests", patientID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
@@ -213,6 +581,78 @@ func CreateNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, s
 	}
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -242,7 +682,7 @@ func CreateNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, s
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func DeleteNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int) (http.ResponseWriter, error) {
+func DeleteNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -262,8 +702,82 @@ func DeleteNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context,
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("DELETE", u.String(), nil)
 	if err != nil {
@@ -272,6 +786,78 @@ func DeleteNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context,
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["nutrition_requestID"] = []string{fmt.Sprintf("%v", nutritionRequestID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -308,7 +894,7 @@ func DeleteNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context,
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func DeleteNutritionRequestNoContent(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int) http.ResponseWriter {
+func DeleteNutritionRequestNoContent(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -328,8 +914,82 @@ func DeleteNutritionRequestNoContent(t goatest.TInterface, ctx context.Context, 
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("DELETE", u.String(), nil)
 	if err != nil {
@@ -338,6 +998,78 @@ func DeleteNutritionRequestNoContent(t goatest.TInterface, ctx context.Context, 
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["nutrition_requestID"] = []string{fmt.Sprintf("%v", nutritionRequestID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -366,7 +1098,7 @@ func DeleteNutritionRequestNoContent(t goatest.TInterface, ctx context.Context, 
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func DeleteNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int) http.ResponseWriter {
+func DeleteNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -386,8 +1118,82 @@ func DeleteNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, s
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("DELETE", u.String(), nil)
 	if err != nil {
@@ -396,6 +1202,78 @@ func DeleteNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, s
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["nutrition_requestID"] = []string{fmt.Sprintf("%v", nutritionRequestID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -424,7 +1302,7 @@ func DeleteNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, s
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ListNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, years []int) (http.ResponseWriter, error) {
+func ListNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, years []int) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -445,6 +1323,78 @@ func ListNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, s
 	// Setup request context
 	rw := httptest.NewRecorder()
 	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	{
 		sliceVal := make([]string, len(years))
 		for i, v := range years {
@@ -462,6 +1412,78 @@ func ListNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, s
 	}
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	{
 		sliceVal := make([]string, len(years))
 		for i, v := range years {
@@ -505,7 +1527,7 @@ func ListNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, s
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ListNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, years []int) http.ResponseWriter {
+func ListNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, years []int) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -526,6 +1548,78 @@ func ListNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, ser
 	// Setup request context
 	rw := httptest.NewRecorder()
 	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	{
 		sliceVal := make([]string, len(years))
 		for i, v := range years {
@@ -543,6 +1637,78 @@ func ListNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, ser
 	}
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	{
 		sliceVal := make([]string, len(years))
 		for i, v := range years {
@@ -578,7 +1744,7 @@ func ListNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, ser
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ListNutritionRequestOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, years []int) (http.ResponseWriter, app.NutritionRequestMediaCollection) {
+func ListNutritionRequestOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, years []int) (http.ResponseWriter, app.NutritionRequestMediaCollection) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -599,6 +1765,78 @@ func ListNutritionRequestOK(t goatest.TInterface, ctx context.Context, service *
 	// Setup request context
 	rw := httptest.NewRecorder()
 	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	{
 		sliceVal := make([]string, len(years))
 		for i, v := range years {
@@ -616,6 +1854,78 @@ func ListNutritionRequestOK(t goatest.TInterface, ctx context.Context, service *
 	}
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	{
 		sliceVal := make([]string, len(years))
 		for i, v := range years {
@@ -663,7 +1973,7 @@ func ListNutritionRequestOK(t goatest.TInterface, ctx context.Context, service *
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func RateNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int, payload *app.RateNutritionRequestPayload) (http.ResponseWriter, error) {
+func RateNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.RateNutritionRequestPayload) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -693,8 +2003,82 @@ func RateNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, s
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v/actions/rate", patientID, nutritionRequestID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v/actions/rate", patientID, nutritionRequestID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("PUT", u.String(), nil)
 	if err != nil {
@@ -703,6 +2087,78 @@ func RateNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, s
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["nutrition_requestID"] = []string{fmt.Sprintf("%v", nutritionRequestID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -740,7 +2196,7 @@ func RateNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, s
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func RateNutritionRequestNoContent(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int, payload *app.RateNutritionRequestPayload) http.ResponseWriter {
+func RateNutritionRequestNoContent(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.RateNutritionRequestPayload) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -771,8 +2227,82 @@ func RateNutritionRequestNoContent(t goatest.TInterface, ctx context.Context, se
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v/actions/rate", patientID, nutritionRequestID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v/actions/rate", patientID, nutritionRequestID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("PUT", u.String(), nil)
 	if err != nil {
@@ -781,6 +2311,78 @@ func RateNutritionRequestNoContent(t goatest.TInterface, ctx context.Context, se
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["nutrition_requestID"] = []string{fmt.Sprintf("%v", nutritionRequestID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -810,7 +2412,7 @@ func RateNutritionRequestNoContent(t goatest.TInterface, ctx context.Context, se
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func RateNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int, payload *app.RateNutritionRequestPayload) http.ResponseWriter {
+func RateNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.RateNutritionRequestPayload) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -841,8 +2443,82 @@ func RateNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, ser
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v/actions/rate", patientID, nutritionRequestID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v/actions/rate", patientID, nutritionRequestID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("PUT", u.String(), nil)
 	if err != nil {
@@ -851,6 +2527,78 @@ func RateNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, ser
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["nutrition_requestID"] = []string{fmt.Sprintf("%v", nutritionRequestID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -876,11 +2624,11 @@ func RateNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, ser
 	return rw
 }
 
-// ShowNutritionRequestBadRequest runs the method Show of the given controller with the given parameters.
+// ReadNutritionRequestBadRequest runs the method Read of the given controller with the given parameters.
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ShowNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int) (http.ResponseWriter, error) {
+func ReadNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -900,8 +2648,82 @@ func ShowNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, s
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -910,17 +2732,89 @@ func ShowNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, s
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["nutrition_requestID"] = []string{fmt.Sprintf("%v", nutritionRequestID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
 	goaCtx := goa.NewContext(goa.WithAction(ctx, "NutritionRequestTest"), rw, req, prms)
-	showCtx, err := app.NewShowNutritionRequestContext(goaCtx, service)
+	readCtx, err := app.NewReadNutritionRequestContext(goaCtx, service)
 	if err != nil {
 		panic("invalid test data " + err.Error()) // bug
 	}
 
 	// Perform action
-	err = ctrl.Show(showCtx)
+	err = ctrl.Read(readCtx)
 
 	// Validate response
 	if err != nil {
@@ -942,11 +2836,11 @@ func ShowNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, s
 	return rw, mt
 }
 
-// ShowNutritionRequestNotFound runs the method Show of the given controller with the given parameters.
+// ReadNutritionRequestNotFound runs the method Read of the given controller with the given parameters.
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ShowNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int) http.ResponseWriter {
+func ReadNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -966,8 +2860,82 @@ func ShowNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, ser
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -976,17 +2944,89 @@ func ShowNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, ser
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["nutrition_requestID"] = []string{fmt.Sprintf("%v", nutritionRequestID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
 	goaCtx := goa.NewContext(goa.WithAction(ctx, "NutritionRequestTest"), rw, req, prms)
-	showCtx, err := app.NewShowNutritionRequestContext(goaCtx, service)
+	readCtx, err := app.NewReadNutritionRequestContext(goaCtx, service)
 	if err != nil {
 		panic("invalid test data " + err.Error()) // bug
 	}
 
 	// Perform action
-	err = ctrl.Show(showCtx)
+	err = ctrl.Read(readCtx)
 
 	// Validate response
 	if err != nil {
@@ -1000,11 +3040,11 @@ func ShowNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, ser
 	return rw
 }
 
-// ShowNutritionRequestOK runs the method Show of the given controller with the given parameters.
+// ReadNutritionRequestOK runs the method Read of the given controller with the given parameters.
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ShowNutritionRequestOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int) (http.ResponseWriter, *app.NutritionRequestMedia) {
+func ReadNutritionRequestOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, *app.NutritionRequestMedia) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1024,8 +3064,82 @@ func ShowNutritionRequestOK(t goatest.TInterface, ctx context.Context, service *
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -1034,17 +3148,89 @@ func ShowNutritionRequestOK(t goatest.TInterface, ctx context.Context, service *
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["nutrition_requestID"] = []string{fmt.Sprintf("%v", nutritionRequestID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
 	goaCtx := goa.NewContext(goa.WithAction(ctx, "NutritionRequestTest"), rw, req, prms)
-	showCtx, err := app.NewShowNutritionRequestContext(goaCtx, service)
+	readCtx, err := app.NewReadNutritionRequestContext(goaCtx, service)
 	if err != nil {
 		panic("invalid test data " + err.Error()) // bug
 	}
 
 	// Perform action
-	err = ctrl.Show(showCtx)
+	err = ctrl.Read(readCtx)
 
 	// Validate response
 	if err != nil {
@@ -1074,7 +3260,7 @@ func ShowNutritionRequestOK(t goatest.TInterface, ctx context.Context, service *
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func UpdateNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int, payload *app.NutritionRequestPayload) (http.ResponseWriter, error) {
+func UpdateNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.NutritionRequestPayload) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1104,8 +3290,82 @@ func UpdateNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context,
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("PATCH", u.String(), nil)
 	if err != nil {
@@ -1114,6 +3374,78 @@ func UpdateNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context,
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["nutrition_requestID"] = []string{fmt.Sprintf("%v", nutritionRequestID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -1151,7 +3483,7 @@ func UpdateNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context,
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func UpdateNutritionRequestNoContent(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int, payload *app.NutritionRequestPayload) http.ResponseWriter {
+func UpdateNutritionRequestNoContent(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.NutritionRequestPayload) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1182,8 +3514,82 @@ func UpdateNutritionRequestNoContent(t goatest.TInterface, ctx context.Context, 
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("PATCH", u.String(), nil)
 	if err != nil {
@@ -1192,6 +3598,78 @@ func UpdateNutritionRequestNoContent(t goatest.TInterface, ctx context.Context, 
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["nutrition_requestID"] = []string{fmt.Sprintf("%v", nutritionRequestID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -1221,7 +3699,7 @@ func UpdateNutritionRequestNoContent(t goatest.TInterface, ctx context.Context, 
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func UpdateNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int, payload *app.NutritionRequestPayload) http.ResponseWriter {
+func UpdateNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.NutritionRequestPayload) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1252,8 +3730,82 @@ func UpdateNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, s
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v", patientID, nutritionRequestID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("PATCH", u.String(), nil)
 	if err != nil {
@@ -1262,6 +3814,78 @@ func UpdateNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, s
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["nutrition_requestID"] = []string{fmt.Sprintf("%v", nutritionRequestID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -1291,7 +3915,7 @@ func UpdateNutritionRequestNotFound(t goatest.TInterface, ctx context.Context, s
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func WatchNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int) (http.ResponseWriter, error) {
+func WatchNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.NutritionRequestController, patientID int, nutritionRequestID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1311,8 +3935,82 @@ func WatchNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, 
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v/watch", patientID, nutritionRequestID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/nutrition.requests/%v/watch", patientID, nutritionRequestID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -1321,6 +4019,78 @@ func WatchNutritionRequestBadRequest(t goatest.TInterface, ctx context.Context, 
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["nutrition_requestID"] = []string{fmt.Sprintf("%v", nutritionRequestID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}

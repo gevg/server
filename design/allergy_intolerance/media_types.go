@@ -11,6 +11,7 @@ var AllergyIntoleranceMedia = MediaType("application/vnd.allergy.intolerance+jso
 	Attributes(func() {
 		TypeName("AllergyIntoleranceMedia")
 		Reference(AllergyIntolerancePayload)
+			Attribute("meta")
 		Attribute("identifier")
 		Attribute("onset")
 		Attribute("recordedDate")
@@ -26,6 +27,7 @@ var AllergyIntoleranceMedia = MediaType("application/vnd.allergy.intolerance+jso
 		Attribute("reaction")
 	})
 	View("default", func() {
+			Attribute("meta")
 		Attribute("identifier")
 		Attribute("onset")
 		Attribute("recordedDate")

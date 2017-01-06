@@ -30,7 +30,7 @@ var _ = Resource("NutritionRequest", func() {
 		Response(BadRequest, ErrorMedia)
 	})
 
-	Action("show", func() {
+	Action("read", func() {
 		Routing(
 			GET("/:nutrition_requestID"),
 		)

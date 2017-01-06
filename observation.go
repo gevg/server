@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/goadesign/goa"
 	"github.com/goa-fhir/server/app"
+	"github.com/goadesign/goa"
 	"golang.org/x/net/websocket"
 	"io"
 )
@@ -44,7 +44,8 @@ func (c *ObservationController) List(ctx *app.ListObservationContext) error {
 	// Put your logic here
 
 	// ObservationController_List: end_implement
-	return nil
+	res := app.ObservationMediaCollection{}
+	return ctx.OK(res)
 }
 
 // Rate runs the rate action.
@@ -64,7 +65,7 @@ func (c *ObservationController) Show(ctx *app.ShowObservationContext) error {
 	// Put your logic here
 
 	// ObservationController_Show: end_implement
-	res := &app.Observation{}
+	res := &app.ObservationMedia{}
 	return ctx.OK(res)
 }
 

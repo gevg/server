@@ -7,6 +7,7 @@ import (
 // Observation is the observation resource media type------------------------------------------------------------------------------------------------
 var ObservationPayload = Type("ObservationPayload", func() {
 	Reference(Observation)
+		Attribute("meta")
 	Attribute("identifier")
 	Attribute("status")
 	Attribute("category")

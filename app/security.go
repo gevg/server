@@ -61,6 +61,18 @@ func NewSigninBasicAuthSecurity() *goa.BasicAuthSecurity {
 	return &def
 }
 
+// UseOauth2ClientBasicAuthMiddleware mounts the oauth2_client_basic_auth auth middleware onto the service.
+func UseOauth2ClientBasicAuthMiddleware(service *goa.Service, middleware goa.Middleware) {
+	service.Context = context.WithValue(service.Context, authMiddlewareKey("oauth2_client_basic_auth"), middleware)
+}
+
+// NewOauth2ClientBasicAuthSecurity creates a oauth2_client_basic_auth security definition.
+func NewOauth2ClientBasicAuthSecurity() *goa.BasicAuthSecurity {
+	def := goa.BasicAuthSecurity{}
+	def.Description = "Basic auth used by client to make the requests needed to retrieve and refresh access tokens"
+	return &def
+}
+
 // handleSecurity creates a handler that runs the auth middleware for the security scheme.
 func handleSecurity(schemeName string, h goa.Handler, scopes ...string) goa.Handler {
 	return func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {

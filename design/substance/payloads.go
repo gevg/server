@@ -7,6 +7,7 @@ import (
 // Substance is the substance resource media type------------------------------------------------------------------------------------------------
 var SubstancePayload = Type("SubstancePayload", func() {
 	Reference(Substance)
+	Attribute("meta")
 	Attribute("identifier")
 	Attribute("category")
 	Attribute("code")

@@ -12,6 +12,7 @@ var PatientPayload = Type("PatientPayload", func() {
 	Attribute("id")
 	Attribute("href")
 	//FHIR elements
+		Attribute("meta")
 	Required("gender")
 	Attribute("identifier")
 	Attribute("active")

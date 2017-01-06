@@ -7,6 +7,7 @@ import (
 // Specimen is the specimen resource media type------------------------------------------------------------------------------------------------
 var SpecimenPayload = Type("SpecimenPayload", func() {
 	Reference(Specimen)
+	Attribute("meta")
 	Attribute("identifier")
 	Attribute("status")
 	Attribute("type")

@@ -11,6 +11,7 @@ var SubstanceMedia = MediaType("application/vnd.substance+json", func() {
 	TypeName("SubstanceMedia")
 	Reference(SubstancePayload)
 	Attributes(func() {
+		Attribute("meta")
 		Attribute("identifier")
 		Attribute("category")
 		Attribute("code")
@@ -20,6 +21,7 @@ var SubstanceMedia = MediaType("application/vnd.substance+json", func() {
 	})
 	View("default", func() {
 		Description("Default view for Substance resource.")
+		Attribute("meta")
 		Attribute("identifier")
 		Attribute("category")
 		Attribute("code")

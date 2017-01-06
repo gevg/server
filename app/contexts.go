@@ -15,7 +15,6 @@ import (
 	"golang.org/x/net/context"
 	"strconv"
 	"time"
-	"unicode/utf8"
 )
 
 // CreateAllergyIntoleranceContext provides the AllergyIntolerance create action context.
@@ -23,8 +22,26 @@ type CreateAllergyIntoleranceContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	PatientID int
-	Payload   *CreateAllergyIntolerancePayload
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	PatientID     int
+	Payload       *CreateAllergyIntolerancePayload
 }
 
 // NewCreateAllergyIntoleranceContext parses the incoming request URL and body, performs validations and creates the
@@ -35,6 +52,118 @@ func NewCreateAllergyIntoleranceContext(ctx context.Context, service *goa.Servic
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := CreateAllergyIntoleranceContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp2 := count
+			tmp1 := &tmp2
+			rctx.Count = tmp1
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp4 := id
+			tmp3 := &tmp4
+			rctx.ID = tmp3
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp5 := &lastUpdate
+			rctx.LastUpdate = tmp5
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramPatientID := req.Params["patientID"]
 	if len(paramPatientID) > 0 {
 		rawPatientID := paramPatientID[0]
@@ -61,6 +190,9 @@ type createAllergyIntolerancePayload struct {
 	Identifier []*identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
 	// Represents the date and/or time of the last known occurrence of a reaction event.
 	LastOccurence *time.Time `form:"lastOccurence,omitempty" json:"lastOccurence,omitempty" xml:"lastOccurence,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Additional narrative about the propensity for the Adverse Reaction, not captured in other fields..
 	Note *annotation `form:"note,omitempty" json:"note,omitempty" xml:"note,omitempty"`
 	// Record of the date and/or time of the onset of the Allergy or Intolerance.
@@ -100,6 +232,11 @@ func (payload *createAllergyIntolerancePayload) Validate() (err error) {
 			}
 		}
 	}
+	if payload.Meta != nil {
+		if err2 := payload.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
 	if payload.Reaction != nil {
 		if err2 := payload.Reaction.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -135,6 +272,9 @@ func (payload *createAllergyIntolerancePayload) Publicize() *CreateAllergyIntole
 	}
 	if payload.LastOccurence != nil {
 		pub.LastOccurence = payload.LastOccurence
+	}
+	if payload.Meta != nil {
+		pub.Meta = payload.Meta.Publicize()
 	}
 	if payload.Note != nil {
 		pub.Note = payload.Note.Publicize()
@@ -177,6 +317,9 @@ type CreateAllergyIntolerancePayload struct {
 	Identifier []*Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
 	// Represents the date and/or time of the last known occurrence of a reaction event.
 	LastOccurence *time.Time `form:"lastOccurence,omitempty" json:"lastOccurence,omitempty" xml:"lastOccurence,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *Meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Additional narrative about the propensity for the Adverse Reaction, not captured in other fields..
 	Note *Annotation `form:"note,omitempty" json:"note,omitempty" xml:"note,omitempty"`
 	// Record of the date and/or time of the onset of the Allergy or Intolerance.
@@ -214,6 +357,11 @@ func (payload *CreateAllergyIntolerancePayload) Validate() (err error) {
 			if err2 := e.Validate(); err2 != nil {
 				err = goa.MergeErrors(err, err2)
 			}
+		}
+	}
+	if payload.Meta != nil {
+		if err2 := payload.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
 		}
 	}
 	if payload.Reaction != nil {
@@ -257,7 +405,26 @@ type DeleteAllergyIntoleranceContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	AllergyIntoleranceID int
+	Contained            *string
+	ContainedType        *string
+	Count                *int
+	Elements             *string
+	Has                  *string
+	ID                   *int
+	Include              *string
+	LastUpdate           *time.Time
+	List                 *string
+	Profile              *string
+	Query                *string
+	Revinclude           *string
+	Security             *string
+	Sort                 *string
+	Summary              *string
+	Tag                  *string
+	Text                 *string
+	Type                 *string
+	Allergy              string
+	AllergyIntoleranceID *int
 	PatientID            int
 }
 
@@ -269,13 +436,132 @@ func NewDeleteAllergyIntoleranceContext(ctx context.Context, service *goa.Servic
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := DeleteAllergyIntoleranceContext{Context: ctx, ResponseData: resp, RequestData: req}
-	paramAllergyIntoleranceID := req.Params["allergy_intoleranceID"]
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp8 := count
+			tmp7 := &tmp8
+			rctx.Count = tmp7
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp10 := id
+			tmp9 := &tmp10
+			rctx.ID = tmp9
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp11 := &lastUpdate
+			rctx.LastUpdate = tmp11
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
+	paramAllergy := req.Params["allergy"]
+	if len(paramAllergy) > 0 {
+		rawAllergy := paramAllergy[0]
+		rctx.Allergy = rawAllergy
+	}
+	paramAllergyIntoleranceID := req.Params["allergy.intoleranceID"]
 	if len(paramAllergyIntoleranceID) > 0 {
 		rawAllergyIntoleranceID := paramAllergyIntoleranceID[0]
 		if allergyIntoleranceID, err2 := strconv.Atoi(rawAllergyIntoleranceID); err2 == nil {
-			rctx.AllergyIntoleranceID = allergyIntoleranceID
+			tmp13 := allergyIntoleranceID
+			tmp12 := &tmp13
+			rctx.AllergyIntoleranceID = tmp12
 		} else {
-			err = goa.MergeErrors(err, goa.InvalidParamTypeError("allergy_intoleranceID", rawAllergyIntoleranceID, "integer"))
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("allergy.intoleranceID", rawAllergyIntoleranceID, "integer"))
 		}
 	}
 	paramPatientID := req.Params["patientID"]
@@ -316,8 +602,26 @@ type ListAllergyIntoleranceContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	PatientID int
-	Years     []int
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	PatientID     int
+	Years         []int
 }
 
 // NewListAllergyIntoleranceContext parses the incoming request URL and body, performs validations and creates the
@@ -328,6 +632,118 @@ func NewListAllergyIntoleranceContext(ctx context.Context, service *goa.Service)
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := ListAllergyIntoleranceContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp16 := count
+			tmp15 := &tmp16
+			rctx.Count = tmp15
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp18 := id
+			tmp17 := &tmp18
+			rctx.ID = tmp17
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp19 := &lastUpdate
+			rctx.LastUpdate = tmp19
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramPatientID := req.Params["patientID"]
 	if len(paramPatientID) > 0 {
 		rawPatientID := paramPatientID[0]
@@ -381,7 +797,26 @@ type RateAllergyIntoleranceContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	AllergyIntoleranceID int
+	Contained            *string
+	ContainedType        *string
+	Count                *int
+	Elements             *string
+	Has                  *string
+	ID                   *int
+	Include              *string
+	LastUpdate           *time.Time
+	List                 *string
+	Profile              *string
+	Query                *string
+	Revinclude           *string
+	Security             *string
+	Sort                 *string
+	Summary              *string
+	Tag                  *string
+	Text                 *string
+	Type                 *string
+	Allergy              string
+	AllergyIntoleranceID *int
 	PatientID            int
 	Payload              *RateAllergyIntolerancePayload
 }
@@ -394,13 +829,132 @@ func NewRateAllergyIntoleranceContext(ctx context.Context, service *goa.Service)
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := RateAllergyIntoleranceContext{Context: ctx, ResponseData: resp, RequestData: req}
-	paramAllergyIntoleranceID := req.Params["allergy_intoleranceID"]
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp23 := count
+			tmp22 := &tmp23
+			rctx.Count = tmp22
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp25 := id
+			tmp24 := &tmp25
+			rctx.ID = tmp24
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp26 := &lastUpdate
+			rctx.LastUpdate = tmp26
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
+	paramAllergy := req.Params["allergy"]
+	if len(paramAllergy) > 0 {
+		rawAllergy := paramAllergy[0]
+		rctx.Allergy = rawAllergy
+	}
+	paramAllergyIntoleranceID := req.Params["allergy.intoleranceID"]
 	if len(paramAllergyIntoleranceID) > 0 {
 		rawAllergyIntoleranceID := paramAllergyIntoleranceID[0]
 		if allergyIntoleranceID, err2 := strconv.Atoi(rawAllergyIntoleranceID); err2 == nil {
-			rctx.AllergyIntoleranceID = allergyIntoleranceID
+			tmp28 := allergyIntoleranceID
+			tmp27 := &tmp28
+			rctx.AllergyIntoleranceID = tmp27
 		} else {
-			err = goa.MergeErrors(err, goa.InvalidParamTypeError("allergy_intoleranceID", rawAllergyIntoleranceID, "integer"))
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("allergy.intoleranceID", rawAllergyIntoleranceID, "integer"))
 		}
 	}
 	paramPatientID := req.Params["patientID"]
@@ -471,30 +1025,168 @@ func (ctx *RateAllergyIntoleranceContext) NotFound() error {
 	return nil
 }
 
-// ShowAllergyIntoleranceContext provides the AllergyIntolerance show action context.
-type ShowAllergyIntoleranceContext struct {
+// ReadAllergyIntoleranceContext provides the AllergyIntolerance read action context.
+type ReadAllergyIntoleranceContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	AllergyIntoleranceID int
+	Contained            *string
+	ContainedType        *string
+	Count                *int
+	Elements             *string
+	Has                  *string
+	ID                   *int
+	Include              *string
+	LastUpdate           *time.Time
+	List                 *string
+	Profile              *string
+	Query                *string
+	Revinclude           *string
+	Security             *string
+	Sort                 *string
+	Summary              *string
+	Tag                  *string
+	Text                 *string
+	Type                 *string
+	Allergy              string
+	AllergyIntoleranceID *int
 	PatientID            int
 }
 
-// NewShowAllergyIntoleranceContext parses the incoming request URL and body, performs validations and creates the
-// context used by the AllergyIntolerance controller show action.
-func NewShowAllergyIntoleranceContext(ctx context.Context, service *goa.Service) (*ShowAllergyIntoleranceContext, error) {
+// NewReadAllergyIntoleranceContext parses the incoming request URL and body, performs validations and creates the
+// context used by the AllergyIntolerance controller read action.
+func NewReadAllergyIntoleranceContext(ctx context.Context, service *goa.Service) (*ReadAllergyIntoleranceContext, error) {
 	var err error
 	resp := goa.ContextResponse(ctx)
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
-	rctx := ShowAllergyIntoleranceContext{Context: ctx, ResponseData: resp, RequestData: req}
-	paramAllergyIntoleranceID := req.Params["allergy_intoleranceID"]
+	rctx := ReadAllergyIntoleranceContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp31 := count
+			tmp30 := &tmp31
+			rctx.Count = tmp30
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp33 := id
+			tmp32 := &tmp33
+			rctx.ID = tmp32
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp34 := &lastUpdate
+			rctx.LastUpdate = tmp34
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
+	paramAllergy := req.Params["allergy"]
+	if len(paramAllergy) > 0 {
+		rawAllergy := paramAllergy[0]
+		rctx.Allergy = rawAllergy
+	}
+	paramAllergyIntoleranceID := req.Params["allergy.intoleranceID"]
 	if len(paramAllergyIntoleranceID) > 0 {
 		rawAllergyIntoleranceID := paramAllergyIntoleranceID[0]
 		if allergyIntoleranceID, err2 := strconv.Atoi(rawAllergyIntoleranceID); err2 == nil {
-			rctx.AllergyIntoleranceID = allergyIntoleranceID
+			tmp36 := allergyIntoleranceID
+			tmp35 := &tmp36
+			rctx.AllergyIntoleranceID = tmp35
 		} else {
-			err = goa.MergeErrors(err, goa.InvalidParamTypeError("allergy_intoleranceID", rawAllergyIntoleranceID, "integer"))
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("allergy.intoleranceID", rawAllergyIntoleranceID, "integer"))
 		}
 	}
 	paramPatientID := req.Params["patientID"]
@@ -513,19 +1205,19 @@ func NewShowAllergyIntoleranceContext(ctx context.Context, service *goa.Service)
 }
 
 // OK sends a HTTP response with status code 200.
-func (ctx *ShowAllergyIntoleranceContext) OK(r *AllergyIntoleranceMedia) error {
+func (ctx *ReadAllergyIntoleranceContext) OK(r *AllergyIntoleranceMedia) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.allergy.intolerance+json")
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
 
 // BadRequest sends a HTTP response with status code 400.
-func (ctx *ShowAllergyIntoleranceContext) BadRequest(r error) error {
+func (ctx *ReadAllergyIntoleranceContext) BadRequest(r error) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.goa.error")
 	return ctx.ResponseData.Service.Send(ctx.Context, 400, r)
 }
 
 // NotFound sends a HTTP response with status code 404.
-func (ctx *ShowAllergyIntoleranceContext) NotFound() error {
+func (ctx *ReadAllergyIntoleranceContext) NotFound() error {
 	ctx.ResponseData.WriteHeader(404)
 	return nil
 }
@@ -535,7 +1227,26 @@ type UpdateAllergyIntoleranceContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	AllergyIntoleranceID int
+	Contained            *string
+	ContainedType        *string
+	Count                *int
+	Elements             *string
+	Has                  *string
+	ID                   *int
+	Include              *string
+	LastUpdate           *time.Time
+	List                 *string
+	Profile              *string
+	Query                *string
+	Revinclude           *string
+	Security             *string
+	Sort                 *string
+	Summary              *string
+	Tag                  *string
+	Text                 *string
+	Type                 *string
+	Allergy              string
+	AllergyIntoleranceID *int
 	PatientID            int
 	Payload              *AllergyIntolerancePayload
 }
@@ -548,13 +1259,132 @@ func NewUpdateAllergyIntoleranceContext(ctx context.Context, service *goa.Servic
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := UpdateAllergyIntoleranceContext{Context: ctx, ResponseData: resp, RequestData: req}
-	paramAllergyIntoleranceID := req.Params["allergy_intoleranceID"]
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp39 := count
+			tmp38 := &tmp39
+			rctx.Count = tmp38
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp41 := id
+			tmp40 := &tmp41
+			rctx.ID = tmp40
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp42 := &lastUpdate
+			rctx.LastUpdate = tmp42
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
+	paramAllergy := req.Params["allergy"]
+	if len(paramAllergy) > 0 {
+		rawAllergy := paramAllergy[0]
+		rctx.Allergy = rawAllergy
+	}
+	paramAllergyIntoleranceID := req.Params["allergy.intoleranceID"]
 	if len(paramAllergyIntoleranceID) > 0 {
 		rawAllergyIntoleranceID := paramAllergyIntoleranceID[0]
 		if allergyIntoleranceID, err2 := strconv.Atoi(rawAllergyIntoleranceID); err2 == nil {
-			rctx.AllergyIntoleranceID = allergyIntoleranceID
+			tmp44 := allergyIntoleranceID
+			tmp43 := &tmp44
+			rctx.AllergyIntoleranceID = tmp43
 		} else {
-			err = goa.MergeErrors(err, goa.InvalidParamTypeError("allergy_intoleranceID", rawAllergyIntoleranceID, "integer"))
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("allergy.intoleranceID", rawAllergyIntoleranceID, "integer"))
 		}
 	}
 	paramPatientID := req.Params["patientID"]
@@ -595,7 +1425,26 @@ type WatchAllergyIntoleranceContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	AllergyIntoleranceID int
+	Contained            *string
+	ContainedType        *string
+	Count                *int
+	Elements             *string
+	Has                  *string
+	ID                   *int
+	Include              *string
+	LastUpdate           *time.Time
+	List                 *string
+	Profile              *string
+	Query                *string
+	Revinclude           *string
+	Security             *string
+	Sort                 *string
+	Summary              *string
+	Tag                  *string
+	Text                 *string
+	Type                 *string
+	Allergy              string
+	AllergyIntoleranceID *int
 	PatientID            int
 }
 
@@ -607,13 +1456,132 @@ func NewWatchAllergyIntoleranceContext(ctx context.Context, service *goa.Service
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := WatchAllergyIntoleranceContext{Context: ctx, ResponseData: resp, RequestData: req}
-	paramAllergyIntoleranceID := req.Params["allergy_intoleranceID"]
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp47 := count
+			tmp46 := &tmp47
+			rctx.Count = tmp46
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp49 := id
+			tmp48 := &tmp49
+			rctx.ID = tmp48
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp50 := &lastUpdate
+			rctx.LastUpdate = tmp50
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
+	paramAllergy := req.Params["allergy"]
+	if len(paramAllergy) > 0 {
+		rawAllergy := paramAllergy[0]
+		rctx.Allergy = rawAllergy
+	}
+	paramAllergyIntoleranceID := req.Params["allergy.intoleranceID"]
 	if len(paramAllergyIntoleranceID) > 0 {
 		rawAllergyIntoleranceID := paramAllergyIntoleranceID[0]
 		if allergyIntoleranceID, err2 := strconv.Atoi(rawAllergyIntoleranceID); err2 == nil {
-			rctx.AllergyIntoleranceID = allergyIntoleranceID
+			tmp52 := allergyIntoleranceID
+			tmp51 := &tmp52
+			rctx.AllergyIntoleranceID = tmp51
 		} else {
-			err = goa.MergeErrors(err, goa.InvalidParamTypeError("allergy_intoleranceID", rawAllergyIntoleranceID, "integer"))
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("allergy.intoleranceID", rawAllergyIntoleranceID, "integer"))
 		}
 	}
 	paramPatientID := req.Params["patientID"]
@@ -642,8 +1610,26 @@ type CreateNutritionRequestContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	PatientID int
-	Payload   *CreateNutritionRequestPayload
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	PatientID     int
+	Payload       *CreateNutritionRequestPayload
 }
 
 // NewCreateNutritionRequestContext parses the incoming request URL and body, performs validations and creates the
@@ -654,6 +1640,118 @@ func NewCreateNutritionRequestContext(ctx context.Context, service *goa.Service)
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := CreateNutritionRequestContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp55 := count
+			tmp54 := &tmp55
+			rctx.Count = tmp54
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp57 := id
+			tmp56 := &tmp57
+			rctx.ID = tmp56
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp58 := &lastUpdate
+			rctx.LastUpdate = tmp58
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramPatientID := req.Params["patientID"]
 	if len(paramPatientID) > 0 {
 		rawPatientID := paramPatientID[0]
@@ -678,7 +1776,7 @@ type createNutritionRequestPayload struct {
 	// An encounter that provides additional information about the healthcare context in which this request is made.
 	Encounter *hL7Reference `form:"encounter,omitempty" json:"encounter,omitempty" xml:"encounter,omitempty"`
 	// Feeding provided through the gastrointestinal tract via a tube, catheter, or stoma that delivers nutrition distal to the oral cavity.
-	EnteralFormula enteralFormulaCollection `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
+	EnteralFormula *enteralFormula `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
 	// This modifier is used to convey order-specific modifiers about the type of food that should NOT be given. These can be derived from
 	// 		patient allergies, intolerances, or preferences such as No Red Meat, No Soy or No Wheat or  Gluten-Free.  While it should not be necessary to repeat allergy or intolerance
 	// 		information captured in the referenced allergyIntolerance resource in the excludeFoodModifier, this element may be used to convey additional specificity related to foods that should be
@@ -691,8 +1789,11 @@ type createNutritionRequestPayload struct {
 	FoodPreferenceModifier []*codeableConcept `form:"foodPreferenceModifier,omitempty" json:"foodPreferenceModifier,omitempty" xml:"foodPreferenceModifier,omitempty"`
 	// Identifiers assigned to this order by the order sender or by the order receiver.
 	Identifier []*identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Diet given orally in contrast to enteral (tube) feeding.
-	OralDiet oralDietMediaCollection `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
+	OralDiet *oralDiet `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
 	// The practitioner that holds legal responsibility for ordering the diet, nutritional supplement, or formula feedings.
 	Orderer *hL7Reference `form:"orderer,omitempty" json:"orderer,omitempty" xml:"orderer,omitempty"`
 	// The person (patient) who needs the nutrition order for an oral diet, nutritional supplement and/or enteral or formula feeding.
@@ -705,8 +1806,10 @@ type createNutritionRequestPayload struct {
 
 // Validate runs the validation rules defined in the design.
 func (payload *createNutritionRequestPayload) Validate() (err error) {
-	if err2 := payload.EnteralFormula.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if payload.EnteralFormula != nil {
+		if err2 := payload.EnteralFormula.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	for _, e := range payload.Identifier {
 		if e != nil {
@@ -715,8 +1818,15 @@ func (payload *createNutritionRequestPayload) Validate() (err error) {
 			}
 		}
 	}
-	if err2 := payload.OralDiet.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if payload.Meta != nil {
+		if err2 := payload.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	if payload.OralDiet != nil {
+		if err2 := payload.OralDiet.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	if payload.Status != nil {
 		if !(*payload.Status == "proposed" || *payload.Status == "draft" || *payload.Status == "planned" || *payload.Status == "requested" || *payload.Status == "active" || *payload.Status == "on-hold" || *payload.Status == "completed" || *payload.Status == "cancelled") {
@@ -749,10 +1859,7 @@ func (payload *createNutritionRequestPayload) Publicize() *CreateNutritionReques
 		pub.Encounter = payload.Encounter.Publicize()
 	}
 	if payload.EnteralFormula != nil {
-		pub.EnteralFormula = make(EnteralFormulaCollection, len(payload.EnteralFormula))
-		for i2, elem2 := range payload.EnteralFormula {
-			pub.EnteralFormula[i2] = elem2.Publicize()
-		}
+		pub.EnteralFormula = payload.EnteralFormula.Publicize()
 	}
 	if payload.ExcludeFoodModifier != nil {
 		pub.ExcludeFoodModifier = make([]*CodeableConcept, len(payload.ExcludeFoodModifier))
@@ -772,11 +1879,11 @@ func (payload *createNutritionRequestPayload) Publicize() *CreateNutritionReques
 			pub.Identifier[i2] = elem2.Publicize()
 		}
 	}
+	if payload.Meta != nil {
+		pub.Meta = payload.Meta.Publicize()
+	}
 	if payload.OralDiet != nil {
-		pub.OralDiet = make(OralDietMediaCollection, len(payload.OralDiet))
-		for i2, elem2 := range payload.OralDiet {
-			pub.OralDiet[i2] = elem2.Publicize()
-		}
+		pub.OralDiet = payload.OralDiet.Publicize()
 	}
 	if payload.Orderer != nil {
 		pub.Orderer = payload.Orderer.Publicize()
@@ -805,7 +1912,7 @@ type CreateNutritionRequestPayload struct {
 	// An encounter that provides additional information about the healthcare context in which this request is made.
 	Encounter *HL7Reference `form:"encounter,omitempty" json:"encounter,omitempty" xml:"encounter,omitempty"`
 	// Feeding provided through the gastrointestinal tract via a tube, catheter, or stoma that delivers nutrition distal to the oral cavity.
-	EnteralFormula EnteralFormulaCollection `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
+	EnteralFormula *EnteralFormula `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
 	// This modifier is used to convey order-specific modifiers about the type of food that should NOT be given. These can be derived from
 	// 		patient allergies, intolerances, or preferences such as No Red Meat, No Soy or No Wheat or  Gluten-Free.  While it should not be necessary to repeat allergy or intolerance
 	// 		information captured in the referenced allergyIntolerance resource in the excludeFoodModifier, this element may be used to convey additional specificity related to foods that should be
@@ -818,8 +1925,11 @@ type CreateNutritionRequestPayload struct {
 	FoodPreferenceModifier []*CodeableConcept `form:"foodPreferenceModifier,omitempty" json:"foodPreferenceModifier,omitempty" xml:"foodPreferenceModifier,omitempty"`
 	// Identifiers assigned to this order by the order sender or by the order receiver.
 	Identifier []*Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *Meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Diet given orally in contrast to enteral (tube) feeding.
-	OralDiet OralDietMediaCollection `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
+	OralDiet *OralDiet `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
 	// The practitioner that holds legal responsibility for ordering the diet, nutritional supplement, or formula feedings.
 	Orderer *HL7Reference `form:"orderer,omitempty" json:"orderer,omitempty" xml:"orderer,omitempty"`
 	// The person (patient) who needs the nutrition order for an oral diet, nutritional supplement and/or enteral or formula feeding.
@@ -832,8 +1942,10 @@ type CreateNutritionRequestPayload struct {
 
 // Validate runs the validation rules defined in the design.
 func (payload *CreateNutritionRequestPayload) Validate() (err error) {
-	if err2 := payload.EnteralFormula.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if payload.EnteralFormula != nil {
+		if err2 := payload.EnteralFormula.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	for _, e := range payload.Identifier {
 		if e != nil {
@@ -842,8 +1954,15 @@ func (payload *CreateNutritionRequestPayload) Validate() (err error) {
 			}
 		}
 	}
-	if err2 := payload.OralDiet.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if payload.Meta != nil {
+		if err2 := payload.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	if payload.OralDiet != nil {
+		if err2 := payload.OralDiet.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	if payload.Status != nil {
 		if !(*payload.Status == "proposed" || *payload.Status == "draft" || *payload.Status == "planned" || *payload.Status == "requested" || *payload.Status == "active" || *payload.Status == "on-hold" || *payload.Status == "completed" || *payload.Status == "cancelled") {
@@ -883,6 +2002,24 @@ type DeleteNutritionRequestContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
+	Contained          *string
+	ContainedType      *string
+	Count              *int
+	Elements           *string
+	Has                *string
+	ID                 *int
+	Include            *string
+	LastUpdate         *time.Time
+	List               *string
+	Profile            *string
+	Query              *string
+	Revinclude         *string
+	Security           *string
+	Sort               *string
+	Summary            *string
+	Tag                *string
+	Text               *string
+	Type               *string
 	NutritionRequestID int
 	PatientID          int
 }
@@ -895,6 +2032,118 @@ func NewDeleteNutritionRequestContext(ctx context.Context, service *goa.Service)
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := DeleteNutritionRequestContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp61 := count
+			tmp60 := &tmp61
+			rctx.Count = tmp60
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp63 := id
+			tmp62 := &tmp63
+			rctx.ID = tmp62
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp64 := &lastUpdate
+			rctx.LastUpdate = tmp64
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramNutritionRequestID := req.Params["nutrition_requestID"]
 	if len(paramNutritionRequestID) > 0 {
 		rawNutritionRequestID := paramNutritionRequestID[0]
@@ -942,8 +2191,26 @@ type ListNutritionRequestContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	PatientID int
-	Years     []int
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	PatientID     int
+	Years         []int
 }
 
 // NewListNutritionRequestContext parses the incoming request URL and body, performs validations and creates the
@@ -954,6 +2221,118 @@ func NewListNutritionRequestContext(ctx context.Context, service *goa.Service) (
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := ListNutritionRequestContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp68 := count
+			tmp67 := &tmp68
+			rctx.Count = tmp67
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp70 := id
+			tmp69 := &tmp70
+			rctx.ID = tmp69
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp71 := &lastUpdate
+			rctx.LastUpdate = tmp71
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramPatientID := req.Params["patientID"]
 	if len(paramPatientID) > 0 {
 		rawPatientID := paramPatientID[0]
@@ -1007,6 +2386,24 @@ type RateNutritionRequestContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
+	Contained          *string
+	ContainedType      *string
+	Count              *int
+	Elements           *string
+	Has                *string
+	ID                 *int
+	Include            *string
+	LastUpdate         *time.Time
+	List               *string
+	Profile            *string
+	Query              *string
+	Revinclude         *string
+	Security           *string
+	Sort               *string
+	Summary            *string
+	Tag                *string
+	Text               *string
+	Type               *string
 	NutritionRequestID int
 	PatientID          int
 	Payload            *RateNutritionRequestPayload
@@ -1020,6 +2417,118 @@ func NewRateNutritionRequestContext(ctx context.Context, service *goa.Service) (
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := RateNutritionRequestContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp75 := count
+			tmp74 := &tmp75
+			rctx.Count = tmp74
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp77 := id
+			tmp76 := &tmp77
+			rctx.ID = tmp76
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp78 := &lastUpdate
+			rctx.LastUpdate = tmp78
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramNutritionRequestID := req.Params["nutrition_requestID"]
 	if len(paramNutritionRequestID) > 0 {
 		rawNutritionRequestID := paramNutritionRequestID[0]
@@ -1097,23 +2606,153 @@ func (ctx *RateNutritionRequestContext) NotFound() error {
 	return nil
 }
 
-// ShowNutritionRequestContext provides the NutritionRequest show action context.
-type ShowNutritionRequestContext struct {
+// ReadNutritionRequestContext provides the NutritionRequest read action context.
+type ReadNutritionRequestContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
+	Contained          *string
+	ContainedType      *string
+	Count              *int
+	Elements           *string
+	Has                *string
+	ID                 *int
+	Include            *string
+	LastUpdate         *time.Time
+	List               *string
+	Profile            *string
+	Query              *string
+	Revinclude         *string
+	Security           *string
+	Sort               *string
+	Summary            *string
+	Tag                *string
+	Text               *string
+	Type               *string
 	NutritionRequestID int
 	PatientID          int
 }
 
-// NewShowNutritionRequestContext parses the incoming request URL and body, performs validations and creates the
-// context used by the NutritionRequest controller show action.
-func NewShowNutritionRequestContext(ctx context.Context, service *goa.Service) (*ShowNutritionRequestContext, error) {
+// NewReadNutritionRequestContext parses the incoming request URL and body, performs validations and creates the
+// context used by the NutritionRequest controller read action.
+func NewReadNutritionRequestContext(ctx context.Context, service *goa.Service) (*ReadNutritionRequestContext, error) {
 	var err error
 	resp := goa.ContextResponse(ctx)
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
-	rctx := ShowNutritionRequestContext{Context: ctx, ResponseData: resp, RequestData: req}
+	rctx := ReadNutritionRequestContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp82 := count
+			tmp81 := &tmp82
+			rctx.Count = tmp81
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp84 := id
+			tmp83 := &tmp84
+			rctx.ID = tmp83
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp85 := &lastUpdate
+			rctx.LastUpdate = tmp85
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramNutritionRequestID := req.Params["nutrition_requestID"]
 	if len(paramNutritionRequestID) > 0 {
 		rawNutritionRequestID := paramNutritionRequestID[0]
@@ -1139,19 +2778,19 @@ func NewShowNutritionRequestContext(ctx context.Context, service *goa.Service) (
 }
 
 // OK sends a HTTP response with status code 200.
-func (ctx *ShowNutritionRequestContext) OK(r *NutritionRequestMedia) error {
+func (ctx *ReadNutritionRequestContext) OK(r *NutritionRequestMedia) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.nutrition.request+json")
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
 
 // BadRequest sends a HTTP response with status code 400.
-func (ctx *ShowNutritionRequestContext) BadRequest(r error) error {
+func (ctx *ReadNutritionRequestContext) BadRequest(r error) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.goa.error")
 	return ctx.ResponseData.Service.Send(ctx.Context, 400, r)
 }
 
 // NotFound sends a HTTP response with status code 404.
-func (ctx *ShowNutritionRequestContext) NotFound() error {
+func (ctx *ReadNutritionRequestContext) NotFound() error {
 	ctx.ResponseData.WriteHeader(404)
 	return nil
 }
@@ -1161,6 +2800,24 @@ type UpdateNutritionRequestContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
+	Contained          *string
+	ContainedType      *string
+	Count              *int
+	Elements           *string
+	Has                *string
+	ID                 *int
+	Include            *string
+	LastUpdate         *time.Time
+	List               *string
+	Profile            *string
+	Query              *string
+	Revinclude         *string
+	Security           *string
+	Sort               *string
+	Summary            *string
+	Tag                *string
+	Text               *string
+	Type               *string
 	NutritionRequestID int
 	PatientID          int
 	Payload            *NutritionRequestPayload
@@ -1174,6 +2831,118 @@ func NewUpdateNutritionRequestContext(ctx context.Context, service *goa.Service)
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := UpdateNutritionRequestContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp89 := count
+			tmp88 := &tmp89
+			rctx.Count = tmp88
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp91 := id
+			tmp90 := &tmp91
+			rctx.ID = tmp90
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp92 := &lastUpdate
+			rctx.LastUpdate = tmp92
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramNutritionRequestID := req.Params["nutrition_requestID"]
 	if len(paramNutritionRequestID) > 0 {
 		rawNutritionRequestID := paramNutritionRequestID[0]
@@ -1221,6 +2990,24 @@ type WatchNutritionRequestContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
+	Contained          *string
+	ContainedType      *string
+	Count              *int
+	Elements           *string
+	Has                *string
+	ID                 *int
+	Include            *string
+	LastUpdate         *time.Time
+	List               *string
+	Profile            *string
+	Query              *string
+	Revinclude         *string
+	Security           *string
+	Sort               *string
+	Summary            *string
+	Tag                *string
+	Text               *string
+	Type               *string
 	NutritionRequestID int
 	PatientID          int
 }
@@ -1233,6 +3020,118 @@ func NewWatchNutritionRequestContext(ctx context.Context, service *goa.Service) 
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := WatchNutritionRequestContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp96 := count
+			tmp95 := &tmp96
+			rctx.Count = tmp95
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp98 := id
+			tmp97 := &tmp98
+			rctx.ID = tmp97
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp99 := &lastUpdate
+			rctx.LastUpdate = tmp99
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramNutritionRequestID := req.Params["nutrition_requestID"]
 	if len(paramNutritionRequestID) > 0 {
 		rawNutritionRequestID := paramNutritionRequestID[0]
@@ -1268,8 +3167,26 @@ type CreateObservationContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	PatientID int
-	Payload   *CreateObservationPayload
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	PatientID     int
+	Payload       *CreateObservationPayload
 }
 
 // NewCreateObservationContext parses the incoming request URL and body, performs validations and creates the
@@ -1280,6 +3197,118 @@ func NewCreateObservationContext(ctx context.Context, service *goa.Service) (*Cr
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := CreateObservationContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp103 := count
+			tmp102 := &tmp103
+			rctx.Count = tmp102
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp105 := id
+			tmp104 := &tmp105
+			rctx.ID = tmp104
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp106 := &lastUpdate
+			rctx.LastUpdate = tmp106
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramPatientID := req.Params["patientID"]
 	if len(paramPatientID) > 0 {
 		rawPatientID := paramPatientID[0]
@@ -1308,7 +3337,7 @@ type createObservationPayload struct {
 	// Some observations have multiple component observations.  These component observations are expressed as separate code
 	// 		value pairs that share the same attributes.  Examples include systolic and diastolic component observations for blood pressure measurement and multiple
 	// 		component observations for genetics observations.
-	Component componentMediaCollection `form:"component,omitempty" json:"component,omitempty" xml:"component,omitempty"`
+	Component *component `form:"component,omitempty" json:"component,omitempty" xml:"component,omitempty"`
 	// Provides a reason why the expected value in the element Observation.value[x] is missing. See http://hl7.org/fhir/ValueSet/observation-valueabsentreason
 	DateAbsentReason *codeableConcept `form:"dateAbsentReason,omitempty" json:"dateAbsentReason,omitempty" xml:"dateAbsentReason,omitempty"`
 	// The device used to generate the observation data.
@@ -1331,14 +3360,17 @@ type createObservationPayload struct {
 	Interpretation *codeableConcept `form:"interpretation,omitempty" json:"interpretation,omitempty" xml:"interpretation,omitempty"`
 	// The date and time this observation was made available to providers, typically after the results have been reviewed and verified.
 	Issued *time.Time `form:"issued,omitempty" json:"issued,omitempty" xml:"issued,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Indicates the mechanism used to perform the observation. See http://hl7.org/fhir/ValueSet/observation-methods
 	Method *codeableConcept `form:"method,omitempty" json:"method,omitempty" xml:"method,omitempty"`
 	// Who was responsible for asserting the observed value as 'true'.
 	Performer []*hL7Reference `form:"performer,omitempty" json:"performer,omitempty" xml:"performer,omitempty"`
 	// Guidance on how to interpret the value by comparison to a normal or recommended range.
-	ReferenceRange referenceRangeMediaCollection `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
+	ReferenceRange *referenceRange `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
 	// A  reference to another resource (usually another Observation but could  also be a QuestionnaireAnswer) whose relationship is defined by the relationship type code.
-	Related relatedMediaCollection `form:"related,omitempty" json:"related,omitempty" xml:"related,omitempty"`
+	Related *related `form:"related,omitempty" json:"related,omitempty" xml:"related,omitempty"`
 	// The specimen that was used when this observation was made.
 	Specimen *hL7Reference `form:"specimen,omitempty" json:"specimen,omitempty" xml:"specimen,omitempty"`
 	// The status of the result value. See http://hl7.org/fhir/ValueSet/observation-status
@@ -1356,8 +3388,10 @@ type createObservationPayload struct {
 
 // Validate runs the validation rules defined in the design.
 func (payload *createObservationPayload) Validate() (err error) {
-	if err2 := payload.Component.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if payload.Component != nil {
+		if err2 := payload.Component.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	for _, e := range payload.Identifier {
 		if e != nil {
@@ -1366,8 +3400,15 @@ func (payload *createObservationPayload) Validate() (err error) {
 			}
 		}
 	}
-	if err2 := payload.ReferenceRange.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if payload.Meta != nil {
+		if err2 := payload.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	if payload.ReferenceRange != nil {
+		if err2 := payload.ReferenceRange.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	if payload.Status != nil {
 		if !(*payload.Status == "registered" || *payload.Status == "preliminary" || *payload.Status == "final" || *payload.Status == "amended +") {
@@ -1413,10 +3454,7 @@ func (payload *createObservationPayload) Publicize() *CreateObservationPayload {
 		pub.Comments = payload.Comments
 	}
 	if payload.Component != nil {
-		pub.Component = make(ComponentMediaCollection, len(payload.Component))
-		for i2, elem2 := range payload.Component {
-			pub.Component[i2] = elem2.Publicize()
-		}
+		pub.Component = payload.Component.Publicize()
 	}
 	if payload.DateAbsentReason != nil {
 		pub.DateAbsentReason = payload.DateAbsentReason.Publicize()
@@ -1445,6 +3483,9 @@ func (payload *createObservationPayload) Publicize() *CreateObservationPayload {
 	if payload.Issued != nil {
 		pub.Issued = payload.Issued
 	}
+	if payload.Meta != nil {
+		pub.Meta = payload.Meta.Publicize()
+	}
 	if payload.Method != nil {
 		pub.Method = payload.Method.Publicize()
 	}
@@ -1455,16 +3496,10 @@ func (payload *createObservationPayload) Publicize() *CreateObservationPayload {
 		}
 	}
 	if payload.ReferenceRange != nil {
-		pub.ReferenceRange = make(ReferenceRangeMediaCollection, len(payload.ReferenceRange))
-		for i2, elem2 := range payload.ReferenceRange {
-			pub.ReferenceRange[i2] = elem2.Publicize()
-		}
+		pub.ReferenceRange = payload.ReferenceRange.Publicize()
 	}
 	if payload.Related != nil {
-		pub.Related = make(RelatedMediaCollection, len(payload.Related))
-		for i2, elem2 := range payload.Related {
-			pub.Related[i2] = elem2.Publicize()
-		}
+		pub.Related = payload.Related.Publicize()
 	}
 	if payload.Specimen != nil {
 		pub.Specimen = payload.Specimen.Publicize()
@@ -1515,7 +3550,7 @@ type CreateObservationPayload struct {
 	// Some observations have multiple component observations.  These component observations are expressed as separate code
 	// 		value pairs that share the same attributes.  Examples include systolic and diastolic component observations for blood pressure measurement and multiple
 	// 		component observations for genetics observations.
-	Component ComponentMediaCollection `form:"component,omitempty" json:"component,omitempty" xml:"component,omitempty"`
+	Component *Component `form:"component,omitempty" json:"component,omitempty" xml:"component,omitempty"`
 	// Provides a reason why the expected value in the element Observation.value[x] is missing. See http://hl7.org/fhir/ValueSet/observation-valueabsentreason
 	DateAbsentReason *CodeableConcept `form:"dateAbsentReason,omitempty" json:"dateAbsentReason,omitempty" xml:"dateAbsentReason,omitempty"`
 	// The device used to generate the observation data.
@@ -1538,14 +3573,17 @@ type CreateObservationPayload struct {
 	Interpretation *CodeableConcept `form:"interpretation,omitempty" json:"interpretation,omitempty" xml:"interpretation,omitempty"`
 	// The date and time this observation was made available to providers, typically after the results have been reviewed and verified.
 	Issued *time.Time `form:"issued,omitempty" json:"issued,omitempty" xml:"issued,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *Meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Indicates the mechanism used to perform the observation. See http://hl7.org/fhir/ValueSet/observation-methods
 	Method *CodeableConcept `form:"method,omitempty" json:"method,omitempty" xml:"method,omitempty"`
 	// Who was responsible for asserting the observed value as 'true'.
 	Performer []*HL7Reference `form:"performer,omitempty" json:"performer,omitempty" xml:"performer,omitempty"`
 	// Guidance on how to interpret the value by comparison to a normal or recommended range.
-	ReferenceRange ReferenceRangeMediaCollection `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
+	ReferenceRange *ReferenceRange `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
 	// A  reference to another resource (usually another Observation but could  also be a QuestionnaireAnswer) whose relationship is defined by the relationship type code.
-	Related RelatedMediaCollection `form:"related,omitempty" json:"related,omitempty" xml:"related,omitempty"`
+	Related *Related `form:"related,omitempty" json:"related,omitempty" xml:"related,omitempty"`
 	// The specimen that was used when this observation was made.
 	Specimen *HL7Reference `form:"specimen,omitempty" json:"specimen,omitempty" xml:"specimen,omitempty"`
 	// The status of the result value. See http://hl7.org/fhir/ValueSet/observation-status
@@ -1563,8 +3601,10 @@ type CreateObservationPayload struct {
 
 // Validate runs the validation rules defined in the design.
 func (payload *CreateObservationPayload) Validate() (err error) {
-	if err2 := payload.Component.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if payload.Component != nil {
+		if err2 := payload.Component.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	for _, e := range payload.Identifier {
 		if e != nil {
@@ -1573,8 +3613,15 @@ func (payload *CreateObservationPayload) Validate() (err error) {
 			}
 		}
 	}
-	if err2 := payload.ReferenceRange.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if payload.Meta != nil {
+		if err2 := payload.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	if payload.ReferenceRange != nil {
+		if err2 := payload.ReferenceRange.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	if payload.Status != nil {
 		if !(*payload.Status == "registered" || *payload.Status == "preliminary" || *payload.Status == "final" || *payload.Status == "amended +") {
@@ -1627,6 +3674,24 @@ type DeleteObservationContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
 	ObservationID int
 	PatientID     int
 }
@@ -1639,6 +3704,118 @@ func NewDeleteObservationContext(ctx context.Context, service *goa.Service) (*De
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := DeleteObservationContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp109 := count
+			tmp108 := &tmp109
+			rctx.Count = tmp108
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp111 := id
+			tmp110 := &tmp111
+			rctx.ID = tmp110
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp112 := &lastUpdate
+			rctx.LastUpdate = tmp112
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramObservationID := req.Params["observationID"]
 	if len(paramObservationID) > 0 {
 		rawObservationID := paramObservationID[0]
@@ -1686,8 +3863,26 @@ type ListObservationContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	PatientID int
-	Years     []int
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	Code          []string
+	PatientID     int
 }
 
 // NewListObservationContext parses the incoming request URL and body, performs validations and creates the
@@ -1698,6 +3893,123 @@ func NewListObservationContext(ctx context.Context, service *goa.Service) (*List
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := ListObservationContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp116 := count
+			tmp115 := &tmp116
+			rctx.Count = tmp115
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp118 := id
+			tmp117 := &tmp118
+			rctx.ID = tmp117
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp119 := &lastUpdate
+			rctx.LastUpdate = tmp119
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
+	paramCode := req.Params["code"]
+	if len(paramCode) > 0 {
+		params := paramCode
+		rctx.Code = params
+	}
 	paramPatientID := req.Params["patientID"]
 	if len(paramPatientID) > 0 {
 		rawPatientID := paramPatientID[0]
@@ -1709,18 +4021,6 @@ func NewListObservationContext(ctx context.Context, service *goa.Service) (*List
 		if rctx.PatientID < 1 {
 			err = goa.MergeErrors(err, goa.InvalidRangeError(`patientID`, rctx.PatientID, 1, true))
 		}
-	}
-	paramYears := req.Params["years"]
-	if len(paramYears) > 0 {
-		params := make([]int, len(paramYears))
-		for i, rawYears := range paramYears {
-			if years, err2 := strconv.Atoi(rawYears); err2 == nil {
-				params[i] = years
-			} else {
-				err = goa.MergeErrors(err, goa.InvalidParamTypeError("years", rawYears, "integer"))
-			}
-		}
-		rctx.Years = params
 	}
 	return &rctx, err
 }
@@ -1751,6 +4051,24 @@ type RateObservationContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
 	ObservationID int
 	PatientID     int
 }
@@ -1763,6 +4081,118 @@ func NewRateObservationContext(ctx context.Context, service *goa.Service) (*Rate
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := RateObservationContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp122 := count
+			tmp121 := &tmp122
+			rctx.Count = tmp121
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp124 := id
+			tmp123 := &tmp124
+			rctx.ID = tmp123
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp125 := &lastUpdate
+			rctx.LastUpdate = tmp125
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramObservationID := req.Params["observationID"]
 	if len(paramObservationID) > 0 {
 		rawObservationID := paramObservationID[0]
@@ -1810,6 +4240,24 @@ type ShowObservationContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
 	ObservationID int
 	PatientID     int
 }
@@ -1822,6 +4270,118 @@ func NewShowObservationContext(ctx context.Context, service *goa.Service) (*Show
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := ShowObservationContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp129 := count
+			tmp128 := &tmp129
+			rctx.Count = tmp128
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp131 := id
+			tmp130 := &tmp131
+			rctx.ID = tmp130
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp132 := &lastUpdate
+			rctx.LastUpdate = tmp132
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramObservationID := req.Params["observationID"]
 	if len(paramObservationID) > 0 {
 		rawObservationID := paramObservationID[0]
@@ -1869,6 +4429,24 @@ type UpdateObservationContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
 	ObservationID int
 	PatientID     int
 	Payload       *ObservationPayload
@@ -1882,6 +4460,118 @@ func NewUpdateObservationContext(ctx context.Context, service *goa.Service) (*Up
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := UpdateObservationContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp136 := count
+			tmp135 := &tmp136
+			rctx.Count = tmp135
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp138 := id
+			tmp137 := &tmp138
+			rctx.ID = tmp137
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp139 := &lastUpdate
+			rctx.LastUpdate = tmp139
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramObservationID := req.Params["observationID"]
 	if len(paramObservationID) > 0 {
 		rawObservationID := paramObservationID[0]
@@ -1929,6 +4619,24 @@ type WatchObservationContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
 	ObservationID int
 	PatientID     int
 }
@@ -1941,6 +4649,118 @@ func NewWatchObservationContext(ctx context.Context, service *goa.Service) (*Wat
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := WatchObservationContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp143 := count
+			tmp142 := &tmp143
+			rctx.Count = tmp142
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp145 := id
+			tmp144 := &tmp145
+			rctx.ID = tmp144
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp146 := &lastUpdate
+			rctx.LastUpdate = tmp146
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramObservationID := req.Params["observationID"]
 	if len(paramObservationID) > 0 {
 		rawObservationID := paramObservationID[0]
@@ -1976,6 +4796,24 @@ type SecureBasicContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
 }
 
 // NewSecureBasicContext parses the incoming request URL and body, performs validations and creates the
@@ -1986,6 +4824,118 @@ func NewSecureBasicContext(ctx context.Context, service *goa.Service) (*SecureBa
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := SecureBasicContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp150 := count
+			tmp149 := &tmp150
+			rctx.Count = tmp149
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp152 := id
+			tmp151 := &tmp152
+			rctx.ID = tmp151
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp153 := &lastUpdate
+			rctx.LastUpdate = tmp153
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	return &rctx, err
 }
 
@@ -2006,6 +4956,24 @@ type UnsecureBasicContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
 }
 
 // NewUnsecureBasicContext parses the incoming request URL and body, performs validations and creates the
@@ -2016,6 +4984,118 @@ func NewUnsecureBasicContext(ctx context.Context, service *goa.Service) (*Unsecu
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := UnsecureBasicContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp155 := count
+			tmp154 := &tmp155
+			rctx.Count = tmp154
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp157 := id
+			tmp156 := &tmp157
+			rctx.ID = tmp156
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp158 := &lastUpdate
+			rctx.LastUpdate = tmp158
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	return &rctx, err
 }
 
@@ -2030,6 +5110,24 @@ type HealthHealthContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
 }
 
 // NewHealthHealthContext parses the incoming request URL and body, performs validations and creates the
@@ -2040,6 +5138,118 @@ func NewHealthHealthContext(ctx context.Context, service *goa.Service) (*HealthH
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := HealthHealthContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp160 := count
+			tmp159 := &tmp160
+			rctx.Count = tmp159
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp162 := id
+			tmp161 := &tmp162
+			rctx.ID = tmp161
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp163 := &lastUpdate
+			rctx.LastUpdate = tmp163
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	return &rctx, err
 }
 
@@ -2056,7 +5266,25 @@ type SecureJWTContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	Fail *bool
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	Fail          *bool
 }
 
 // NewSecureJWTContext parses the incoming request URL and body, performs validations and creates the
@@ -2067,12 +5295,124 @@ func NewSecureJWTContext(ctx context.Context, service *goa.Service) (*SecureJWTC
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := SecureJWTContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp165 := count
+			tmp164 := &tmp165
+			rctx.Count = tmp164
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp167 := id
+			tmp166 := &tmp167
+			rctx.ID = tmp166
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp168 := &lastUpdate
+			rctx.LastUpdate = tmp168
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramFail := req.Params["fail"]
 	if len(paramFail) > 0 {
 		rawFail := paramFail[0]
 		if fail, err2 := strconv.ParseBool(rawFail); err2 == nil {
-			tmp40 := &fail
-			rctx.Fail = tmp40
+			tmp169 := &fail
+			rctx.Fail = tmp169
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("fail", rawFail, "boolean"))
 		}
@@ -2097,7 +5437,25 @@ type SigninJWTContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	Payload *SigninJWTPayload
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	Payload       *SigninJWTPayload
 }
 
 // NewSigninJWTContext parses the incoming request URL and body, performs validations and creates the
@@ -2108,6 +5466,118 @@ func NewSigninJWTContext(ctx context.Context, service *goa.Service) (*SigninJWTC
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := SigninJWTContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp171 := count
+			tmp170 := &tmp171
+			rctx.Count = tmp170
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp173 := id
+			tmp172 := &tmp173
+			rctx.ID = tmp172
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp174 := &lastUpdate
+			rctx.LastUpdate = tmp174
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	return &rctx, err
 }
 
@@ -2186,7 +5656,25 @@ type SignupJWTContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	Payload *SignupJWTPayload
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	Payload       *SignupJWTPayload
 }
 
 // NewSignupJWTContext parses the incoming request URL and body, performs validations and creates the
@@ -2197,6 +5685,118 @@ func NewSignupJWTContext(ctx context.Context, service *goa.Service) (*SignupJWTC
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := SignupJWTContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp176 := count
+			tmp175 := &tmp176
+			rctx.Count = tmp175
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp178 := id
+			tmp177 := &tmp178
+			rctx.ID = tmp177
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp179 := &lastUpdate
+			rctx.LastUpdate = tmp179
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	return &rctx, err
 }
 
@@ -2346,6 +5946,24 @@ type UnsecureJWTContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
 }
 
 // NewUnsecureJWTContext parses the incoming request URL and body, performs validations and creates the
@@ -2356,6 +5974,118 @@ func NewUnsecureJWTContext(ctx context.Context, service *goa.Service) (*Unsecure
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := UnsecureJWTContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp181 := count
+			tmp180 := &tmp181
+			rctx.Count = tmp180
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp183 := id
+			tmp182 := &tmp183
+			rctx.ID = tmp182
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp184 := &lastUpdate
+			rctx.LastUpdate = tmp184
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	return &rctx, err
 }
 
@@ -2370,7 +6100,25 @@ type CreatePatientContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	Payload *CreatePatientPayload
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	Payload       *CreatePatientPayload
 }
 
 // NewCreatePatientContext parses the incoming request URL and body, performs validations and creates the
@@ -2381,6 +6129,118 @@ func NewCreatePatientContext(ctx context.Context, service *goa.Service) (*Create
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := CreatePatientContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp186 := count
+			tmp185 := &tmp186
+			rctx.Count = tmp185
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp188 := id
+			tmp187 := &tmp188
+			rctx.ID = tmp187
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp189 := &lastUpdate
+			rctx.LastUpdate = tmp189
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	return &rctx, err
 }
 
@@ -2450,12 +6310,36 @@ func (ctx *CreatePatientContext) BadRequest(r error) error {
 	return ctx.ResponseData.Service.Send(ctx.Context, 400, r)
 }
 
+// Unauthorized sends a HTTP response with status code 401.
+func (ctx *CreatePatientContext) Unauthorized(r error) error {
+	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.goa.error")
+	return ctx.ResponseData.Service.Send(ctx.Context, 401, r)
+}
+
 // DeletePatientContext provides the patient delete action context.
 type DeletePatientContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	PatientID int
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	PatientID     int
 }
 
 // NewDeletePatientContext parses the incoming request URL and body, performs validations and creates the
@@ -2466,6 +6350,118 @@ func NewDeletePatientContext(ctx context.Context, service *goa.Service) (*Delete
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := DeletePatientContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp191 := count
+			tmp190 := &tmp191
+			rctx.Count = tmp190
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp193 := id
+			tmp192 := &tmp193
+			rctx.ID = tmp192
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp194 := &lastUpdate
+			rctx.LastUpdate = tmp194
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramPatientID := req.Params["patientID"]
 	if len(paramPatientID) > 0 {
 		rawPatientID := paramPatientID[0]
@@ -2490,81 +6486,165 @@ func (ctx *DeletePatientContext) BadRequest(r error) error {
 	return ctx.ResponseData.Service.Send(ctx.Context, 400, r)
 }
 
+// Unauthorized sends a HTTP response with status code 401.
+func (ctx *DeletePatientContext) Unauthorized(r error) error {
+	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.goa.error")
+	return ctx.ResponseData.Service.Send(ctx.Context, 401, r)
+}
+
 // NotFound sends a HTTP response with status code 404.
 func (ctx *DeletePatientContext) NotFound() error {
 	ctx.ResponseData.WriteHeader(404)
 	return nil
 }
 
-// ListPatientContext provides the patient list action context.
-type ListPatientContext struct {
+// ReadPatientContext provides the patient read action context.
+type ReadPatientContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	Fail *bool
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	PatientID     int
+	Payload       *PatientPayload
 }
 
-// NewListPatientContext parses the incoming request URL and body, performs validations and creates the
-// context used by the patient controller list action.
-func NewListPatientContext(ctx context.Context, service *goa.Service) (*ListPatientContext, error) {
+// NewReadPatientContext parses the incoming request URL and body, performs validations and creates the
+// context used by the patient controller read action.
+func NewReadPatientContext(ctx context.Context, service *goa.Service) (*ReadPatientContext, error) {
 	var err error
 	resp := goa.ContextResponse(ctx)
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
-	rctx := ListPatientContext{Context: ctx, ResponseData: resp, RequestData: req}
-	paramFail := req.Params["fail"]
-	if len(paramFail) > 0 {
-		rawFail := paramFail[0]
-		if fail, err2 := strconv.ParseBool(rawFail); err2 == nil {
-			tmp42 := &fail
-			rctx.Fail = tmp42
+	rctx := ReadPatientContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp197 := count
+			tmp196 := &tmp197
+			rctx.Count = tmp196
 		} else {
-			err = goa.MergeErrors(err, goa.InvalidParamTypeError("fail", rawFail, "boolean"))
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
 		}
 	}
-	return &rctx, err
-}
-
-// OK sends a HTTP response with status code 200.
-func (ctx *ListPatientContext) OK(r PatientMediaCollection) error {
-	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.patient+json; type=collection")
-	if r == nil {
-		r = PatientMediaCollection{}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
 	}
-	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
-}
-
-// OKLink sends a HTTP response with status code 200.
-func (ctx *ListPatientContext) OKLink(r PatientMediaLinkCollection) error {
-	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.patient+json; type=collection")
-	if r == nil {
-		r = PatientMediaLinkCollection{}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
 	}
-	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
-}
-
-// Unauthorized sends a HTTP response with status code 401.
-func (ctx *ListPatientContext) Unauthorized() error {
-	ctx.ResponseData.WriteHeader(401)
-	return nil
-}
-
-// ShowPatientContext provides the patient show action context.
-type ShowPatientContext struct {
-	context.Context
-	*goa.ResponseData
-	*goa.RequestData
-	PatientID int
-}
-
-// NewShowPatientContext parses the incoming request URL and body, performs validations and creates the
-// context used by the patient controller show action.
-func NewShowPatientContext(ctx context.Context, service *goa.Service) (*ShowPatientContext, error) {
-	var err error
-	resp := goa.ContextResponse(ctx)
-	resp.Service = service
-	req := goa.ContextRequest(ctx)
-	rctx := ShowPatientContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp199 := id
+			tmp198 := &tmp199
+			rctx.ID = tmp198
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp200 := &lastUpdate
+			rctx.LastUpdate = tmp200
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramPatientID := req.Params["patientID"]
 	if len(paramPatientID) > 0 {
 		rawPatientID := paramPatientID[0]
@@ -2581,25 +6661,248 @@ func NewShowPatientContext(ctx context.Context, service *goa.Service) (*ShowPati
 }
 
 // OK sends a HTTP response with status code 200.
-func (ctx *ShowPatientContext) OK(r *PatientMedia) error {
+func (ctx *ReadPatientContext) OK(r *PatientMedia) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.patient+json")
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
 
 // OKLink sends a HTTP response with status code 200.
-func (ctx *ShowPatientContext) OKLink(r *PatientMediaLink) error {
+func (ctx *ReadPatientContext) OKLink(r *PatientMediaLink) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.patient+json")
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
 
 // BadRequest sends a HTTP response with status code 400.
-func (ctx *ShowPatientContext) BadRequest(r error) error {
+func (ctx *ReadPatientContext) BadRequest(r error) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.goa.error")
 	return ctx.ResponseData.Service.Send(ctx.Context, 400, r)
 }
 
+// Unauthorized sends a HTTP response with status code 401.
+func (ctx *ReadPatientContext) Unauthorized(r error) error {
+	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.goa.error")
+	return ctx.ResponseData.Service.Send(ctx.Context, 401, r)
+}
+
 // NotFound sends a HTTP response with status code 404.
-func (ctx *ShowPatientContext) NotFound() error {
+func (ctx *ReadPatientContext) NotFound() error {
+	ctx.ResponseData.WriteHeader(404)
+	return nil
+}
+
+// SearchPatientContext provides the patient search action context.
+type SearchPatientContext struct {
+	context.Context
+	*goa.ResponseData
+	*goa.RequestData
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	Active        *bool
+	BirthDate     []time.Time
+	Gender        *string
+	Name          []string
+	Payload       *PatientPayload
+}
+
+// NewSearchPatientContext parses the incoming request URL and body, performs validations and creates the
+// context used by the patient controller search action.
+func NewSearchPatientContext(ctx context.Context, service *goa.Service) (*SearchPatientContext, error) {
+	var err error
+	resp := goa.ContextResponse(ctx)
+	resp.Service = service
+	req := goa.ContextRequest(ctx)
+	rctx := SearchPatientContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp203 := count
+			tmp202 := &tmp203
+			rctx.Count = tmp202
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp205 := id
+			tmp204 := &tmp205
+			rctx.ID = tmp204
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp206 := &lastUpdate
+			rctx.LastUpdate = tmp206
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
+	paramActive := req.Params["active"]
+	if len(paramActive) > 0 {
+		rawActive := paramActive[0]
+		if active, err2 := strconv.ParseBool(rawActive); err2 == nil {
+			tmp207 := &active
+			rctx.Active = tmp207
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("active", rawActive, "boolean"))
+		}
+	}
+	paramBirthDate := req.Params["birthDate"]
+	if len(paramBirthDate) > 0 {
+		params := make([]time.Time, len(paramBirthDate))
+		for i, rawBirthDate := range paramBirthDate {
+			if birthDate, err2 := time.Parse(time.RFC3339, rawBirthDate); err2 == nil {
+				params[i] = birthDate
+			} else {
+				err = goa.MergeErrors(err, goa.InvalidParamTypeError("birthDate", rawBirthDate, "datetime"))
+			}
+		}
+		rctx.BirthDate = params
+	}
+	paramGender := req.Params["gender"]
+	if len(paramGender) > 0 {
+		rawGender := paramGender[0]
+		rctx.Gender = &rawGender
+		if rctx.Gender != nil {
+			if !(*rctx.Gender == "male" || *rctx.Gender == "female" || *rctx.Gender == "other" || *rctx.Gender == "unknown") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`gender`, *rctx.Gender, []interface{}{"male", "female", "other", "unknown"}))
+			}
+		}
+	}
+	paramName := req.Params["name"]
+	if len(paramName) > 0 {
+		params := paramName
+		rctx.Name = params
+	}
+	return &rctx, err
+}
+
+// OK sends a HTTP response with status code 200.
+func (ctx *SearchPatientContext) OK(r PatientMediaCollection) error {
+	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.patient+json; type=collection")
+	if r == nil {
+		r = PatientMediaCollection{}
+	}
+	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
+}
+
+// BadRequest sends a HTTP response with status code 400.
+func (ctx *SearchPatientContext) BadRequest(r error) error {
+	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.goa.error")
+	return ctx.ResponseData.Service.Send(ctx.Context, 400, r)
+}
+
+// Unauthorized sends a HTTP response with status code 401.
+func (ctx *SearchPatientContext) Unauthorized(r error) error {
+	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.goa.error")
+	return ctx.ResponseData.Service.Send(ctx.Context, 401, r)
+}
+
+// NotFound sends a HTTP response with status code 404.
+func (ctx *SearchPatientContext) NotFound() error {
 	ctx.ResponseData.WriteHeader(404)
 	return nil
 }
@@ -2609,8 +6912,26 @@ type UpdatePatientContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	PatientID int
-	Payload   *UpdatePatientPayload
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	PatientID     int
+	Payload       *UpdatePatientPayload
 }
 
 // NewUpdatePatientContext parses the incoming request URL and body, performs validations and creates the
@@ -2621,6 +6942,118 @@ func NewUpdatePatientContext(ctx context.Context, service *goa.Service) (*Update
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := UpdatePatientContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp210 := count
+			tmp209 := &tmp210
+			rctx.Count = tmp209
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp212 := id
+			tmp211 := &tmp212
+			rctx.ID = tmp211
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp213 := &lastUpdate
+			rctx.LastUpdate = tmp213
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramPatientID := req.Params["patientID"]
 	if len(paramPatientID) > 0 {
 		rawPatientID := paramPatientID[0]
@@ -2699,8 +7132,206 @@ func (ctx *UpdatePatientContext) BadRequest(r error) error {
 	return ctx.ResponseData.Service.Send(ctx.Context, 400, r)
 }
 
+// Unauthorized sends a HTTP response with status code 401.
+func (ctx *UpdatePatientContext) Unauthorized(r error) error {
+	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.goa.error")
+	return ctx.ResponseData.Service.Send(ctx.Context, 401, r)
+}
+
 // NotFound sends a HTTP response with status code 404.
 func (ctx *UpdatePatientContext) NotFound() error {
+	ctx.ResponseData.WriteHeader(404)
+	return nil
+}
+
+// VreadPatientContext provides the patient vread action context.
+type VreadPatientContext struct {
+	context.Context
+	*goa.ResponseData
+	*goa.RequestData
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	PatientID     int
+	Payload       *PatientPayload
+}
+
+// NewVreadPatientContext parses the incoming request URL and body, performs validations and creates the
+// context used by the patient controller vread action.
+func NewVreadPatientContext(ctx context.Context, service *goa.Service) (*VreadPatientContext, error) {
+	var err error
+	resp := goa.ContextResponse(ctx)
+	resp.Service = service
+	req := goa.ContextRequest(ctx)
+	rctx := VreadPatientContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp216 := count
+			tmp215 := &tmp216
+			rctx.Count = tmp215
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp218 := id
+			tmp217 := &tmp218
+			rctx.ID = tmp217
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp219 := &lastUpdate
+			rctx.LastUpdate = tmp219
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
+	paramPatientID := req.Params["patientID"]
+	if len(paramPatientID) > 0 {
+		rawPatientID := paramPatientID[0]
+		if patientID, err2 := strconv.Atoi(rawPatientID); err2 == nil {
+			rctx.PatientID = patientID
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("patientID", rawPatientID, "integer"))
+		}
+		if rctx.PatientID < 1 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError(`patientID`, rctx.PatientID, 1, true))
+		}
+	}
+	return &rctx, err
+}
+
+// OK sends a HTTP response with status code 200.
+func (ctx *VreadPatientContext) OK(r *PatientMedia) error {
+	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.patient+json")
+	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
+}
+
+// OKLink sends a HTTP response with status code 200.
+func (ctx *VreadPatientContext) OKLink(r *PatientMediaLink) error {
+	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.patient+json")
+	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
+}
+
+// BadRequest sends a HTTP response with status code 400.
+func (ctx *VreadPatientContext) BadRequest(r error) error {
+	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.goa.error")
+	return ctx.ResponseData.Service.Send(ctx.Context, 400, r)
+}
+
+// Unauthorized sends a HTTP response with status code 401.
+func (ctx *VreadPatientContext) Unauthorized(r error) error {
+	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.goa.error")
+	return ctx.ResponseData.Service.Send(ctx.Context, 401, r)
+}
+
+// NotFound sends a HTTP response with status code 404.
+func (ctx *VreadPatientContext) NotFound() error {
 	ctx.ResponseData.WriteHeader(404)
 	return nil
 }
@@ -2710,7 +7341,25 @@ type CreateUserContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	Payload *CreateUserPayload
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	Payload       *CreateUserPayload
 }
 
 // NewCreateUserContext parses the incoming request URL and body, performs validations and creates the
@@ -2721,14 +7370,125 @@ func NewCreateUserContext(ctx context.Context, service *goa.Service) (*CreateUse
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := CreateUserContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp222 := count
+			tmp221 := &tmp222
+			rctx.Count = tmp221
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp224 := id
+			tmp223 := &tmp224
+			rctx.ID = tmp223
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp225 := &lastUpdate
+			rctx.LastUpdate = tmp225
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	return &rctx, err
 }
 
 // createUserPayload is the user create action payload.
 type createUserPayload struct {
 	// Email of user
-	Email *string `form:"email,omitempty" json:"email,omitempty" xml:"email,omitempty"`
-	// Password of user
+	Email    *string `form:"email,omitempty" json:"email,omitempty" xml:"email,omitempty"`
 	Password *string `form:"password,omitempty" json:"password,omitempty" xml:"password,omitempty"`
 }
 
@@ -2743,16 +7503,6 @@ func (payload *createUserPayload) Validate() (err error) {
 	if payload.Email != nil {
 		if err2 := goa.ValidateFormat(goa.FormatEmail, *payload.Email); err2 != nil {
 			err = goa.MergeErrors(err, goa.InvalidFormatError(`raw.email`, *payload.Email, goa.FormatEmail, err2))
-		}
-	}
-	if payload.Email != nil {
-		if utf8.RuneCountInString(*payload.Email) < 4 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.email`, *payload.Email, utf8.RuneCountInString(*payload.Email), 4, true))
-		}
-	}
-	if payload.Password != nil {
-		if utf8.RuneCountInString(*payload.Password) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.password`, *payload.Password, utf8.RuneCountInString(*payload.Password), 2, true))
 		}
 	}
 	return
@@ -2773,8 +7523,7 @@ func (payload *createUserPayload) Publicize() *CreateUserPayload {
 // CreateUserPayload is the user create action payload.
 type CreateUserPayload struct {
 	// Email of user
-	Email string `form:"email" json:"email" xml:"email"`
-	// Password of user
+	Email    string `form:"email" json:"email" xml:"email"`
 	Password string `form:"password" json:"password" xml:"password"`
 }
 
@@ -2788,12 +7537,6 @@ func (payload *CreateUserPayload) Validate() (err error) {
 	}
 	if err2 := goa.ValidateFormat(goa.FormatEmail, payload.Email); err2 != nil {
 		err = goa.MergeErrors(err, goa.InvalidFormatError(`raw.email`, payload.Email, goa.FormatEmail, err2))
-	}
-	if utf8.RuneCountInString(payload.Email) < 4 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.email`, payload.Email, utf8.RuneCountInString(payload.Email), 4, true))
-	}
-	if utf8.RuneCountInString(payload.Password) < 2 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.password`, payload.Password, utf8.RuneCountInString(payload.Password), 2, true))
 	}
 	return
 }
@@ -2815,7 +7558,25 @@ type DeleteUserContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	UserID int
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	UserID        int
 }
 
 // NewDeleteUserContext parses the incoming request URL and body, performs validations and creates the
@@ -2826,6 +7587,118 @@ func NewDeleteUserContext(ctx context.Context, service *goa.Service) (*DeleteUse
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := DeleteUserContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp227 := count
+			tmp226 := &tmp227
+			rctx.Count = tmp226
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp229 := id
+			tmp228 := &tmp229
+			rctx.ID = tmp228
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp230 := &lastUpdate
+			rctx.LastUpdate = tmp230
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramUserID := req.Params["userID"]
 	if len(paramUserID) > 0 {
 		rawUserID := paramUserID[0]
@@ -2861,6 +7734,24 @@ type ListUserContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
 }
 
 // NewListUserContext parses the incoming request URL and body, performs validations and creates the
@@ -2871,32 +7762,144 @@ func NewListUserContext(ctx context.Context, service *goa.Service) (*ListUserCon
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := ListUserContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp233 := count
+			tmp232 := &tmp233
+			rctx.Count = tmp232
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp235 := id
+			tmp234 := &tmp235
+			rctx.ID = tmp234
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp236 := &lastUpdate
+			rctx.LastUpdate = tmp236
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	return &rctx, err
 }
 
 // OK sends a HTTP response with status code 200.
-func (ctx *ListUserContext) OK(r UserCollection) error {
+func (ctx *ListUserContext) OK(r UserMediaCollection) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.user+json; type=collection")
 	if r == nil {
-		r = UserCollection{}
+		r = UserMediaCollection{}
 	}
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
 
 // OKLink sends a HTTP response with status code 200.
-func (ctx *ListUserContext) OKLink(r UserLinkCollection) error {
+func (ctx *ListUserContext) OKLink(r UserMediaLinkCollection) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.user+json; type=collection")
 	if r == nil {
-		r = UserLinkCollection{}
+		r = UserMediaLinkCollection{}
 	}
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
 
 // OKTiny sends a HTTP response with status code 200.
-func (ctx *ListUserContext) OKTiny(r UserTinyCollection) error {
+func (ctx *ListUserContext) OKTiny(r UserMediaTinyCollection) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.user+json; type=collection")
 	if r == nil {
-		r = UserTinyCollection{}
+		r = UserMediaTinyCollection{}
 	}
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
@@ -2906,7 +7909,25 @@ type ShowUserContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	UserID int
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	UserID        int
 }
 
 // NewShowUserContext parses the incoming request URL and body, performs validations and creates the
@@ -2917,6 +7938,118 @@ func NewShowUserContext(ctx context.Context, service *goa.Service) (*ShowUserCon
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := ShowUserContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp238 := count
+			tmp237 := &tmp238
+			rctx.Count = tmp237
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp240 := id
+			tmp239 := &tmp240
+			rctx.ID = tmp239
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp241 := &lastUpdate
+			rctx.LastUpdate = tmp241
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramUserID := req.Params["userID"]
 	if len(paramUserID) > 0 {
 		rawUserID := paramUserID[0]
@@ -2933,19 +8066,19 @@ func NewShowUserContext(ctx context.Context, service *goa.Service) (*ShowUserCon
 }
 
 // OK sends a HTTP response with status code 200.
-func (ctx *ShowUserContext) OK(r *User) error {
+func (ctx *ShowUserContext) OK(r *UserMedia) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.user+json")
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
 
 // OKLink sends a HTTP response with status code 200.
-func (ctx *ShowUserContext) OKLink(r *UserLink) error {
+func (ctx *ShowUserContext) OKLink(r *UserMediaLink) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.user+json")
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
 
 // OKTiny sends a HTTP response with status code 200.
-func (ctx *ShowUserContext) OKTiny(r *UserTiny) error {
+func (ctx *ShowUserContext) OKTiny(r *UserMediaTiny) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.user+json")
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
@@ -2967,7 +8100,25 @@ type SigninUserContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	Payload *SigninUserPayload
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	Payload       *SigninUserPayload
 }
 
 // NewSigninUserContext parses the incoming request URL and body, performs validations and creates the
@@ -2978,12 +8129,123 @@ func NewSigninUserContext(ctx context.Context, service *goa.Service) (*SigninUse
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := SigninUserContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp244 := count
+			tmp243 := &tmp244
+			rctx.Count = tmp243
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp246 := id
+			tmp245 := &tmp246
+			rctx.ID = tmp245
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp247 := &lastUpdate
+			rctx.LastUpdate = tmp247
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	return &rctx, err
 }
 
 // signinUserPayload is the user signin action payload.
 type signinUserPayload struct {
-	// Password of user
 	Password *string `form:"password,omitempty" json:"password,omitempty" xml:"password,omitempty"`
 	// Username of user
 	Username *string `form:"username,omitempty" json:"username,omitempty" xml:"username,omitempty"`
@@ -2996,16 +8258,6 @@ func (payload *signinUserPayload) Validate() (err error) {
 	}
 	if payload.Password == nil {
 		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "password"))
-	}
-	if payload.Password != nil {
-		if utf8.RuneCountInString(*payload.Password) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.password`, *payload.Password, utf8.RuneCountInString(*payload.Password), 2, true))
-		}
-	}
-	if payload.Username != nil {
-		if utf8.RuneCountInString(*payload.Username) < 3 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.username`, *payload.Username, utf8.RuneCountInString(*payload.Username), 3, true))
-		}
 	}
 	return
 }
@@ -3024,7 +8276,6 @@ func (payload *signinUserPayload) Publicize() *SigninUserPayload {
 
 // SigninUserPayload is the user signin action payload.
 type SigninUserPayload struct {
-	// Password of user
 	Password string `form:"password" json:"password" xml:"password"`
 	// Username of user
 	Username string `form:"username" json:"username" xml:"username"`
@@ -3037,12 +8288,6 @@ func (payload *SigninUserPayload) Validate() (err error) {
 	}
 	if payload.Password == "" {
 		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "password"))
-	}
-	if utf8.RuneCountInString(payload.Password) < 2 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.password`, payload.Password, utf8.RuneCountInString(payload.Password), 2, true))
-	}
-	if utf8.RuneCountInString(payload.Username) < 3 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.username`, payload.Username, utf8.RuneCountInString(payload.Username), 3, true))
 	}
 	return
 }
@@ -3070,7 +8315,25 @@ type SignupUserContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	Payload *SignupUserPayload
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	Payload       *SignupUserPayload
 }
 
 // NewSignupUserContext parses the incoming request URL and body, performs validations and creates the
@@ -3081,6 +8344,118 @@ func NewSignupUserContext(ctx context.Context, service *goa.Service) (*SignupUse
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := SignupUserContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp249 := count
+			tmp248 := &tmp249
+			rctx.Count = tmp248
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp251 := id
+			tmp250 := &tmp251
+			rctx.ID = tmp250
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp252 := &lastUpdate
+			rctx.LastUpdate = tmp252
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	return &rctx, err
 }
 
@@ -3100,7 +8475,6 @@ type signupUserPayload struct {
 	FirstName *string `form:"first_name,omitempty" json:"first_name,omitempty" xml:"first_name,omitempty"`
 	// Last name of user
 	LastName *string `form:"last_name,omitempty" json:"last_name,omitempty" xml:"last_name,omitempty"`
-	// Password of user
 	Password *string `form:"password,omitempty" json:"password,omitempty" xml:"password,omitempty"`
 	// Username of user
 	Username *string `form:"username,omitempty" json:"username,omitempty" xml:"username,omitempty"`
@@ -3135,54 +8509,9 @@ func (payload *signupUserPayload) Validate() (err error) {
 	if payload.AddressPostalCode == nil {
 		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "address_postal_code"))
 	}
-	if payload.AddressCity != nil {
-		if utf8.RuneCountInString(*payload.AddressCity) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.address_city`, *payload.AddressCity, utf8.RuneCountInString(*payload.AddressCity), 2, true))
-		}
-	}
-	if payload.AddressLine != nil {
-		if utf8.RuneCountInString(*payload.AddressLine) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.address_line`, *payload.AddressLine, utf8.RuneCountInString(*payload.AddressLine), 2, true))
-		}
-	}
-	if payload.AddressPostalCode != nil {
-		if len(*payload.AddressPostalCode) < 5 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.address_postal_code`, *payload.AddressPostalCode, len(*payload.AddressPostalCode), 5, true))
-		}
-	}
-	if payload.AddressState != nil {
-		if utf8.RuneCountInString(*payload.AddressState) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.address_state`, *payload.AddressState, utf8.RuneCountInString(*payload.AddressState), 2, true))
-		}
-	}
 	if payload.Email != nil {
 		if err2 := goa.ValidateFormat(goa.FormatEmail, *payload.Email); err2 != nil {
 			err = goa.MergeErrors(err, goa.InvalidFormatError(`raw.email`, *payload.Email, goa.FormatEmail, err2))
-		}
-	}
-	if payload.Email != nil {
-		if utf8.RuneCountInString(*payload.Email) < 4 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.email`, *payload.Email, utf8.RuneCountInString(*payload.Email), 4, true))
-		}
-	}
-	if payload.FirstName != nil {
-		if utf8.RuneCountInString(*payload.FirstName) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.first_name`, *payload.FirstName, utf8.RuneCountInString(*payload.FirstName), 2, true))
-		}
-	}
-	if payload.LastName != nil {
-		if utf8.RuneCountInString(*payload.LastName) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.last_name`, *payload.LastName, utf8.RuneCountInString(*payload.LastName), 2, true))
-		}
-	}
-	if payload.Password != nil {
-		if utf8.RuneCountInString(*payload.Password) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.password`, *payload.Password, utf8.RuneCountInString(*payload.Password), 2, true))
-		}
-	}
-	if payload.Username != nil {
-		if utf8.RuneCountInString(*payload.Username) < 3 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.username`, *payload.Username, utf8.RuneCountInString(*payload.Username), 3, true))
 		}
 	}
 	return
@@ -3237,7 +8566,6 @@ type SignupUserPayload struct {
 	FirstName string `form:"first_name" json:"first_name" xml:"first_name"`
 	// Last name of user
 	LastName string `form:"last_name" json:"last_name" xml:"last_name"`
-	// Password of user
 	Password string `form:"password" json:"password" xml:"password"`
 	// Username of user
 	Username string `form:"username" json:"username" xml:"username"`
@@ -3270,53 +8598,26 @@ func (payload *SignupUserPayload) Validate() (err error) {
 		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "address_state"))
 	}
 
-	if utf8.RuneCountInString(payload.AddressCity) < 2 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.address_city`, payload.AddressCity, utf8.RuneCountInString(payload.AddressCity), 2, true))
-	}
-	if utf8.RuneCountInString(payload.AddressLine) < 2 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.address_line`, payload.AddressLine, utf8.RuneCountInString(payload.AddressLine), 2, true))
-	}
-	if len(payload.AddressPostalCode) < 5 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.address_postal_code`, payload.AddressPostalCode, len(payload.AddressPostalCode), 5, true))
-	}
-	if utf8.RuneCountInString(payload.AddressState) < 2 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.address_state`, payload.AddressState, utf8.RuneCountInString(payload.AddressState), 2, true))
-	}
 	if err2 := goa.ValidateFormat(goa.FormatEmail, payload.Email); err2 != nil {
 		err = goa.MergeErrors(err, goa.InvalidFormatError(`raw.email`, payload.Email, goa.FormatEmail, err2))
-	}
-	if utf8.RuneCountInString(payload.Email) < 4 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.email`, payload.Email, utf8.RuneCountInString(payload.Email), 4, true))
-	}
-	if utf8.RuneCountInString(payload.FirstName) < 2 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.first_name`, payload.FirstName, utf8.RuneCountInString(payload.FirstName), 2, true))
-	}
-	if utf8.RuneCountInString(payload.LastName) < 2 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.last_name`, payload.LastName, utf8.RuneCountInString(payload.LastName), 2, true))
-	}
-	if utf8.RuneCountInString(payload.Password) < 2 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.password`, payload.Password, utf8.RuneCountInString(payload.Password), 2, true))
-	}
-	if utf8.RuneCountInString(payload.Username) < 3 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.username`, payload.Username, utf8.RuneCountInString(payload.Username), 3, true))
 	}
 	return
 }
 
 // OK sends a HTTP response with status code 200.
-func (ctx *SignupUserContext) OK(r *User) error {
+func (ctx *SignupUserContext) OK(r *UserMedia) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.user+json")
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
 
 // OKLink sends a HTTP response with status code 200.
-func (ctx *SignupUserContext) OKLink(r *UserLink) error {
+func (ctx *SignupUserContext) OKLink(r *UserMediaLink) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.user+json")
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
 
 // OKTiny sends a HTTP response with status code 200.
-func (ctx *SignupUserContext) OKTiny(r *UserTiny) error {
+func (ctx *SignupUserContext) OKTiny(r *UserMediaTiny) error {
 	ctx.ResponseData.Header().Set("Content-Type", "application/vnd.user+json")
 	return ctx.ResponseData.Service.Send(ctx.Context, 200, r)
 }
@@ -3338,8 +8639,26 @@ type UpdateUserContext struct {
 	context.Context
 	*goa.ResponseData
 	*goa.RequestData
-	UserID  int
-	Payload *UpdateUserPayload
+	Contained     *string
+	ContainedType *string
+	Count         *int
+	Elements      *string
+	Has           *string
+	ID            *int
+	Include       *string
+	LastUpdate    *time.Time
+	List          *string
+	Profile       *string
+	Query         *string
+	Revinclude    *string
+	Security      *string
+	Sort          *string
+	Summary       *string
+	Tag           *string
+	Text          *string
+	Type          *string
+	UserID        int
+	Payload       *UpdateUserPayload
 }
 
 // NewUpdateUserContext parses the incoming request URL and body, performs validations and creates the
@@ -3350,6 +8669,118 @@ func NewUpdateUserContext(ctx context.Context, service *goa.Service) (*UpdateUse
 	resp.Service = service
 	req := goa.ContextRequest(ctx)
 	rctx := UpdateUserContext{Context: ctx, ResponseData: resp, RequestData: req}
+	paramContained := req.Params["_contained"]
+	if len(paramContained) > 0 {
+		rawContained := paramContained[0]
+		rctx.Contained = &rawContained
+	}
+	paramContainedType := req.Params["_containedType"]
+	if len(paramContainedType) > 0 {
+		rawContainedType := paramContainedType[0]
+		rctx.ContainedType = &rawContainedType
+	}
+	paramCount := req.Params["_count"]
+	if len(paramCount) > 0 {
+		rawCount := paramCount[0]
+		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
+			tmp254 := count
+			tmp253 := &tmp254
+			rctx.Count = tmp253
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
+		}
+	}
+	paramElements := req.Params["_elements"]
+	if len(paramElements) > 0 {
+		rawElements := paramElements[0]
+		rctx.Elements = &rawElements
+	}
+	paramHas := req.Params["_has"]
+	if len(paramHas) > 0 {
+		rawHas := paramHas[0]
+		rctx.Has = &rawHas
+	}
+	paramID := req.Params["_id"]
+	if len(paramID) > 0 {
+		rawID := paramID[0]
+		if id, err2 := strconv.Atoi(rawID); err2 == nil {
+			tmp256 := id
+			tmp255 := &tmp256
+			rctx.ID = tmp255
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
+		}
+	}
+	paramInclude := req.Params["_include"]
+	if len(paramInclude) > 0 {
+		rawInclude := paramInclude[0]
+		rctx.Include = &rawInclude
+	}
+	paramLastUpdate := req.Params["_lastUpdate"]
+	if len(paramLastUpdate) > 0 {
+		rawLastUpdate := paramLastUpdate[0]
+		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
+			tmp257 := &lastUpdate
+			rctx.LastUpdate = tmp257
+		} else {
+			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
+		}
+	}
+	paramList := req.Params["_list"]
+	if len(paramList) > 0 {
+		rawList := paramList[0]
+		rctx.List = &rawList
+	}
+	paramProfile := req.Params["_profile"]
+	if len(paramProfile) > 0 {
+		rawProfile := paramProfile[0]
+		rctx.Profile = &rawProfile
+	}
+	paramQuery := req.Params["_query"]
+	if len(paramQuery) > 0 {
+		rawQuery := paramQuery[0]
+		rctx.Query = &rawQuery
+	}
+	paramRevinclude := req.Params["_revinclude"]
+	if len(paramRevinclude) > 0 {
+		rawRevinclude := paramRevinclude[0]
+		rctx.Revinclude = &rawRevinclude
+	}
+	paramSecurity := req.Params["_security"]
+	if len(paramSecurity) > 0 {
+		rawSecurity := paramSecurity[0]
+		rctx.Security = &rawSecurity
+	}
+	paramSort := req.Params["_sort"]
+	if len(paramSort) > 0 {
+		rawSort := paramSort[0]
+		rctx.Sort = &rawSort
+		if rctx.Sort != nil {
+			if !(*rctx.Sort == "" || *rctx.Sort == "-") {
+				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`_sort`, *rctx.Sort, []interface{}{"", "-"}))
+			}
+		}
+	}
+	paramSummary := req.Params["_summary"]
+	if len(paramSummary) > 0 {
+		rawSummary := paramSummary[0]
+		rctx.Summary = &rawSummary
+	}
+	paramTag := req.Params["_tag"]
+	if len(paramTag) > 0 {
+		rawTag := paramTag[0]
+		rctx.Tag = &rawTag
+	}
+	paramText := req.Params["_text"]
+	if len(paramText) > 0 {
+		rawText := paramText[0]
+		rctx.Text = &rawText
+	}
+	paramType := req.Params["_type"]
+	if len(paramType) > 0 {
+		rawType := paramType[0]
+		rctx.Type = &rawType
+	}
 	paramUserID := req.Params["userID"]
 	if len(paramUserID) > 0 {
 		rawUserID := paramUserID[0]
@@ -3365,8 +8796,7 @@ func NewUpdateUserContext(ctx context.Context, service *goa.Service) (*UpdateUse
 // updateUserPayload is the user update action payload.
 type updateUserPayload struct {
 	// Email of user
-	Email *string `form:"email,omitempty" json:"email,omitempty" xml:"email,omitempty"`
-	// Password of user
+	Email    *string `form:"email,omitempty" json:"email,omitempty" xml:"email,omitempty"`
 	Password *string `form:"password,omitempty" json:"password,omitempty" xml:"password,omitempty"`
 }
 
@@ -3381,16 +8811,6 @@ func (payload *updateUserPayload) Validate() (err error) {
 	if payload.Email != nil {
 		if err2 := goa.ValidateFormat(goa.FormatEmail, *payload.Email); err2 != nil {
 			err = goa.MergeErrors(err, goa.InvalidFormatError(`raw.email`, *payload.Email, goa.FormatEmail, err2))
-		}
-	}
-	if payload.Email != nil {
-		if utf8.RuneCountInString(*payload.Email) < 4 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.email`, *payload.Email, utf8.RuneCountInString(*payload.Email), 4, true))
-		}
-	}
-	if payload.Password != nil {
-		if utf8.RuneCountInString(*payload.Password) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.password`, *payload.Password, utf8.RuneCountInString(*payload.Password), 2, true))
 		}
 	}
 	return
@@ -3411,8 +8831,7 @@ func (payload *updateUserPayload) Publicize() *UpdateUserPayload {
 // UpdateUserPayload is the user update action payload.
 type UpdateUserPayload struct {
 	// Email of user
-	Email string `form:"email" json:"email" xml:"email"`
-	// Password of user
+	Email    string `form:"email" json:"email" xml:"email"`
 	Password string `form:"password" json:"password" xml:"password"`
 }
 
@@ -3426,12 +8845,6 @@ func (payload *UpdateUserPayload) Validate() (err error) {
 	}
 	if err2 := goa.ValidateFormat(goa.FormatEmail, payload.Email); err2 != nil {
 		err = goa.MergeErrors(err, goa.InvalidFormatError(`raw.email`, payload.Email, goa.FormatEmail, err2))
-	}
-	if utf8.RuneCountInString(payload.Email) < 4 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.email`, payload.Email, utf8.RuneCountInString(payload.Email), 4, true))
-	}
-	if utf8.RuneCountInString(payload.Password) < 2 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`raw.password`, payload.Password, utf8.RuneCountInString(payload.Password), 2, true))
 	}
 	return
 }

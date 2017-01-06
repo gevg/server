@@ -35,7 +35,7 @@ type AllergyIntoleranceController interface {
 	Delete(*DeleteAllergyIntoleranceContext) error
 	List(*ListAllergyIntoleranceContext) error
 	Rate(*RateAllergyIntoleranceContext) error
-	Show(*ShowAllergyIntoleranceContext) error
+	Read(*ReadAllergyIntoleranceContext) error
 	Update(*UpdateAllergyIntoleranceContext) error
 	Watch(*WatchAllergyIntoleranceContext) error
 }
@@ -45,9 +45,9 @@ func MountAllergyIntoleranceController(service *goa.Service, ctrl AllergyIntoler
 	initService(service)
 	var h goa.Handler
 	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/allergy.intolerance", ctrl.MuxHandler("preflight", handleAllergyIntoleranceOrigin(cors.HandlePreflight()), nil))
-	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID", ctrl.MuxHandler("preflight", handleAllergyIntoleranceOrigin(cors.HandlePreflight()), nil))
-	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID/actions/rate", ctrl.MuxHandler("preflight", handleAllergyIntoleranceOrigin(cors.HandlePreflight()), nil))
-	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID/watch", ctrl.MuxHandler("preflight", handleAllergyIntoleranceOrigin(cors.HandlePreflight()), nil))
+	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/allergy.intolerance/:allergy.intoleranceID", ctrl.MuxHandler("preflight", handleAllergyIntoleranceOrigin(cors.HandlePreflight()), nil))
+	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/allergy.intolerance/:allergy.intoleranceID/actions/rate", ctrl.MuxHandler("preflight", handleAllergyIntoleranceOrigin(cors.HandlePreflight()), nil))
+	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID/allergy.intolerance/:allergy.intoleranceID/watch", ctrl.MuxHandler("preflight", handleAllergyIntoleranceOrigin(cors.HandlePreflight()), nil))
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -84,8 +84,8 @@ func MountAllergyIntoleranceController(service *goa.Service, ctrl AllergyIntoler
 		return ctrl.Delete(rctx)
 	}
 	h = handleAllergyIntoleranceOrigin(h)
-	service.Mux.Handle("DELETE", "/nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID", ctrl.MuxHandler("Delete", h, nil))
-	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Delete", "route", "DELETE /nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID")
+	service.Mux.Handle("DELETE", "/nosh/patients/:patientID/allergy.intolerance/:allergy.intoleranceID", ctrl.MuxHandler("Delete", h, nil))
+	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Delete", "route", "DELETE /nosh/patients/:patientID/allergy.intolerance/:allergy.intoleranceID")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -122,8 +122,8 @@ func MountAllergyIntoleranceController(service *goa.Service, ctrl AllergyIntoler
 		return ctrl.Rate(rctx)
 	}
 	h = handleAllergyIntoleranceOrigin(h)
-	service.Mux.Handle("PUT", "/nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID/actions/rate", ctrl.MuxHandler("Rate", h, unmarshalRateAllergyIntolerancePayload))
-	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Rate", "route", "PUT /nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID/actions/rate")
+	service.Mux.Handle("PUT", "/nosh/patients/:patientID/allergy.intolerance/:allergy.intoleranceID/actions/rate", ctrl.MuxHandler("Rate", h, unmarshalRateAllergyIntolerancePayload))
+	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Rate", "route", "PUT /nosh/patients/:patientID/allergy.intolerance/:allergy.intoleranceID/actions/rate")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -131,15 +131,15 @@ func MountAllergyIntoleranceController(service *goa.Service, ctrl AllergyIntoler
 			return err
 		}
 		// Build the context
-		rctx, err := NewShowAllergyIntoleranceContext(ctx, service)
+		rctx, err := NewReadAllergyIntoleranceContext(ctx, service)
 		if err != nil {
 			return err
 		}
-		return ctrl.Show(rctx)
+		return ctrl.Read(rctx)
 	}
 	h = handleAllergyIntoleranceOrigin(h)
-	service.Mux.Handle("GET", "/nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID", ctrl.MuxHandler("Show", h, nil))
-	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Show", "route", "GET /nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID")
+	service.Mux.Handle("GET", "/nosh/patients/:patientID/allergy.intolerance/:allergy.intoleranceID", ctrl.MuxHandler("Read", h, nil))
+	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Read", "route", "GET /nosh/patients/:patientID/allergy.intolerance/:allergy.intoleranceID")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -160,8 +160,8 @@ func MountAllergyIntoleranceController(service *goa.Service, ctrl AllergyIntoler
 		return ctrl.Update(rctx)
 	}
 	h = handleAllergyIntoleranceOrigin(h)
-	service.Mux.Handle("PATCH", "/nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID", ctrl.MuxHandler("Update", h, unmarshalUpdateAllergyIntolerancePayload))
-	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Update", "route", "PATCH /nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID")
+	service.Mux.Handle("PATCH", "/nosh/patients/:patientID/allergy.intolerance/:allergy.intoleranceID", ctrl.MuxHandler("Update", h, unmarshalUpdateAllergyIntolerancePayload))
+	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Update", "route", "PATCH /nosh/patients/:patientID/allergy.intolerance/:allergy.intoleranceID")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -176,8 +176,8 @@ func MountAllergyIntoleranceController(service *goa.Service, ctrl AllergyIntoler
 		return ctrl.Watch(rctx)
 	}
 	h = handleAllergyIntoleranceOrigin(h)
-	service.Mux.Handle("GET", "/nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID/watch", ctrl.MuxHandler("Watch", h, nil))
-	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Watch", "route", "GET /nosh/patients/:patientID/allergy.intolerance/:allergy_intoleranceID/watch")
+	service.Mux.Handle("GET", "/nosh/patients/:patientID/allergy.intolerance/:allergy.intoleranceID/watch", ctrl.MuxHandler("Watch", h, nil))
+	service.LogInfo("mount", "ctrl", "AllergyIntolerance", "action", "Watch", "route", "GET /nosh/patients/:patientID/allergy.intolerance/:allergy.intoleranceID/watch")
 }
 
 // handleAllergyIntoleranceOrigin applies the CORS response headers corresponding to the origin.
@@ -189,17 +189,30 @@ func handleAllergyIntoleranceOrigin(h goa.Handler) goa.Handler {
 			// Not a CORS request
 			return h(ctx, rw, req)
 		}
-		if cors.MatchOrigin(origin, "http://localhost:8080") {
+		if cors.MatchOrigin(origin, "*") {
 			ctx = goa.WithLogContext(ctx, "origin", origin)
 			rw.Header().Set("Access-Control-Allow-Origin", origin)
-			rw.Header().Set("Vary", "Origin")
-			rw.Header().Set("Access-Control-Expose-Headers", "Content-Type, Origin, Authorization")
+			rw.Header().Set("Access-Control-Expose-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
 			rw.Header().Set("Access-Control-Max-Age", "600")
 			rw.Header().Set("Access-Control-Allow-Credentials", "true")
 			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
 				// We are handling a preflight request
-				rw.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE")
-				rw.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Authorization")
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS")
+				rw.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			}
+			return h(ctx, rw, req)
+		}
+		if cors.MatchOrigin(origin, "http://localhost:8080") {
+			ctx = goa.WithLogContext(ctx, "origin", origin)
+			rw.Header().Set("Access-Control-Allow-Origin", origin)
+			rw.Header().Set("Vary", "Origin")
+			rw.Header().Set("Access-Control-Expose-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			rw.Header().Set("Access-Control-Max-Age", "600")
+			rw.Header().Set("Access-Control-Allow-Credentials", "true")
+			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
+				// We are handling a preflight request
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS")
+				rw.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
 			}
 			return h(ctx, rw, req)
 		}
@@ -274,7 +287,7 @@ type NutritionRequestController interface {
 	Delete(*DeleteNutritionRequestContext) error
 	List(*ListNutritionRequestContext) error
 	Rate(*RateNutritionRequestContext) error
-	Show(*ShowNutritionRequestContext) error
+	Read(*ReadNutritionRequestContext) error
 	Update(*UpdateNutritionRequestContext) error
 	Watch(*WatchNutritionRequestContext) error
 }
@@ -370,15 +383,15 @@ func MountNutritionRequestController(service *goa.Service, ctrl NutritionRequest
 			return err
 		}
 		// Build the context
-		rctx, err := NewShowNutritionRequestContext(ctx, service)
+		rctx, err := NewReadNutritionRequestContext(ctx, service)
 		if err != nil {
 			return err
 		}
-		return ctrl.Show(rctx)
+		return ctrl.Read(rctx)
 	}
 	h = handleNutritionRequestOrigin(h)
-	service.Mux.Handle("GET", "/nosh/patients/:patientID/nutrition.requests/:nutrition_requestID", ctrl.MuxHandler("Show", h, nil))
-	service.LogInfo("mount", "ctrl", "NutritionRequest", "action", "Show", "route", "GET /nosh/patients/:patientID/nutrition.requests/:nutrition_requestID")
+	service.Mux.Handle("GET", "/nosh/patients/:patientID/nutrition.requests/:nutrition_requestID", ctrl.MuxHandler("Read", h, nil))
+	service.LogInfo("mount", "ctrl", "NutritionRequest", "action", "Read", "route", "GET /nosh/patients/:patientID/nutrition.requests/:nutrition_requestID")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -428,17 +441,30 @@ func handleNutritionRequestOrigin(h goa.Handler) goa.Handler {
 			// Not a CORS request
 			return h(ctx, rw, req)
 		}
-		if cors.MatchOrigin(origin, "http://localhost:8080") {
+		if cors.MatchOrigin(origin, "*") {
 			ctx = goa.WithLogContext(ctx, "origin", origin)
 			rw.Header().Set("Access-Control-Allow-Origin", origin)
-			rw.Header().Set("Vary", "Origin")
-			rw.Header().Set("Access-Control-Expose-Headers", "Content-Type, Origin, Authorization")
+			rw.Header().Set("Access-Control-Expose-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
 			rw.Header().Set("Access-Control-Max-Age", "600")
 			rw.Header().Set("Access-Control-Allow-Credentials", "true")
 			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
 				// We are handling a preflight request
-				rw.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE")
-				rw.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Authorization")
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS")
+				rw.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			}
+			return h(ctx, rw, req)
+		}
+		if cors.MatchOrigin(origin, "http://localhost:8080") {
+			ctx = goa.WithLogContext(ctx, "origin", origin)
+			rw.Header().Set("Access-Control-Allow-Origin", origin)
+			rw.Header().Set("Vary", "Origin")
+			rw.Header().Set("Access-Control-Expose-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			rw.Header().Set("Access-Control-Max-Age", "600")
+			rw.Header().Set("Access-Control-Allow-Credentials", "true")
+			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
+				// We are handling a preflight request
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS")
+				rw.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
 			}
 			return h(ctx, rw, req)
 		}
@@ -661,17 +687,30 @@ func handleObservationOrigin(h goa.Handler) goa.Handler {
 			// Not a CORS request
 			return h(ctx, rw, req)
 		}
-		if cors.MatchOrigin(origin, "http://localhost:8080") {
+		if cors.MatchOrigin(origin, "*") {
 			ctx = goa.WithLogContext(ctx, "origin", origin)
 			rw.Header().Set("Access-Control-Allow-Origin", origin)
-			rw.Header().Set("Vary", "Origin")
-			rw.Header().Set("Access-Control-Expose-Headers", "Content-Type, Origin, Authorization")
+			rw.Header().Set("Access-Control-Expose-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
 			rw.Header().Set("Access-Control-Max-Age", "600")
 			rw.Header().Set("Access-Control-Allow-Credentials", "true")
 			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
 				// We are handling a preflight request
-				rw.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE")
-				rw.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Authorization")
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS")
+				rw.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			}
+			return h(ctx, rw, req)
+		}
+		if cors.MatchOrigin(origin, "http://localhost:8080") {
+			ctx = goa.WithLogContext(ctx, "origin", origin)
+			rw.Header().Set("Access-Control-Allow-Origin", origin)
+			rw.Header().Set("Vary", "Origin")
+			rw.Header().Set("Access-Control-Expose-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			rw.Header().Set("Access-Control-Max-Age", "600")
+			rw.Header().Set("Access-Control-Allow-Credentials", "true")
+			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
+				// We are handling a preflight request
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS")
+				rw.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
 			}
 			return h(ctx, rw, req)
 		}
@@ -781,17 +820,30 @@ func handleBasicOrigin(h goa.Handler) goa.Handler {
 			// Not a CORS request
 			return h(ctx, rw, req)
 		}
-		if cors.MatchOrigin(origin, "http://localhost:8080") {
+		if cors.MatchOrigin(origin, "*") {
 			ctx = goa.WithLogContext(ctx, "origin", origin)
 			rw.Header().Set("Access-Control-Allow-Origin", origin)
-			rw.Header().Set("Vary", "Origin")
-			rw.Header().Set("Access-Control-Expose-Headers", "Content-Type, Origin, Authorization")
+			rw.Header().Set("Access-Control-Expose-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
 			rw.Header().Set("Access-Control-Max-Age", "600")
 			rw.Header().Set("Access-Control-Allow-Credentials", "true")
 			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
 				// We are handling a preflight request
-				rw.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE")
-				rw.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Authorization")
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS")
+				rw.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			}
+			return h(ctx, rw, req)
+		}
+		if cors.MatchOrigin(origin, "http://localhost:8080") {
+			ctx = goa.WithLogContext(ctx, "origin", origin)
+			rw.Header().Set("Access-Control-Allow-Origin", origin)
+			rw.Header().Set("Vary", "Origin")
+			rw.Header().Set("Access-Control-Expose-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			rw.Header().Set("Access-Control-Max-Age", "600")
+			rw.Header().Set("Access-Control-Allow-Credentials", "true")
+			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
+				// We are handling a preflight request
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS")
+				rw.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
 			}
 			return h(ctx, rw, req)
 		}
@@ -852,17 +904,105 @@ func handleHealthOrigin(h goa.Handler) goa.Handler {
 			// Not a CORS request
 			return h(ctx, rw, req)
 		}
+		if cors.MatchOrigin(origin, "*") {
+			ctx = goa.WithLogContext(ctx, "origin", origin)
+			rw.Header().Set("Access-Control-Allow-Origin", origin)
+			rw.Header().Set("Access-Control-Expose-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			rw.Header().Set("Access-Control-Max-Age", "600")
+			rw.Header().Set("Access-Control-Allow-Credentials", "true")
+			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
+				// We are handling a preflight request
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS")
+				rw.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			}
+			return h(ctx, rw, req)
+		}
 		if cors.MatchOrigin(origin, "http://localhost:8080") {
 			ctx = goa.WithLogContext(ctx, "origin", origin)
 			rw.Header().Set("Access-Control-Allow-Origin", origin)
 			rw.Header().Set("Vary", "Origin")
-			rw.Header().Set("Access-Control-Expose-Headers", "Content-Type, Origin, Authorization")
+			rw.Header().Set("Access-Control-Expose-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			rw.Header().Set("Access-Control-Max-Age", "600")
+			rw.Header().Set("Access-Control-Allow-Credentials", "true")
+			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
+				// We are handling a preflight request
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS")
+				rw.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			}
+			return h(ctx, rw, req)
+		}
+		if cors.MatchOrigin(origin, "http://swagger.goa.design") {
+			ctx = goa.WithLogContext(ctx, "origin", origin)
+			rw.Header().Set("Access-Control-Allow-Origin", origin)
+			rw.Header().Set("Vary", "Origin")
+			rw.Header().Set("Access-Control-Expose-Headers", "Content-Type, Origin")
 			rw.Header().Set("Access-Control-Max-Age", "600")
 			rw.Header().Set("Access-Control-Allow-Credentials", "true")
 			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
 				// We are handling a preflight request
 				rw.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE")
-				rw.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Authorization")
+				rw.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type")
+			}
+			return h(ctx, rw, req)
+		}
+
+		return h(ctx, rw, req)
+	}
+}
+
+// JsController is the controller interface for the Js actions.
+type JsController interface {
+	goa.Muxer
+	goa.FileServer
+}
+
+// MountJsController "mounts" a Js resource controller on the given service.
+func MountJsController(service *goa.Service, ctrl JsController) {
+	initService(service)
+	var h goa.Handler
+	service.Mux.Handle("OPTIONS", "/js/*filepath", ctrl.MuxHandler("preflight", handleJsOrigin(cors.HandlePreflight()), nil))
+
+	h = ctrl.FileHandler("/js/*filepath", "public/js")
+	h = handleJsOrigin(h)
+	service.Mux.Handle("GET", "/js/*filepath", ctrl.MuxHandler("serve", h, nil))
+	service.LogInfo("mount", "ctrl", "Js", "files", "public/js", "route", "GET /js/*filepath")
+
+	h = ctrl.FileHandler("/js/", "public\\js\\index.html")
+	h = handleJsOrigin(h)
+	service.Mux.Handle("GET", "/js/", ctrl.MuxHandler("serve", h, nil))
+	service.LogInfo("mount", "ctrl", "Js", "files", "public\\js\\index.html", "route", "GET /js/")
+}
+
+// handleJsOrigin applies the CORS response headers corresponding to the origin.
+func handleJsOrigin(h goa.Handler) goa.Handler {
+
+	return func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
+		origin := req.Header.Get("Origin")
+		if origin == "" {
+			// Not a CORS request
+			return h(ctx, rw, req)
+		}
+		if cors.MatchOrigin(origin, "*") {
+			ctx = goa.WithLogContext(ctx, "origin", origin)
+			rw.Header().Set("Access-Control-Allow-Origin", origin)
+			rw.Header().Set("Access-Control-Allow-Credentials", "false")
+			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
+				// We are handling a preflight request
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+			}
+			return h(ctx, rw, req)
+		}
+		if cors.MatchOrigin(origin, "http://localhost:8080") {
+			ctx = goa.WithLogContext(ctx, "origin", origin)
+			rw.Header().Set("Access-Control-Allow-Origin", origin)
+			rw.Header().Set("Vary", "Origin")
+			rw.Header().Set("Access-Control-Expose-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			rw.Header().Set("Access-Control-Max-Age", "600")
+			rw.Header().Set("Access-Control-Allow-Credentials", "true")
+			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
+				// We are handling a preflight request
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS")
+				rw.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
 			}
 			return h(ctx, rw, req)
 		}
@@ -991,17 +1131,30 @@ func handleJWTOrigin(h goa.Handler) goa.Handler {
 			// Not a CORS request
 			return h(ctx, rw, req)
 		}
-		if cors.MatchOrigin(origin, "http://localhost:8080") {
+		if cors.MatchOrigin(origin, "*") {
 			ctx = goa.WithLogContext(ctx, "origin", origin)
 			rw.Header().Set("Access-Control-Allow-Origin", origin)
-			rw.Header().Set("Vary", "Origin")
-			rw.Header().Set("Access-Control-Expose-Headers", "Content-Type, Origin, Authorization")
+			rw.Header().Set("Access-Control-Expose-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
 			rw.Header().Set("Access-Control-Max-Age", "600")
 			rw.Header().Set("Access-Control-Allow-Credentials", "true")
 			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
 				// We are handling a preflight request
-				rw.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE")
-				rw.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Authorization")
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS")
+				rw.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			}
+			return h(ctx, rw, req)
+		}
+		if cors.MatchOrigin(origin, "http://localhost:8080") {
+			ctx = goa.WithLogContext(ctx, "origin", origin)
+			rw.Header().Set("Access-Control-Allow-Origin", origin)
+			rw.Header().Set("Vary", "Origin")
+			rw.Header().Set("Access-Control-Expose-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			rw.Header().Set("Access-Control-Max-Age", "600")
+			rw.Header().Set("Access-Control-Allow-Credentials", "true")
+			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
+				// We are handling a preflight request
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS")
+				rw.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
 			}
 			return h(ctx, rw, req)
 		}
@@ -1059,9 +1212,10 @@ type PatientController interface {
 	goa.Muxer
 	Create(*CreatePatientContext) error
 	Delete(*DeletePatientContext) error
-	List(*ListPatientContext) error
-	Show(*ShowPatientContext) error
+	Read(*ReadPatientContext) error
+	Search(*SearchPatientContext) error
 	Update(*UpdatePatientContext) error
+	Vread(*VreadPatientContext) error
 }
 
 // MountPatientController "mounts" a Patient resource controller on the given service.
@@ -1070,7 +1224,6 @@ func MountPatientController(service *goa.Service, ctrl PatientController) {
 	var h goa.Handler
 	service.Mux.Handle("OPTIONS", "/nosh/patients", ctrl.MuxHandler("preflight", handlePatientOrigin(cors.HandlePreflight()), nil))
 	service.Mux.Handle("OPTIONS", "/nosh/patients/:patientID", ctrl.MuxHandler("preflight", handlePatientOrigin(cors.HandlePreflight()), nil))
-	service.Mux.Handle("OPTIONS", "/nosh/patients/jwt", ctrl.MuxHandler("preflight", handlePatientOrigin(cors.HandlePreflight()), nil))
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -1116,17 +1269,21 @@ func MountPatientController(service *goa.Service, ctrl PatientController) {
 			return err
 		}
 		// Build the context
-		rctx, err := NewListPatientContext(ctx, service)
+		rctx, err := NewReadPatientContext(ctx, service)
 		if err != nil {
 			return err
 		}
-		return ctrl.List(rctx)
+		// Build the payload
+		if rawPayload := goa.ContextRequest(ctx).Payload; rawPayload != nil {
+			rctx.Payload = rawPayload.(*PatientPayload)
+		} else {
+			return goa.MissingPayloadError()
+		}
+		return ctrl.Read(rctx)
 	}
 	h = handlePatientOrigin(h)
-	service.Mux.Handle("GET", "/nosh/patients/jwt", ctrl.MuxHandler("List", h, nil))
-	service.LogInfo("mount", "ctrl", "Patient", "action", "List", "route", "GET /nosh/patients/jwt")
-	service.Mux.Handle("GET", "/nosh/patients", ctrl.MuxHandler("List", h, nil))
-	service.LogInfo("mount", "ctrl", "Patient", "action", "List", "route", "GET /nosh/patients")
+	service.Mux.Handle("GET", "/nosh/patients/:patientID", ctrl.MuxHandler("Read", h, unmarshalReadPatientPayload))
+	service.LogInfo("mount", "ctrl", "Patient", "action", "Read", "route", "GET /nosh/patients/:patientID")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -1134,15 +1291,23 @@ func MountPatientController(service *goa.Service, ctrl PatientController) {
 			return err
 		}
 		// Build the context
-		rctx, err := NewShowPatientContext(ctx, service)
+		rctx, err := NewSearchPatientContext(ctx, service)
 		if err != nil {
 			return err
 		}
-		return ctrl.Show(rctx)
+		// Build the payload
+		if rawPayload := goa.ContextRequest(ctx).Payload; rawPayload != nil {
+			rctx.Payload = rawPayload.(*PatientPayload)
+		} else {
+			return goa.MissingPayloadError()
+		}
+		return ctrl.Search(rctx)
 	}
 	h = handlePatientOrigin(h)
-	service.Mux.Handle("GET", "/nosh/patients/:patientID", ctrl.MuxHandler("Show", h, nil))
-	service.LogInfo("mount", "ctrl", "Patient", "action", "Show", "route", "GET /nosh/patients/:patientID")
+	service.Mux.Handle("GET", "/nosh/patients", ctrl.MuxHandler("Search", h, unmarshalSearchPatientPayload))
+	service.LogInfo("mount", "ctrl", "Patient", "action", "Search", "route", "GET /nosh/patients")
+	service.Mux.Handle("POST", "/nosh/patients", ctrl.MuxHandler("Search", h, unmarshalSearchPatientPayload))
+	service.LogInfo("mount", "ctrl", "Patient", "action", "Search", "route", "POST /nosh/patients")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -1165,6 +1330,28 @@ func MountPatientController(service *goa.Service, ctrl PatientController) {
 	h = handlePatientOrigin(h)
 	service.Mux.Handle("PUT", "/nosh/patients/:patientID", ctrl.MuxHandler("Update", h, unmarshalUpdatePatientPayload))
 	service.LogInfo("mount", "ctrl", "Patient", "action", "Update", "route", "PUT /nosh/patients/:patientID")
+
+	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
+		// Check if there was an error loading the request
+		if err := goa.ContextError(ctx); err != nil {
+			return err
+		}
+		// Build the context
+		rctx, err := NewVreadPatientContext(ctx, service)
+		if err != nil {
+			return err
+		}
+		// Build the payload
+		if rawPayload := goa.ContextRequest(ctx).Payload; rawPayload != nil {
+			rctx.Payload = rawPayload.(*PatientPayload)
+		} else {
+			return goa.MissingPayloadError()
+		}
+		return ctrl.Vread(rctx)
+	}
+	h = handlePatientOrigin(h)
+	service.Mux.Handle("GET", "/nosh/patients/:patientID", ctrl.MuxHandler("Vread", h, unmarshalVreadPatientPayload))
+	service.LogInfo("mount", "ctrl", "Patient", "action", "Vread", "route", "GET /nosh/patients/:patientID")
 }
 
 // handlePatientOrigin applies the CORS response headers corresponding to the origin.
@@ -1176,17 +1363,30 @@ func handlePatientOrigin(h goa.Handler) goa.Handler {
 			// Not a CORS request
 			return h(ctx, rw, req)
 		}
-		if cors.MatchOrigin(origin, "http://localhost:8080") {
+		if cors.MatchOrigin(origin, "*") {
 			ctx = goa.WithLogContext(ctx, "origin", origin)
 			rw.Header().Set("Access-Control-Allow-Origin", origin)
-			rw.Header().Set("Vary", "Origin")
-			rw.Header().Set("Access-Control-Expose-Headers", "Content-Type, Origin, Authorization")
+			rw.Header().Set("Access-Control-Expose-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
 			rw.Header().Set("Access-Control-Max-Age", "600")
 			rw.Header().Set("Access-Control-Allow-Credentials", "true")
 			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
 				// We are handling a preflight request
-				rw.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE")
-				rw.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Authorization")
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS")
+				rw.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			}
+			return h(ctx, rw, req)
+		}
+		if cors.MatchOrigin(origin, "http://localhost:8080") {
+			ctx = goa.WithLogContext(ctx, "origin", origin)
+			rw.Header().Set("Access-Control-Allow-Origin", origin)
+			rw.Header().Set("Vary", "Origin")
+			rw.Header().Set("Access-Control-Expose-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			rw.Header().Set("Access-Control-Max-Age", "600")
+			rw.Header().Set("Access-Control-Allow-Credentials", "true")
+			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
+				// We are handling a preflight request
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS")
+				rw.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
 			}
 			return h(ctx, rw, req)
 		}
@@ -1224,6 +1424,36 @@ func unmarshalCreatePatientPayload(ctx context.Context, service *goa.Service, re
 	return nil
 }
 
+// unmarshalReadPatientPayload unmarshals the request body into the context request data Payload field.
+func unmarshalReadPatientPayload(ctx context.Context, service *goa.Service, req *http.Request) error {
+	payload := &patientPayload{}
+	if err := service.DecodeRequest(req, payload); err != nil {
+		return err
+	}
+	if err := payload.Validate(); err != nil {
+		// Initialize payload with private data structure so it can be logged
+		goa.ContextRequest(ctx).Payload = payload
+		return err
+	}
+	goa.ContextRequest(ctx).Payload = payload.Publicize()
+	return nil
+}
+
+// unmarshalSearchPatientPayload unmarshals the request body into the context request data Payload field.
+func unmarshalSearchPatientPayload(ctx context.Context, service *goa.Service, req *http.Request) error {
+	payload := &patientPayload{}
+	if err := service.DecodeRequest(req, payload); err != nil {
+		return err
+	}
+	if err := payload.Validate(); err != nil {
+		// Initialize payload with private data structure so it can be logged
+		goa.ContextRequest(ctx).Payload = payload
+		return err
+	}
+	goa.ContextRequest(ctx).Payload = payload.Publicize()
+	return nil
+}
+
 // unmarshalUpdatePatientPayload unmarshals the request body into the context request data Payload field.
 func unmarshalUpdatePatientPayload(ctx context.Context, service *goa.Service, req *http.Request) error {
 	payload := &updatePatientPayload{}
@@ -1237,6 +1467,161 @@ func unmarshalUpdatePatientPayload(ctx context.Context, service *goa.Service, re
 	}
 	goa.ContextRequest(ctx).Payload = payload.Publicize()
 	return nil
+}
+
+// unmarshalVreadPatientPayload unmarshals the request body into the context request data Payload field.
+func unmarshalVreadPatientPayload(ctx context.Context, service *goa.Service, req *http.Request) error {
+	payload := &patientPayload{}
+	if err := service.DecodeRequest(req, payload); err != nil {
+		return err
+	}
+	if err := payload.Validate(); err != nil {
+		// Initialize payload with private data structure so it can be logged
+		goa.ContextRequest(ctx).Payload = payload
+		return err
+	}
+	goa.ContextRequest(ctx).Payload = payload.Publicize()
+	return nil
+}
+
+// PublicController is the controller interface for the Public actions.
+type PublicController interface {
+	goa.Muxer
+	goa.FileServer
+}
+
+// MountPublicController "mounts" a Public resource controller on the given service.
+func MountPublicController(service *goa.Service, ctrl PublicController) {
+	initService(service)
+	var h goa.Handler
+	service.Mux.Handle("OPTIONS", "/ui", ctrl.MuxHandler("preflight", handlePublicOrigin(cors.HandlePreflight()), nil))
+
+	h = ctrl.FileHandler("/ui", "public/html/index.html")
+	h = handlePublicOrigin(h)
+	service.Mux.Handle("GET", "/ui", ctrl.MuxHandler("serve", h, nil))
+	service.LogInfo("mount", "ctrl", "Public", "files", "public/html/index.html", "route", "GET /ui")
+}
+
+// handlePublicOrigin applies the CORS response headers corresponding to the origin.
+func handlePublicOrigin(h goa.Handler) goa.Handler {
+
+	return func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
+		origin := req.Header.Get("Origin")
+		if origin == "" {
+			// Not a CORS request
+			return h(ctx, rw, req)
+		}
+		if cors.MatchOrigin(origin, "*") {
+			ctx = goa.WithLogContext(ctx, "origin", origin)
+			rw.Header().Set("Access-Control-Allow-Origin", origin)
+			rw.Header().Set("Access-Control-Allow-Credentials", "false")
+			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
+				// We are handling a preflight request
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+			}
+			return h(ctx, rw, req)
+		}
+		if cors.MatchOrigin(origin, "http://localhost:8080") {
+			ctx = goa.WithLogContext(ctx, "origin", origin)
+			rw.Header().Set("Access-Control-Allow-Origin", origin)
+			rw.Header().Set("Vary", "Origin")
+			rw.Header().Set("Access-Control-Expose-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			rw.Header().Set("Access-Control-Max-Age", "600")
+			rw.Header().Set("Access-Control-Allow-Credentials", "true")
+			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
+				// We are handling a preflight request
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS")
+				rw.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			}
+			return h(ctx, rw, req)
+		}
+		if cors.MatchOrigin(origin, "http://swagger.goa.design") {
+			ctx = goa.WithLogContext(ctx, "origin", origin)
+			rw.Header().Set("Access-Control-Allow-Origin", origin)
+			rw.Header().Set("Vary", "Origin")
+			rw.Header().Set("Access-Control-Expose-Headers", "Content-Type, Origin")
+			rw.Header().Set("Access-Control-Max-Age", "600")
+			rw.Header().Set("Access-Control-Allow-Credentials", "true")
+			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
+				// We are handling a preflight request
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE")
+				rw.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type")
+			}
+			return h(ctx, rw, req)
+		}
+
+		return h(ctx, rw, req)
+	}
+}
+
+// SwaggerController is the controller interface for the Swagger actions.
+type SwaggerController interface {
+	goa.Muxer
+	goa.FileServer
+}
+
+// MountSwaggerController "mounts" a Swagger resource controller on the given service.
+func MountSwaggerController(service *goa.Service, ctrl SwaggerController) {
+	initService(service)
+	var h goa.Handler
+	service.Mux.Handle("OPTIONS", "/swagger.json", ctrl.MuxHandler("preflight", handleSwaggerOrigin(cors.HandlePreflight()), nil))
+
+	h = ctrl.FileHandler("/swagger.json", "public/swagger/swagger.json")
+	h = handleSwaggerOrigin(h)
+	service.Mux.Handle("GET", "/swagger.json", ctrl.MuxHandler("serve", h, nil))
+	service.LogInfo("mount", "ctrl", "Swagger", "files", "public/swagger/swagger.json", "route", "GET /swagger.json")
+}
+
+// handleSwaggerOrigin applies the CORS response headers corresponding to the origin.
+func handleSwaggerOrigin(h goa.Handler) goa.Handler {
+
+	return func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
+		origin := req.Header.Get("Origin")
+		if origin == "" {
+			// Not a CORS request
+			return h(ctx, rw, req)
+		}
+		if cors.MatchOrigin(origin, "*") {
+			ctx = goa.WithLogContext(ctx, "origin", origin)
+			rw.Header().Set("Access-Control-Allow-Origin", origin)
+			rw.Header().Set("Access-Control-Allow-Credentials", "false")
+			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
+				// We are handling a preflight request
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+			}
+			return h(ctx, rw, req)
+		}
+		if cors.MatchOrigin(origin, "http://localhost:8080") {
+			ctx = goa.WithLogContext(ctx, "origin", origin)
+			rw.Header().Set("Access-Control-Allow-Origin", origin)
+			rw.Header().Set("Vary", "Origin")
+			rw.Header().Set("Access-Control-Expose-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			rw.Header().Set("Access-Control-Max-Age", "600")
+			rw.Header().Set("Access-Control-Allow-Credentials", "true")
+			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
+				// We are handling a preflight request
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS")
+				rw.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			}
+			return h(ctx, rw, req)
+		}
+		if cors.MatchOrigin(origin, "http://swagger.goa.design") {
+			ctx = goa.WithLogContext(ctx, "origin", origin)
+			rw.Header().Set("Access-Control-Allow-Origin", origin)
+			rw.Header().Set("Vary", "Origin")
+			rw.Header().Set("Access-Control-Expose-Headers", "Content-Type, Origin")
+			rw.Header().Set("Access-Control-Max-Age", "600")
+			rw.Header().Set("Access-Control-Allow-Credentials", "true")
+			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
+				// We are handling a preflight request
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE")
+				rw.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type")
+			}
+			return h(ctx, rw, req)
+		}
+
+		return h(ctx, rw, req)
+	}
 }
 
 // UserController is the controller interface for the User actions.
@@ -1406,17 +1791,30 @@ func handleUserOrigin(h goa.Handler) goa.Handler {
 			// Not a CORS request
 			return h(ctx, rw, req)
 		}
-		if cors.MatchOrigin(origin, "http://localhost:8080") {
+		if cors.MatchOrigin(origin, "*") {
 			ctx = goa.WithLogContext(ctx, "origin", origin)
 			rw.Header().Set("Access-Control-Allow-Origin", origin)
-			rw.Header().Set("Vary", "Origin")
-			rw.Header().Set("Access-Control-Expose-Headers", "Content-Type, Origin, Authorization")
+			rw.Header().Set("Access-Control-Expose-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
 			rw.Header().Set("Access-Control-Max-Age", "600")
 			rw.Header().Set("Access-Control-Allow-Credentials", "true")
 			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
 				// We are handling a preflight request
-				rw.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE")
-				rw.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Authorization")
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS")
+				rw.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			}
+			return h(ctx, rw, req)
+		}
+		if cors.MatchOrigin(origin, "http://localhost:8080") {
+			ctx = goa.WithLogContext(ctx, "origin", origin)
+			rw.Header().Set("Access-Control-Allow-Origin", origin)
+			rw.Header().Set("Vary", "Origin")
+			rw.Header().Set("Access-Control-Expose-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
+			rw.Header().Set("Access-Control-Max-Age", "600")
+			rw.Header().Set("Access-Control-Allow-Credentials", "true")
+			if acrm := req.Header.Get("Access-Control-Request-Method"); acrm != "" {
+				// We are handling a preflight request
+				rw.Header().Set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS")
+				rw.Header().Set("Access-Control-Allow-Headers", "Origin, Authorization, Accept, Content-Type, X-Requested-With")
 			}
 			return h(ctx, rw, req)
 		}

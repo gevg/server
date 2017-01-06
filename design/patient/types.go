@@ -30,7 +30,11 @@ var Patient = Type("Patient", func() {
 
 	//Start FHIR----------------------------------------------
 	Required("gender", "maritalStatus")
-
+	Attribute("meta", Meta, `The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	Changes to the content may not always be associated with version changes to the resource.`, func() {
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
 	Attribute("identifier", ArrayOf(Identifier), "Patient identifer", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:

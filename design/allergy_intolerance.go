@@ -30,13 +30,13 @@ var _ = Resource("AllergyIntolerance", func() {
 		Response(BadRequest, ErrorMedia)
 	})
 
-	Action("show", func() {
+	Action("read", func() {
 		Routing(
-			GET("/:allergy_intoleranceID"),
+			GET("/:allergy.intoleranceID"),
 		)
 		Description("Retrieve vital with given id")
 		Params(func() {
-			Param("allergy_intoleranceID", Integer)
+			Param("allergy.intoleranceID", Integer)
 		})
 		Response(OK)
 		Response(NotFound)
@@ -45,12 +45,12 @@ var _ = Resource("AllergyIntolerance", func() {
 
 	Action("watch", func() {
 		Routing(
-			GET("/:allergy_intoleranceID/watch"),
+			GET("/:allergy.intoleranceID/watch"),
 		)
 		Scheme("ws")
 		Description("Retrieve vital with given id")
 		Params(func() {
-			Param("allergy_intoleranceID", Integer)
+			Param("allergy.intoleranceID", Integer)
 		})
 		Response(SwitchingProtocols)
 		Response(BadRequest, ErrorMedia)
@@ -71,10 +71,10 @@ var _ = Resource("AllergyIntolerance", func() {
 
 	Action("update", func() {
 		Routing(
-			PATCH("/:allergy_intoleranceID"),
+			PATCH("/:allergy.intoleranceID"),
 		)
 		Params(func() {
-			Param("allergy_intoleranceID", Integer)
+			Param("allergy.intoleranceID", Integer)
 		})
 		Payload(AllergyIntolerancePayload)
 		Response(NoContent)
@@ -84,10 +84,10 @@ var _ = Resource("AllergyIntolerance", func() {
 
 	Action("rate", func() {
 		Routing(
-			PUT("/:allergy_intoleranceID/actions/rate"),
+			PUT("/:allergy.intoleranceID/actions/rate"),
 		)
 		Params(func() {
-			Param("allergy_intoleranceID", Integer)
+			Param("allergy.intoleranceID", Integer)
 		})
 		Payload(func() {
 			Member("rating")
@@ -100,10 +100,10 @@ var _ = Resource("AllergyIntolerance", func() {
 
 	Action("delete", func() {
 		Routing(
-			DELETE("/:allergy_intoleranceID"),
+			DELETE("/:allergy.intoleranceID"),
 		)
 		Params(func() {
-			Param("allergy_intoleranceID", Integer)
+			Param("allergy.intoleranceID", Integer)
 		})
 		Response(NoContent)
 		Response(NotFound)

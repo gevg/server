@@ -26,6 +26,11 @@ var NutritionRequest = Type("NutritionRequest", func() {
 	//Local End-----------------------------------------------------------------------------------
 
 	Required("status")
+	Attribute("meta", Meta, `The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	Changes to the content may not always be associated with version changes to the resource.`, func() {
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
 	Attribute("patient", HL7Reference, "The person (patient) who needs the nutrition order for an oral diet, nutritional supplement and/or enteral or formula feeding.", func() {
 		//Reference to Patient
 		//Comments:
@@ -76,7 +81,7 @@ var NutritionRequest = Type("NutritionRequest", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("oralDiet", CollectionOf(OralDietMedia), "Diet given orally in contrast to enteral (tube) feeding.", func() {
+	Attribute("oralDiet", OralDiet, "Diet given orally in contrast to enteral (tube) feeding.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
@@ -84,7 +89,7 @@ var NutritionRequest = Type("NutritionRequest", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("enteralFormula", CollectionOf(EnteralFormulaMedia), "Feeding provided through the gastrointestinal tract via a tube, catheter, or stoma that delivers nutrition distal to the oral cavity.", func() {
+	Attribute("enteralFormula", EnteralFormula, "Feeding provided through the gastrointestinal tract via a tube, catheter, or stoma that delivers nutrition distal to the oral cavity.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})

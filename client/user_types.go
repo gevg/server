@@ -13,7 +13,6 @@ package client
 import (
 	"github.com/goadesign/goa"
 	"time"
-	"unicode/utf8"
 )
 
 // There is a variety of postal address formats defined around the world. This format defines a superset that is the basis for all addresses around the world.
@@ -25,11 +24,11 @@ type address struct {
 	// District is sometimes known as county, but in some regions 'county' in used in place of city (municipality), so county name should be conveyed in city instead.
 	Distinct *string `form:"distinct,omitempty" json:"distinct,omitempty" xml:"distinct,omitempty"`
 	// This component contains the house number, apartment number, street name, street direction,  P.O. Box number, delivery hints, and similar address information.
-	Line *string `form:"line,omitempty" json:"line,omitempty" xml:"line,omitempty"`
+	Line []string `form:"line,omitempty" json:"line,omitempty" xml:"line,omitempty"`
 	// Time period when address was/is in use.
 	Period *period `form:"period,omitempty" json:"period,omitempty" xml:"period,omitempty"`
 	// A postal code designating a region defined by the postal service.
-	PostalCode *int `form:"postalCode,omitempty" json:"postalCode,omitempty" xml:"postalCode,omitempty"`
+	PostalCode *string `form:"postalCode,omitempty" json:"postalCode,omitempty" xml:"postalCode,omitempty"`
 	// Sub-unit of a country with limited sovereignty in a federally organized country. A code may be used if codes are in common use (i.e. US 2 letter state codes).
 	State *string `form:"state,omitempty" json:"state,omitempty" xml:"state,omitempty"`
 	// Distinguishes between physical addresses (those you can visit) and mailing addresses (e.g. PO Boxes and care-of addresses). Most addresses are both.
@@ -101,11 +100,11 @@ type Address struct {
 	// District is sometimes known as county, but in some regions 'county' in used in place of city (municipality), so county name should be conveyed in city instead.
 	Distinct *string `form:"distinct,omitempty" json:"distinct,omitempty" xml:"distinct,omitempty"`
 	// This component contains the house number, apartment number, street name, street direction,  P.O. Box number, delivery hints, and similar address information.
-	Line *string `form:"line,omitempty" json:"line,omitempty" xml:"line,omitempty"`
+	Line []string `form:"line,omitempty" json:"line,omitempty" xml:"line,omitempty"`
 	// Time period when address was/is in use.
 	Period *Period `form:"period,omitempty" json:"period,omitempty" xml:"period,omitempty"`
 	// A postal code designating a region defined by the postal service.
-	PostalCode *int `form:"postalCode,omitempty" json:"postalCode,omitempty" xml:"postalCode,omitempty"`
+	PostalCode *string `form:"postalCode,omitempty" json:"postalCode,omitempty" xml:"postalCode,omitempty"`
 	// Sub-unit of a country with limited sovereignty in a federally organized country. A code may be used if codes are in common use (i.e. US 2 letter state codes).
 	State *string `form:"state,omitempty" json:"state,omitempty" xml:"state,omitempty"`
 	// Distinguishes between physical addresses (those you can visit) and mailing addresses (e.g. PO Boxes and care-of addresses). Most addresses are both.
@@ -140,9 +139,9 @@ type addressPayload struct {
 	// District is sometimes known as county, but in some regions 'county' in used in place of city (municipality), so county name should be conveyed in city instead.
 	Distinct *string `form:"distinct,omitempty" json:"distinct,omitempty" xml:"distinct,omitempty"`
 	// This component contains the house number, apartment number, street name, street direction,  P.O. Box number, delivery hints, and similar address information.
-	Line *string `form:"line,omitempty" json:"line,omitempty" xml:"line,omitempty"`
+	Line []string `form:"line,omitempty" json:"line,omitempty" xml:"line,omitempty"`
 	// A postal code designating a region defined by the postal service.
-	PostalCode *int `form:"postalCode,omitempty" json:"postalCode,omitempty" xml:"postalCode,omitempty"`
+	PostalCode *string `form:"postalCode,omitempty" json:"postalCode,omitempty" xml:"postalCode,omitempty"`
 	// Sub-unit of a country with limited sovereignty in a federally organized country. A code may be used if codes are in common use (i.e. US 2 letter state codes).
 	State *string `form:"state,omitempty" json:"state,omitempty" xml:"state,omitempty"`
 	// Distinguishes between physical addresses (those you can visit) and mailing addresses (e.g. PO Boxes and care-of addresses). Most addresses are both.
@@ -205,9 +204,9 @@ type AddressPayload struct {
 	// District is sometimes known as county, but in some regions 'county' in used in place of city (municipality), so county name should be conveyed in city instead.
 	Distinct *string `form:"distinct,omitempty" json:"distinct,omitempty" xml:"distinct,omitempty"`
 	// This component contains the house number, apartment number, street name, street direction,  P.O. Box number, delivery hints, and similar address information.
-	Line *string `form:"line,omitempty" json:"line,omitempty" xml:"line,omitempty"`
+	Line []string `form:"line,omitempty" json:"line,omitempty" xml:"line,omitempty"`
 	// A postal code designating a region defined by the postal service.
-	PostalCode *int `form:"postalCode,omitempty" json:"postalCode,omitempty" xml:"postalCode,omitempty"`
+	PostalCode *string `form:"postalCode,omitempty" json:"postalCode,omitempty" xml:"postalCode,omitempty"`
 	// Sub-unit of a country with limited sovereignty in a federally organized country. A code may be used if codes are in common use (i.e. US 2 letter state codes).
 	State *string `form:"state,omitempty" json:"state,omitempty" xml:"state,omitempty"`
 	// Distinguishes between physical addresses (those you can visit) and mailing addresses (e.g. PO Boxes and care-of addresses). Most addresses are both.
@@ -248,6 +247,9 @@ type allergyIntolerance struct {
 	Identifier []*identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
 	// Represents the date and/or time of the last known occurrence of a reaction event.
 	LastOccurence *time.Time `form:"lastOccurence,omitempty" json:"lastOccurence,omitempty" xml:"lastOccurence,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Additional narrative about the propensity for the Adverse Reaction, not captured in other fields..
 	Note *annotation `form:"note,omitempty" json:"note,omitempty" xml:"note,omitempty"`
 	// Record of the date and/or time of the onset of the Allergy or Intolerance.
@@ -301,6 +303,11 @@ func (ut *allergyIntolerance) Validate() (err error) {
 			}
 		}
 	}
+	if ut.Meta != nil {
+		if err2 := ut.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
 	if ut.Reaction != nil {
 		if err2 := ut.Reaction.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -345,6 +352,9 @@ func (ut *allergyIntolerance) Publicize() *AllergyIntolerance {
 	}
 	if ut.LastOccurence != nil {
 		pub.LastOccurence = ut.LastOccurence
+	}
+	if ut.Meta != nil {
+		pub.Meta = ut.Meta.Publicize()
 	}
 	if ut.Note != nil {
 		pub.Note = ut.Note.Publicize()
@@ -396,6 +406,9 @@ type AllergyIntolerance struct {
 	Identifier []*Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
 	// Represents the date and/or time of the last known occurrence of a reaction event.
 	LastOccurence *time.Time `form:"lastOccurence,omitempty" json:"lastOccurence,omitempty" xml:"lastOccurence,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *Meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Additional narrative about the propensity for the Adverse Reaction, not captured in other fields..
 	Note *Annotation `form:"note,omitempty" json:"note,omitempty" xml:"note,omitempty"`
 	// Record of the date and/or time of the onset of the Allergy or Intolerance.
@@ -447,6 +460,11 @@ func (ut *AllergyIntolerance) Validate() (err error) {
 			}
 		}
 	}
+	if ut.Meta != nil {
+		if err2 := ut.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
 	if ut.Reaction != nil {
 		if err2 := ut.Reaction.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -472,6 +490,9 @@ type allergyIntolerancePayload struct {
 	Identifier []*identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
 	// Represents the date and/or time of the last known occurrence of a reaction event.
 	LastOccurence *time.Time `form:"lastOccurence,omitempty" json:"lastOccurence,omitempty" xml:"lastOccurence,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Additional narrative about the propensity for the Adverse Reaction, not captured in other fields..
 	Note *annotation `form:"note,omitempty" json:"note,omitempty" xml:"note,omitempty"`
 	// Record of the date and/or time of the onset of the Allergy or Intolerance.
@@ -511,6 +532,11 @@ func (ut *allergyIntolerancePayload) Validate() (err error) {
 			}
 		}
 	}
+	if ut.Meta != nil {
+		if err2 := ut.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
 	if ut.Reaction != nil {
 		if err2 := ut.Reaction.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -546,6 +572,9 @@ func (ut *allergyIntolerancePayload) Publicize() *AllergyIntolerancePayload {
 	}
 	if ut.LastOccurence != nil {
 		pub.LastOccurence = ut.LastOccurence
+	}
+	if ut.Meta != nil {
+		pub.Meta = ut.Meta.Publicize()
 	}
 	if ut.Note != nil {
 		pub.Note = ut.Note.Publicize()
@@ -588,6 +617,9 @@ type AllergyIntolerancePayload struct {
 	Identifier []*Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
 	// Represents the date and/or time of the last known occurrence of a reaction event.
 	LastOccurence *time.Time `form:"lastOccurence,omitempty" json:"lastOccurence,omitempty" xml:"lastOccurence,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *Meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Additional narrative about the propensity for the Adverse Reaction, not captured in other fields..
 	Note *Annotation `form:"note,omitempty" json:"note,omitempty" xml:"note,omitempty"`
 	// Record of the date and/or time of the onset of the Allergy or Intolerance.
@@ -625,6 +657,11 @@ func (ut *AllergyIntolerancePayload) Validate() (err error) {
 			if err2 := e.Validate(); err2 != nil {
 				err = goa.MergeErrors(err, err2)
 			}
+		}
+	}
+	if ut.Meta != nil {
+		if err2 := ut.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
 		}
 	}
 	if ut.Reaction != nil {
@@ -1283,7 +1320,7 @@ type component struct {
 	// Provides a reason why the expected value in the element Observation.value[x] is missing. See http://hl7.org/fhir/ValueSet/observation-valueabsentreason
 	DataAbsentReason *codeableConcept `form:"dataAbsentReason,omitempty" json:"dataAbsentReason,omitempty" xml:"dataAbsentReason,omitempty"`
 	// Guidance on how to interpret the value by comparison to a normal or recommended range.
-	ReferenceRange       *referenceRange  `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
+	NormalReferenceRange *referenceRange  `form:"normalReferenceRange,omitempty" json:"normalReferenceRange,omitempty" xml:"normalReferenceRange,omitempty"`
 	ValueAttachment      *attachment      `form:"valueAttachment,omitempty" json:"valueAttachment,omitempty" xml:"valueAttachment,omitempty"`
 	ValueCodeableConcept *codeableConcept `form:"valueCodeableConcept,omitempty" json:"valueCodeableConcept,omitempty" xml:"valueCodeableConcept,omitempty"`
 	ValueDatTime         *time.Time       `form:"valueDatTime,omitempty" json:"valueDatTime,omitempty" xml:"valueDatTime,omitempty"`
@@ -1297,8 +1334,8 @@ type component struct {
 
 // Validate validates the component type instance.
 func (ut *component) Validate() (err error) {
-	if ut.ReferenceRange != nil {
-		if err2 := ut.ReferenceRange.Validate(); err2 != nil {
+	if ut.NormalReferenceRange != nil {
+		if err2 := ut.NormalReferenceRange.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
 		}
 	}
@@ -1334,8 +1371,8 @@ func (ut *component) Publicize() *Component {
 	if ut.DataAbsentReason != nil {
 		pub.DataAbsentReason = ut.DataAbsentReason.Publicize()
 	}
-	if ut.ReferenceRange != nil {
-		pub.ReferenceRange = ut.ReferenceRange.Publicize()
+	if ut.NormalReferenceRange != nil {
+		pub.NormalReferenceRange = ut.NormalReferenceRange.Publicize()
 	}
 	if ut.ValueAttachment != nil {
 		pub.ValueAttachment = ut.ValueAttachment.Publicize()
@@ -1375,7 +1412,7 @@ type Component struct {
 	// Provides a reason why the expected value in the element Observation.value[x] is missing. See http://hl7.org/fhir/ValueSet/observation-valueabsentreason
 	DataAbsentReason *CodeableConcept `form:"dataAbsentReason,omitempty" json:"dataAbsentReason,omitempty" xml:"dataAbsentReason,omitempty"`
 	// Guidance on how to interpret the value by comparison to a normal or recommended range.
-	ReferenceRange       *ReferenceRange  `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
+	NormalReferenceRange *ReferenceRange  `form:"normalReferenceRange,omitempty" json:"normalReferenceRange,omitempty" xml:"normalReferenceRange,omitempty"`
 	ValueAttachment      *Attachment      `form:"valueAttachment,omitempty" json:"valueAttachment,omitempty" xml:"valueAttachment,omitempty"`
 	ValueCodeableConcept *CodeableConcept `form:"valueCodeableConcept,omitempty" json:"valueCodeableConcept,omitempty" xml:"valueCodeableConcept,omitempty"`
 	ValueDatTime         *time.Time       `form:"valueDatTime,omitempty" json:"valueDatTime,omitempty" xml:"valueDatTime,omitempty"`
@@ -1389,8 +1426,8 @@ type Component struct {
 
 // Validate validates the Component type instance.
 func (ut *Component) Validate() (err error) {
-	if ut.ReferenceRange != nil {
-		if err2 := ut.ReferenceRange.Validate(); err2 != nil {
+	if ut.NormalReferenceRange != nil {
+		if err2 := ut.NormalReferenceRange.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
 		}
 	}
@@ -1422,9 +1459,8 @@ type componentPayload struct {
 	// Describes what was observed. Sometimes this is called the observation 'code'. See http://hl7.org/fhir/ValueSet/observation-codes
 	Code *codeableConcept `form:"code,omitempty" json:"code,omitempty" xml:"code,omitempty"`
 	// Provides a reason why the expected value in the element Observation.value[x] is missing. See http://hl7.org/fhir/ValueSet/observation-valueabsentreason
-	DataAbsentReason *codeableConcept `form:"dataAbsentReason,omitempty" json:"dataAbsentReason,omitempty" xml:"dataAbsentReason,omitempty"`
-	// Guidance on how to interpret the value by comparison to a normal or recommended range.
-	ReferenceRange       *referenceRange  `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
+	DataAbsentReason     *codeableConcept `form:"dataAbsentReason,omitempty" json:"dataAbsentReason,omitempty" xml:"dataAbsentReason,omitempty"`
+	ReferenceRange       *string          `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
 	ValueAttachment      *attachment      `form:"valueAttachment,omitempty" json:"valueAttachment,omitempty" xml:"valueAttachment,omitempty"`
 	ValueCodeableConcept *codeableConcept `form:"valueCodeableConcept,omitempty" json:"valueCodeableConcept,omitempty" xml:"valueCodeableConcept,omitempty"`
 	ValueDatTime         *time.Time       `form:"valueDatTime,omitempty" json:"valueDatTime,omitempty" xml:"valueDatTime,omitempty"`
@@ -1437,11 +1473,6 @@ type componentPayload struct {
 
 // Validate validates the componentPayload type instance.
 func (ut *componentPayload) Validate() (err error) {
-	if ut.ReferenceRange != nil {
-		if err2 := ut.ReferenceRange.Validate(); err2 != nil {
-			err = goa.MergeErrors(err, err2)
-		}
-	}
 	if ut.ValueAttachment != nil {
 		if err2 := ut.ValueAttachment.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -1475,7 +1506,7 @@ func (ut *componentPayload) Publicize() *ComponentPayload {
 		pub.DataAbsentReason = ut.DataAbsentReason.Publicize()
 	}
 	if ut.ReferenceRange != nil {
-		pub.ReferenceRange = ut.ReferenceRange.Publicize()
+		pub.ReferenceRange = ut.ReferenceRange
 	}
 	if ut.ValueAttachment != nil {
 		pub.ValueAttachment = ut.ValueAttachment.Publicize()
@@ -1509,9 +1540,8 @@ type ComponentPayload struct {
 	// Describes what was observed. Sometimes this is called the observation 'code'. See http://hl7.org/fhir/ValueSet/observation-codes
 	Code *CodeableConcept `form:"code,omitempty" json:"code,omitempty" xml:"code,omitempty"`
 	// Provides a reason why the expected value in the element Observation.value[x] is missing. See http://hl7.org/fhir/ValueSet/observation-valueabsentreason
-	DataAbsentReason *CodeableConcept `form:"dataAbsentReason,omitempty" json:"dataAbsentReason,omitempty" xml:"dataAbsentReason,omitempty"`
-	// Guidance on how to interpret the value by comparison to a normal or recommended range.
-	ReferenceRange       *ReferenceRange  `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
+	DataAbsentReason     *CodeableConcept `form:"dataAbsentReason,omitempty" json:"dataAbsentReason,omitempty" xml:"dataAbsentReason,omitempty"`
+	ReferenceRange       *string          `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
 	ValueAttachment      *Attachment      `form:"valueAttachment,omitempty" json:"valueAttachment,omitempty" xml:"valueAttachment,omitempty"`
 	ValueCodeableConcept *CodeableConcept `form:"valueCodeableConcept,omitempty" json:"valueCodeableConcept,omitempty" xml:"valueCodeableConcept,omitempty"`
 	ValueDatTime         *time.Time       `form:"valueDatTime,omitempty" json:"valueDatTime,omitempty" xml:"valueDatTime,omitempty"`
@@ -1524,11 +1554,6 @@ type ComponentPayload struct {
 
 // Validate validates the ComponentPayload type instance.
 func (ut *ComponentPayload) Validate() (err error) {
-	if ut.ReferenceRange != nil {
-		if err2 := ut.ReferenceRange.Validate(); err2 != nil {
-			err = goa.MergeErrors(err, err2)
-		}
-	}
 	if ut.ValueAttachment != nil {
 		if err2 := ut.ValueAttachment.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -3486,7 +3511,7 @@ type nutritionRequest struct {
 	// An encounter that provides additional information about the healthcare context in which this request is made.
 	Encounter *hL7Reference `form:"encounter,omitempty" json:"encounter,omitempty" xml:"encounter,omitempty"`
 	// Feeding provided through the gastrointestinal tract via a tube, catheter, or stoma that delivers nutrition distal to the oral cavity.
-	EnteralFormula enteralFormulaCollection `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
+	EnteralFormula *enteralFormula `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
 	// This modifier is used to convey order-specific modifiers about the type of food that should NOT be given. These can be derived from
 	// 		patient allergies, intolerances, or preferences such as No Red Meat, No Soy or No Wheat or  Gluten-Free.  While it should not be necessary to repeat allergy or intolerance
 	// 		information captured in the referenced allergyIntolerance resource in the excludeFoodModifier, this element may be used to convey additional specificity related to foods that should be
@@ -3503,8 +3528,11 @@ type nutritionRequest struct {
 	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
 	// Identifiers assigned to this order by the order sender or by the order receiver.
 	Identifier []*identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Diet given orally in contrast to enteral (tube) feeding.
-	OralDiet oralDietMediaCollection `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
+	OralDiet *oralDiet `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
 	// The practitioner that holds legal responsibility for ordering the diet, nutritional supplement, or formula feedings.
 	Orderer *hL7Reference `form:"orderer,omitempty" json:"orderer,omitempty" xml:"orderer,omitempty"`
 	// The person (patient) who needs the nutrition order for an oral diet, nutritional supplement and/or enteral or formula feeding.
@@ -3528,8 +3556,10 @@ func (ut *nutritionRequest) Validate() (err error) {
 	if ut.Status == nil {
 		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "status"))
 	}
-	if err2 := ut.EnteralFormula.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if ut.EnteralFormula != nil {
+		if err2 := ut.EnteralFormula.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	for _, e := range ut.Identifier {
 		if e != nil {
@@ -3538,8 +3568,15 @@ func (ut *nutritionRequest) Validate() (err error) {
 			}
 		}
 	}
-	if err2 := ut.OralDiet.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if ut.Meta != nil {
+		if err2 := ut.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	if ut.OralDiet != nil {
+		if err2 := ut.OralDiet.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	if ut.Status != nil {
 		if !(*ut.Status == "proposed" || *ut.Status == "draft" || *ut.Status == "planned" || *ut.Status == "requested" || *ut.Status == "active" || *ut.Status == "on-hold" || *ut.Status == "completed" || *ut.Status == "cancelled") {
@@ -3575,10 +3612,7 @@ func (ut *nutritionRequest) Publicize() *NutritionRequest {
 		pub.Encounter = ut.Encounter.Publicize()
 	}
 	if ut.EnteralFormula != nil {
-		pub.EnteralFormula = make(EnteralFormulaCollection, len(ut.EnteralFormula))
-		for i2, elem2 := range ut.EnteralFormula {
-			pub.EnteralFormula[i2] = elem2.Publicize()
-		}
+		pub.EnteralFormula = ut.EnteralFormula.Publicize()
 	}
 	if ut.ExcludeFoodModifier != nil {
 		pub.ExcludeFoodModifier = make([]*CodeableConcept, len(ut.ExcludeFoodModifier))
@@ -3604,11 +3638,11 @@ func (ut *nutritionRequest) Publicize() *NutritionRequest {
 			pub.Identifier[i2] = elem2.Publicize()
 		}
 	}
+	if ut.Meta != nil {
+		pub.Meta = ut.Meta.Publicize()
+	}
 	if ut.OralDiet != nil {
-		pub.OralDiet = make(OralDietMediaCollection, len(ut.OralDiet))
-		for i2, elem2 := range ut.OralDiet {
-			pub.OralDiet[i2] = elem2.Publicize()
-		}
+		pub.OralDiet = ut.OralDiet.Publicize()
 	}
 	if ut.Orderer != nil {
 		pub.Orderer = ut.Orderer.Publicize()
@@ -3642,7 +3676,7 @@ type NutritionRequest struct {
 	// An encounter that provides additional information about the healthcare context in which this request is made.
 	Encounter *HL7Reference `form:"encounter,omitempty" json:"encounter,omitempty" xml:"encounter,omitempty"`
 	// Feeding provided through the gastrointestinal tract via a tube, catheter, or stoma that delivers nutrition distal to the oral cavity.
-	EnteralFormula EnteralFormulaCollection `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
+	EnteralFormula *EnteralFormula `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
 	// This modifier is used to convey order-specific modifiers about the type of food that should NOT be given. These can be derived from
 	// 		patient allergies, intolerances, or preferences such as No Red Meat, No Soy or No Wheat or  Gluten-Free.  While it should not be necessary to repeat allergy or intolerance
 	// 		information captured in the referenced allergyIntolerance resource in the excludeFoodModifier, this element may be used to convey additional specificity related to foods that should be
@@ -3659,8 +3693,11 @@ type NutritionRequest struct {
 	ID int `form:"id" json:"id" xml:"id"`
 	// Identifiers assigned to this order by the order sender or by the order receiver.
 	Identifier []*Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *Meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Diet given orally in contrast to enteral (tube) feeding.
-	OralDiet OralDietMediaCollection `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
+	OralDiet *OralDiet `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
 	// The practitioner that holds legal responsibility for ordering the diet, nutritional supplement, or formula feedings.
 	Orderer *HL7Reference `form:"orderer,omitempty" json:"orderer,omitempty" xml:"orderer,omitempty"`
 	// The person (patient) who needs the nutrition order for an oral diet, nutritional supplement and/or enteral or formula feeding.
@@ -3682,8 +3719,10 @@ func (ut *NutritionRequest) Validate() (err error) {
 	if ut.Status == "" {
 		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "status"))
 	}
-	if err2 := ut.EnteralFormula.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if ut.EnteralFormula != nil {
+		if err2 := ut.EnteralFormula.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	for _, e := range ut.Identifier {
 		if e != nil {
@@ -3692,8 +3731,15 @@ func (ut *NutritionRequest) Validate() (err error) {
 			}
 		}
 	}
-	if err2 := ut.OralDiet.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if ut.Meta != nil {
+		if err2 := ut.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	if ut.OralDiet != nil {
+		if err2 := ut.OralDiet.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	if !(ut.Status == "proposed" || ut.Status == "draft" || ut.Status == "planned" || ut.Status == "requested" || ut.Status == "active" || ut.Status == "on-hold" || ut.Status == "completed" || ut.Status == "cancelled") {
 		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.status`, ut.Status, []interface{}{"proposed", "draft", "planned", "requested", "active", "on-hold", "completed", "cancelled"}))
@@ -3717,7 +3763,7 @@ type nutritionRequestPayload struct {
 	// An encounter that provides additional information about the healthcare context in which this request is made.
 	Encounter *hL7Reference `form:"encounter,omitempty" json:"encounter,omitempty" xml:"encounter,omitempty"`
 	// Feeding provided through the gastrointestinal tract via a tube, catheter, or stoma that delivers nutrition distal to the oral cavity.
-	EnteralFormula enteralFormulaCollection `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
+	EnteralFormula *enteralFormula `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
 	// This modifier is used to convey order-specific modifiers about the type of food that should NOT be given. These can be derived from
 	// 		patient allergies, intolerances, or preferences such as No Red Meat, No Soy or No Wheat or  Gluten-Free.  While it should not be necessary to repeat allergy or intolerance
 	// 		information captured in the referenced allergyIntolerance resource in the excludeFoodModifier, this element may be used to convey additional specificity related to foods that should be
@@ -3730,8 +3776,11 @@ type nutritionRequestPayload struct {
 	FoodPreferenceModifier []*codeableConcept `form:"foodPreferenceModifier,omitempty" json:"foodPreferenceModifier,omitempty" xml:"foodPreferenceModifier,omitempty"`
 	// Identifiers assigned to this order by the order sender or by the order receiver.
 	Identifier []*identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Diet given orally in contrast to enteral (tube) feeding.
-	OralDiet oralDietMediaCollection `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
+	OralDiet *oralDiet `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
 	// The practitioner that holds legal responsibility for ordering the diet, nutritional supplement, or formula feedings.
 	Orderer *hL7Reference `form:"orderer,omitempty" json:"orderer,omitempty" xml:"orderer,omitempty"`
 	// The person (patient) who needs the nutrition order for an oral diet, nutritional supplement and/or enteral or formula feeding.
@@ -3744,8 +3793,10 @@ type nutritionRequestPayload struct {
 
 // Validate validates the nutritionRequestPayload type instance.
 func (ut *nutritionRequestPayload) Validate() (err error) {
-	if err2 := ut.EnteralFormula.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if ut.EnteralFormula != nil {
+		if err2 := ut.EnteralFormula.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	for _, e := range ut.Identifier {
 		if e != nil {
@@ -3754,8 +3805,15 @@ func (ut *nutritionRequestPayload) Validate() (err error) {
 			}
 		}
 	}
-	if err2 := ut.OralDiet.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if ut.Meta != nil {
+		if err2 := ut.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	if ut.OralDiet != nil {
+		if err2 := ut.OralDiet.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	if ut.Status != nil {
 		if !(*ut.Status == "proposed" || *ut.Status == "draft" || *ut.Status == "planned" || *ut.Status == "requested" || *ut.Status == "active" || *ut.Status == "on-hold" || *ut.Status == "completed" || *ut.Status == "cancelled") {
@@ -3788,10 +3846,7 @@ func (ut *nutritionRequestPayload) Publicize() *NutritionRequestPayload {
 		pub.Encounter = ut.Encounter.Publicize()
 	}
 	if ut.EnteralFormula != nil {
-		pub.EnteralFormula = make(EnteralFormulaCollection, len(ut.EnteralFormula))
-		for i2, elem2 := range ut.EnteralFormula {
-			pub.EnteralFormula[i2] = elem2.Publicize()
-		}
+		pub.EnteralFormula = ut.EnteralFormula.Publicize()
 	}
 	if ut.ExcludeFoodModifier != nil {
 		pub.ExcludeFoodModifier = make([]*CodeableConcept, len(ut.ExcludeFoodModifier))
@@ -3811,11 +3866,11 @@ func (ut *nutritionRequestPayload) Publicize() *NutritionRequestPayload {
 			pub.Identifier[i2] = elem2.Publicize()
 		}
 	}
+	if ut.Meta != nil {
+		pub.Meta = ut.Meta.Publicize()
+	}
 	if ut.OralDiet != nil {
-		pub.OralDiet = make(OralDietMediaCollection, len(ut.OralDiet))
-		for i2, elem2 := range ut.OralDiet {
-			pub.OralDiet[i2] = elem2.Publicize()
-		}
+		pub.OralDiet = ut.OralDiet.Publicize()
 	}
 	if ut.Orderer != nil {
 		pub.Orderer = ut.Orderer.Publicize()
@@ -3844,7 +3899,7 @@ type NutritionRequestPayload struct {
 	// An encounter that provides additional information about the healthcare context in which this request is made.
 	Encounter *HL7Reference `form:"encounter,omitempty" json:"encounter,omitempty" xml:"encounter,omitempty"`
 	// Feeding provided through the gastrointestinal tract via a tube, catheter, or stoma that delivers nutrition distal to the oral cavity.
-	EnteralFormula EnteralFormulaCollection `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
+	EnteralFormula *EnteralFormula `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
 	// This modifier is used to convey order-specific modifiers about the type of food that should NOT be given. These can be derived from
 	// 		patient allergies, intolerances, or preferences such as No Red Meat, No Soy or No Wheat or  Gluten-Free.  While it should not be necessary to repeat allergy or intolerance
 	// 		information captured in the referenced allergyIntolerance resource in the excludeFoodModifier, this element may be used to convey additional specificity related to foods that should be
@@ -3857,8 +3912,11 @@ type NutritionRequestPayload struct {
 	FoodPreferenceModifier []*CodeableConcept `form:"foodPreferenceModifier,omitempty" json:"foodPreferenceModifier,omitempty" xml:"foodPreferenceModifier,omitempty"`
 	// Identifiers assigned to this order by the order sender or by the order receiver.
 	Identifier []*Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *Meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Diet given orally in contrast to enteral (tube) feeding.
-	OralDiet OralDietMediaCollection `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
+	OralDiet *OralDiet `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
 	// The practitioner that holds legal responsibility for ordering the diet, nutritional supplement, or formula feedings.
 	Orderer *HL7Reference `form:"orderer,omitempty" json:"orderer,omitempty" xml:"orderer,omitempty"`
 	// The person (patient) who needs the nutrition order for an oral diet, nutritional supplement and/or enteral or formula feeding.
@@ -3871,8 +3929,10 @@ type NutritionRequestPayload struct {
 
 // Validate validates the NutritionRequestPayload type instance.
 func (ut *NutritionRequestPayload) Validate() (err error) {
-	if err2 := ut.EnteralFormula.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if ut.EnteralFormula != nil {
+		if err2 := ut.EnteralFormula.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	for _, e := range ut.Identifier {
 		if e != nil {
@@ -3881,8 +3941,15 @@ func (ut *NutritionRequestPayload) Validate() (err error) {
 			}
 		}
 	}
-	if err2 := ut.OralDiet.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if ut.Meta != nil {
+		if err2 := ut.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	if ut.OralDiet != nil {
+		if err2 := ut.OralDiet.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	if ut.Status != nil {
 		if !(*ut.Status == "proposed" || *ut.Status == "draft" || *ut.Status == "planned" || *ut.Status == "requested" || *ut.Status == "active" || *ut.Status == "on-hold" || *ut.Status == "completed" || *ut.Status == "cancelled") {
@@ -3912,7 +3979,7 @@ type observation struct {
 	// Some observations have multiple component observations.  These component observations are expressed as separate code
 	// 		value pairs that share the same attributes.  Examples include systolic and diastolic component observations for blood pressure measurement and multiple
 	// 		component observations for genetics observations.
-	Component componentMediaCollection `form:"component,omitempty" json:"component,omitempty" xml:"component,omitempty"`
+	Component *component `form:"component,omitempty" json:"component,omitempty" xml:"component,omitempty"`
 	// Provides a reason why the expected value in the element Observation.value[x] is missing. See http://hl7.org/fhir/ValueSet/observation-valueabsentreason
 	DateAbsentReason *codeableConcept `form:"dateAbsentReason,omitempty" json:"dateAbsentReason,omitempty" xml:"dateAbsentReason,omitempty"`
 	// The device used to generate the observation data.
@@ -3935,14 +4002,17 @@ type observation struct {
 	Interpretation *codeableConcept `form:"interpretation,omitempty" json:"interpretation,omitempty" xml:"interpretation,omitempty"`
 	// The date and time this observation was made available to providers, typically after the results have been reviewed and verified.
 	Issued *time.Time `form:"issued,omitempty" json:"issued,omitempty" xml:"issued,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Indicates the mechanism used to perform the observation. See http://hl7.org/fhir/ValueSet/observation-methods
 	Method *codeableConcept `form:"method,omitempty" json:"method,omitempty" xml:"method,omitempty"`
 	// Who was responsible for asserting the observed value as 'true'.
 	Performer []*hL7Reference `form:"performer,omitempty" json:"performer,omitempty" xml:"performer,omitempty"`
 	// Guidance on how to interpret the value by comparison to a normal or recommended range.
-	ReferenceRange referenceRangeMediaCollection `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
+	ReferenceRange *referenceRange `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
 	// A  reference to another resource (usually another Observation but could  also be a QuestionnaireAnswer) whose relationship is defined by the relationship type code.
-	Related relatedMediaCollection `form:"related,omitempty" json:"related,omitempty" xml:"related,omitempty"`
+	Related *related `form:"related,omitempty" json:"related,omitempty" xml:"related,omitempty"`
 	// The specimen that was used when this observation was made.
 	Specimen *hL7Reference `form:"specimen,omitempty" json:"specimen,omitempty" xml:"specimen,omitempty"`
 	// The status of the result value. See http://hl7.org/fhir/ValueSet/observation-status
@@ -3960,8 +4030,10 @@ type observation struct {
 
 // Validate validates the observation type instance.
 func (ut *observation) Validate() (err error) {
-	if err2 := ut.Component.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if ut.Component != nil {
+		if err2 := ut.Component.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	for _, e := range ut.Identifier {
 		if e != nil {
@@ -3970,8 +4042,15 @@ func (ut *observation) Validate() (err error) {
 			}
 		}
 	}
-	if err2 := ut.ReferenceRange.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if ut.Meta != nil {
+		if err2 := ut.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	if ut.ReferenceRange != nil {
+		if err2 := ut.ReferenceRange.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	if ut.Status != nil {
 		if !(*ut.Status == "registered" || *ut.Status == "preliminary" || *ut.Status == "final" || *ut.Status == "amended +") {
@@ -4017,10 +4096,7 @@ func (ut *observation) Publicize() *Observation {
 		pub.Comments = ut.Comments
 	}
 	if ut.Component != nil {
-		pub.Component = make(ComponentMediaCollection, len(ut.Component))
-		for i2, elem2 := range ut.Component {
-			pub.Component[i2] = elem2.Publicize()
-		}
+		pub.Component = ut.Component.Publicize()
 	}
 	if ut.DateAbsentReason != nil {
 		pub.DateAbsentReason = ut.DateAbsentReason.Publicize()
@@ -4049,6 +4125,9 @@ func (ut *observation) Publicize() *Observation {
 	if ut.Issued != nil {
 		pub.Issued = ut.Issued
 	}
+	if ut.Meta != nil {
+		pub.Meta = ut.Meta.Publicize()
+	}
 	if ut.Method != nil {
 		pub.Method = ut.Method.Publicize()
 	}
@@ -4059,16 +4138,10 @@ func (ut *observation) Publicize() *Observation {
 		}
 	}
 	if ut.ReferenceRange != nil {
-		pub.ReferenceRange = make(ReferenceRangeMediaCollection, len(ut.ReferenceRange))
-		for i2, elem2 := range ut.ReferenceRange {
-			pub.ReferenceRange[i2] = elem2.Publicize()
-		}
+		pub.ReferenceRange = ut.ReferenceRange.Publicize()
 	}
 	if ut.Related != nil {
-		pub.Related = make(RelatedMediaCollection, len(ut.Related))
-		for i2, elem2 := range ut.Related {
-			pub.Related[i2] = elem2.Publicize()
-		}
+		pub.Related = ut.Related.Publicize()
 	}
 	if ut.Specimen != nil {
 		pub.Specimen = ut.Specimen.Publicize()
@@ -4119,7 +4192,7 @@ type Observation struct {
 	// Some observations have multiple component observations.  These component observations are expressed as separate code
 	// 		value pairs that share the same attributes.  Examples include systolic and diastolic component observations for blood pressure measurement and multiple
 	// 		component observations for genetics observations.
-	Component ComponentMediaCollection `form:"component,omitempty" json:"component,omitempty" xml:"component,omitempty"`
+	Component *Component `form:"component,omitempty" json:"component,omitempty" xml:"component,omitempty"`
 	// Provides a reason why the expected value in the element Observation.value[x] is missing. See http://hl7.org/fhir/ValueSet/observation-valueabsentreason
 	DateAbsentReason *CodeableConcept `form:"dateAbsentReason,omitempty" json:"dateAbsentReason,omitempty" xml:"dateAbsentReason,omitempty"`
 	// The device used to generate the observation data.
@@ -4142,14 +4215,17 @@ type Observation struct {
 	Interpretation *CodeableConcept `form:"interpretation,omitempty" json:"interpretation,omitempty" xml:"interpretation,omitempty"`
 	// The date and time this observation was made available to providers, typically after the results have been reviewed and verified.
 	Issued *time.Time `form:"issued,omitempty" json:"issued,omitempty" xml:"issued,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *Meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Indicates the mechanism used to perform the observation. See http://hl7.org/fhir/ValueSet/observation-methods
 	Method *CodeableConcept `form:"method,omitempty" json:"method,omitempty" xml:"method,omitempty"`
 	// Who was responsible for asserting the observed value as 'true'.
 	Performer []*HL7Reference `form:"performer,omitempty" json:"performer,omitempty" xml:"performer,omitempty"`
 	// Guidance on how to interpret the value by comparison to a normal or recommended range.
-	ReferenceRange ReferenceRangeMediaCollection `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
+	ReferenceRange *ReferenceRange `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
 	// A  reference to another resource (usually another Observation but could  also be a QuestionnaireAnswer) whose relationship is defined by the relationship type code.
-	Related RelatedMediaCollection `form:"related,omitempty" json:"related,omitempty" xml:"related,omitempty"`
+	Related *Related `form:"related,omitempty" json:"related,omitempty" xml:"related,omitempty"`
 	// The specimen that was used when this observation was made.
 	Specimen *HL7Reference `form:"specimen,omitempty" json:"specimen,omitempty" xml:"specimen,omitempty"`
 	// The status of the result value. See http://hl7.org/fhir/ValueSet/observation-status
@@ -4167,8 +4243,10 @@ type Observation struct {
 
 // Validate validates the Observation type instance.
 func (ut *Observation) Validate() (err error) {
-	if err2 := ut.Component.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if ut.Component != nil {
+		if err2 := ut.Component.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	for _, e := range ut.Identifier {
 		if e != nil {
@@ -4177,8 +4255,15 @@ func (ut *Observation) Validate() (err error) {
 			}
 		}
 	}
-	if err2 := ut.ReferenceRange.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if ut.Meta != nil {
+		if err2 := ut.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	if ut.ReferenceRange != nil {
+		if err2 := ut.ReferenceRange.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	if ut.Status != nil {
 		if !(*ut.Status == "registered" || *ut.Status == "preliminary" || *ut.Status == "final" || *ut.Status == "amended +") {
@@ -4221,7 +4306,7 @@ type observationPayload struct {
 	// Some observations have multiple component observations.  These component observations are expressed as separate code
 	// 		value pairs that share the same attributes.  Examples include systolic and diastolic component observations for blood pressure measurement and multiple
 	// 		component observations for genetics observations.
-	Component componentMediaCollection `form:"component,omitempty" json:"component,omitempty" xml:"component,omitempty"`
+	Component *component `form:"component,omitempty" json:"component,omitempty" xml:"component,omitempty"`
 	// Provides a reason why the expected value in the element Observation.value[x] is missing. See http://hl7.org/fhir/ValueSet/observation-valueabsentreason
 	DateAbsentReason *codeableConcept `form:"dateAbsentReason,omitempty" json:"dateAbsentReason,omitempty" xml:"dateAbsentReason,omitempty"`
 	// The device used to generate the observation data.
@@ -4244,14 +4329,17 @@ type observationPayload struct {
 	Interpretation *codeableConcept `form:"interpretation,omitempty" json:"interpretation,omitempty" xml:"interpretation,omitempty"`
 	// The date and time this observation was made available to providers, typically after the results have been reviewed and verified.
 	Issued *time.Time `form:"issued,omitempty" json:"issued,omitempty" xml:"issued,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Indicates the mechanism used to perform the observation. See http://hl7.org/fhir/ValueSet/observation-methods
 	Method *codeableConcept `form:"method,omitempty" json:"method,omitempty" xml:"method,omitempty"`
 	// Who was responsible for asserting the observed value as 'true'.
 	Performer []*hL7Reference `form:"performer,omitempty" json:"performer,omitempty" xml:"performer,omitempty"`
 	// Guidance on how to interpret the value by comparison to a normal or recommended range.
-	ReferenceRange referenceRangeMediaCollection `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
+	ReferenceRange *referenceRange `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
 	// A  reference to another resource (usually another Observation but could  also be a QuestionnaireAnswer) whose relationship is defined by the relationship type code.
-	Related relatedMediaCollection `form:"related,omitempty" json:"related,omitempty" xml:"related,omitempty"`
+	Related *related `form:"related,omitempty" json:"related,omitempty" xml:"related,omitempty"`
 	// The specimen that was used when this observation was made.
 	Specimen *hL7Reference `form:"specimen,omitempty" json:"specimen,omitempty" xml:"specimen,omitempty"`
 	// The status of the result value. See http://hl7.org/fhir/ValueSet/observation-status
@@ -4269,8 +4357,10 @@ type observationPayload struct {
 
 // Validate validates the observationPayload type instance.
 func (ut *observationPayload) Validate() (err error) {
-	if err2 := ut.Component.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if ut.Component != nil {
+		if err2 := ut.Component.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	for _, e := range ut.Identifier {
 		if e != nil {
@@ -4279,8 +4369,15 @@ func (ut *observationPayload) Validate() (err error) {
 			}
 		}
 	}
-	if err2 := ut.ReferenceRange.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if ut.Meta != nil {
+		if err2 := ut.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	if ut.ReferenceRange != nil {
+		if err2 := ut.ReferenceRange.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	if ut.Status != nil {
 		if !(*ut.Status == "registered" || *ut.Status == "preliminary" || *ut.Status == "final" || *ut.Status == "amended +") {
@@ -4326,10 +4423,7 @@ func (ut *observationPayload) Publicize() *ObservationPayload {
 		pub.Comments = ut.Comments
 	}
 	if ut.Component != nil {
-		pub.Component = make(ComponentMediaCollection, len(ut.Component))
-		for i2, elem2 := range ut.Component {
-			pub.Component[i2] = elem2.Publicize()
-		}
+		pub.Component = ut.Component.Publicize()
 	}
 	if ut.DateAbsentReason != nil {
 		pub.DateAbsentReason = ut.DateAbsentReason.Publicize()
@@ -4358,6 +4452,9 @@ func (ut *observationPayload) Publicize() *ObservationPayload {
 	if ut.Issued != nil {
 		pub.Issued = ut.Issued
 	}
+	if ut.Meta != nil {
+		pub.Meta = ut.Meta.Publicize()
+	}
 	if ut.Method != nil {
 		pub.Method = ut.Method.Publicize()
 	}
@@ -4368,16 +4465,10 @@ func (ut *observationPayload) Publicize() *ObservationPayload {
 		}
 	}
 	if ut.ReferenceRange != nil {
-		pub.ReferenceRange = make(ReferenceRangeMediaCollection, len(ut.ReferenceRange))
-		for i2, elem2 := range ut.ReferenceRange {
-			pub.ReferenceRange[i2] = elem2.Publicize()
-		}
+		pub.ReferenceRange = ut.ReferenceRange.Publicize()
 	}
 	if ut.Related != nil {
-		pub.Related = make(RelatedMediaCollection, len(ut.Related))
-		for i2, elem2 := range ut.Related {
-			pub.Related[i2] = elem2.Publicize()
-		}
+		pub.Related = ut.Related.Publicize()
 	}
 	if ut.Specimen != nil {
 		pub.Specimen = ut.Specimen.Publicize()
@@ -4428,7 +4519,7 @@ type ObservationPayload struct {
 	// Some observations have multiple component observations.  These component observations are expressed as separate code
 	// 		value pairs that share the same attributes.  Examples include systolic and diastolic component observations for blood pressure measurement and multiple
 	// 		component observations for genetics observations.
-	Component ComponentMediaCollection `form:"component,omitempty" json:"component,omitempty" xml:"component,omitempty"`
+	Component *Component `form:"component,omitempty" json:"component,omitempty" xml:"component,omitempty"`
 	// Provides a reason why the expected value in the element Observation.value[x] is missing. See http://hl7.org/fhir/ValueSet/observation-valueabsentreason
 	DateAbsentReason *CodeableConcept `form:"dateAbsentReason,omitempty" json:"dateAbsentReason,omitempty" xml:"dateAbsentReason,omitempty"`
 	// The device used to generate the observation data.
@@ -4451,14 +4542,17 @@ type ObservationPayload struct {
 	Interpretation *CodeableConcept `form:"interpretation,omitempty" json:"interpretation,omitempty" xml:"interpretation,omitempty"`
 	// The date and time this observation was made available to providers, typically after the results have been reviewed and verified.
 	Issued *time.Time `form:"issued,omitempty" json:"issued,omitempty" xml:"issued,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *Meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Indicates the mechanism used to perform the observation. See http://hl7.org/fhir/ValueSet/observation-methods
 	Method *CodeableConcept `form:"method,omitempty" json:"method,omitempty" xml:"method,omitempty"`
 	// Who was responsible for asserting the observed value as 'true'.
 	Performer []*HL7Reference `form:"performer,omitempty" json:"performer,omitempty" xml:"performer,omitempty"`
 	// Guidance on how to interpret the value by comparison to a normal or recommended range.
-	ReferenceRange ReferenceRangeMediaCollection `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
+	ReferenceRange *ReferenceRange `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
 	// A  reference to another resource (usually another Observation but could  also be a QuestionnaireAnswer) whose relationship is defined by the relationship type code.
-	Related RelatedMediaCollection `form:"related,omitempty" json:"related,omitempty" xml:"related,omitempty"`
+	Related *Related `form:"related,omitempty" json:"related,omitempty" xml:"related,omitempty"`
 	// The specimen that was used when this observation was made.
 	Specimen *HL7Reference `form:"specimen,omitempty" json:"specimen,omitempty" xml:"specimen,omitempty"`
 	// The status of the result value. See http://hl7.org/fhir/ValueSet/observation-status
@@ -4476,8 +4570,10 @@ type ObservationPayload struct {
 
 // Validate validates the ObservationPayload type instance.
 func (ut *ObservationPayload) Validate() (err error) {
-	if err2 := ut.Component.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if ut.Component != nil {
+		if err2 := ut.Component.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	for _, e := range ut.Identifier {
 		if e != nil {
@@ -4486,8 +4582,15 @@ func (ut *ObservationPayload) Validate() (err error) {
 			}
 		}
 	}
-	if err2 := ut.ReferenceRange.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if ut.Meta != nil {
+		if err2 := ut.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	if ut.ReferenceRange != nil {
+		if err2 := ut.ReferenceRange.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	if ut.Status != nil {
 		if !(*ut.Status == "registered" || *ut.Status == "preliminary" || *ut.Status == "final" || *ut.Status == "amended +") {
@@ -4727,6 +4830,9 @@ type patient struct {
 	ManagingOrganization *hL7Reference `form:"managingOrganization,omitempty" json:"managingOrganization,omitempty" xml:"managingOrganization,omitempty"`
 	// This field contains a patient's most recent marital (civil) status. See http://hl7.org/fhir/ValueSet/marital-status
 	MaritalStatus *codeableConcept `form:"maritalStatus,omitempty" json:"maritalStatus,omitempty" xml:"maritalStatus,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Indicates whether the patient is part of a multiple or indicates the actual birth order..
 	MultipleBirthBoolean *bool `form:"multipleBirthBoolean,omitempty" json:"multipleBirthBoolean,omitempty" xml:"multipleBirthBoolean,omitempty"`
 	// Indicates whether the patient is part of a multiple or indicates the actual birth order..
@@ -4795,6 +4901,11 @@ func (ut *patient) Validate() (err error) {
 			if err2 := e.Validate(); err2 != nil {
 				err = goa.MergeErrors(err, err2)
 			}
+		}
+	}
+	if ut.Meta != nil {
+		if err2 := ut.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
 		}
 	}
 	for _, e := range ut.Name {
@@ -4893,6 +5004,9 @@ func (ut *patient) Publicize() *Patient {
 	if ut.MaritalStatus != nil {
 		pub.MaritalStatus = ut.MaritalStatus.Publicize()
 	}
+	if ut.Meta != nil {
+		pub.Meta = ut.Meta.Publicize()
+	}
 	if ut.MultipleBirthBoolean != nil {
 		pub.MultipleBirthBoolean = ut.MultipleBirthBoolean
 	}
@@ -4958,6 +5072,9 @@ type Patient struct {
 	ManagingOrganization *HL7Reference `form:"managingOrganization,omitempty" json:"managingOrganization,omitempty" xml:"managingOrganization,omitempty"`
 	// This field contains a patient's most recent marital (civil) status. See http://hl7.org/fhir/ValueSet/marital-status
 	MaritalStatus *CodeableConcept `form:"maritalStatus" json:"maritalStatus" xml:"maritalStatus"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *Meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Indicates whether the patient is part of a multiple or indicates the actual birth order..
 	MultipleBirthBoolean *bool `form:"multipleBirthBoolean,omitempty" json:"multipleBirthBoolean,omitempty" xml:"multipleBirthBoolean,omitempty"`
 	// Indicates whether the patient is part of a multiple or indicates the actual birth order..
@@ -5020,6 +5137,11 @@ func (ut *Patient) Validate() (err error) {
 			}
 		}
 	}
+	if ut.Meta != nil {
+		if err2 := ut.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
 	for _, e := range ut.Name {
 		if e != nil {
 			if err2 := e.Validate(); err2 != nil {
@@ -5080,6 +5202,9 @@ type patientPayload struct {
 	Link []*hL7Link `form:"link,omitempty" json:"link,omitempty" xml:"link,omitempty"`
 	// Organization that is the custodian of the patient record.
 	ManagingOrganization *hL7Reference `form:"managingOrganization,omitempty" json:"managingOrganization,omitempty" xml:"managingOrganization,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Indicates whether the patient is part of a multiple or indicates the actual birth order..
 	MultipleBirthBoolean *bool `form:"multipleBirthBoolean,omitempty" json:"multipleBirthBoolean,omitempty" xml:"multipleBirthBoolean,omitempty"`
 	// Indicates whether the patient is part of a multiple or indicates the actual birth order..
@@ -5131,6 +5256,11 @@ func (ut *patientPayload) Validate() (err error) {
 			if err2 := e.Validate(); err2 != nil {
 				err = goa.MergeErrors(err, err2)
 			}
+		}
+	}
+	if ut.Meta != nil {
+		if err2 := ut.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
 		}
 	}
 	for _, e := range ut.Name {
@@ -5219,6 +5349,9 @@ func (ut *patientPayload) Publicize() *PatientPayload {
 	if ut.ManagingOrganization != nil {
 		pub.ManagingOrganization = ut.ManagingOrganization.Publicize()
 	}
+	if ut.Meta != nil {
+		pub.Meta = ut.Meta.Publicize()
+	}
 	if ut.MultipleBirthBoolean != nil {
 		pub.MultipleBirthBoolean = ut.MultipleBirthBoolean
 	}
@@ -5276,6 +5409,9 @@ type PatientPayload struct {
 	Link []*HL7Link `form:"link,omitempty" json:"link,omitempty" xml:"link,omitempty"`
 	// Organization that is the custodian of the patient record.
 	ManagingOrganization *HL7Reference `form:"managingOrganization,omitempty" json:"managingOrganization,omitempty" xml:"managingOrganization,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *Meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Indicates whether the patient is part of a multiple or indicates the actual birth order..
 	MultipleBirthBoolean *bool `form:"multipleBirthBoolean,omitempty" json:"multipleBirthBoolean,omitempty" xml:"multipleBirthBoolean,omitempty"`
 	// Indicates whether the patient is part of a multiple or indicates the actual birth order..
@@ -5325,6 +5461,11 @@ func (ut *PatientPayload) Validate() (err error) {
 			if err2 := e.Validate(); err2 != nil {
 				err = goa.MergeErrors(err, err2)
 			}
+		}
+	}
+	if ut.Meta != nil {
+		if err2 := ut.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
 		}
 	}
 	for _, e := range ut.Name {
@@ -6985,64 +7126,302 @@ func (ut *TimingPayload) Validate() (err error) {
 	return
 }
 
+// Payload sent by client to obtain refresh and access token or to refresh an access token.
+// see https://tools.ietf.org/html/rfc6749#section-4.1.3 and https://tools.ietf.org/html/rfc6749#section-6
+type tokenPayload struct {
+	// The authorization code received from the authorization server, used for initial refresh and access token request
+	Code *string `form:"code,omitempty" json:"code,omitempty" xml:"code,omitempty"`
+	// Value MUST be set to "authorization_code" when obtaining initial refresh and access token.
+	// Value MUST be set to "refresh_token" when refreshing an access token.
+	GrantType *string `form:"grant_type,omitempty" json:"grant_type,omitempty" xml:"grant_type,omitempty"`
+	// The redirect_uri parameter specified when making the authorize request to obtain the authorization code, used for initial refresh and access token request
+	RedirectURI *string `form:"redirect_uri,omitempty" json:"redirect_uri,omitempty" xml:"redirect_uri,omitempty"`
+	// The refresh token issued to the client, used for refreshing an access token
+	RefreshToken *string `form:"refresh_token,omitempty" json:"refresh_token,omitempty" xml:"refresh_token,omitempty"`
+	// The scope of the access request, used for refreshing an access token
+	Scope *string `form:"scope,omitempty" json:"scope,omitempty" xml:"scope,omitempty"`
+}
+
+// Validate validates the tokenPayload type instance.
+func (ut *tokenPayload) Validate() (err error) {
+	if ut.GrantType == nil {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "grant_type"))
+	}
+	if ut.GrantType != nil {
+		if !(*ut.GrantType == "authorization_code" || *ut.GrantType == "refresh_token") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.grant_type`, *ut.GrantType, []interface{}{"authorization_code", "refresh_token"}))
+		}
+	}
+	return
+}
+
+// Publicize creates TokenPayload from tokenPayload
+func (ut *tokenPayload) Publicize() *TokenPayload {
+	var pub TokenPayload
+	if ut.Code != nil {
+		pub.Code = ut.Code
+	}
+	if ut.GrantType != nil {
+		pub.GrantType = *ut.GrantType
+	}
+	if ut.RedirectURI != nil {
+		pub.RedirectURI = ut.RedirectURI
+	}
+	if ut.RefreshToken != nil {
+		pub.RefreshToken = ut.RefreshToken
+	}
+	if ut.Scope != nil {
+		pub.Scope = ut.Scope
+	}
+	return &pub
+}
+
+// Payload sent by client to obtain refresh and access token or to refresh an access token.
+// see https://tools.ietf.org/html/rfc6749#section-4.1.3 and https://tools.ietf.org/html/rfc6749#section-6
+type TokenPayload struct {
+	// The authorization code received from the authorization server, used for initial refresh and access token request
+	Code *string `form:"code,omitempty" json:"code,omitempty" xml:"code,omitempty"`
+	// Value MUST be set to "authorization_code" when obtaining initial refresh and access token.
+	// Value MUST be set to "refresh_token" when refreshing an access token.
+	GrantType string `form:"grant_type" json:"grant_type" xml:"grant_type"`
+	// The redirect_uri parameter specified when making the authorize request to obtain the authorization code, used for initial refresh and access token request
+	RedirectURI *string `form:"redirect_uri,omitempty" json:"redirect_uri,omitempty" xml:"redirect_uri,omitempty"`
+	// The refresh token issued to the client, used for refreshing an access token
+	RefreshToken *string `form:"refresh_token,omitempty" json:"refresh_token,omitempty" xml:"refresh_token,omitempty"`
+	// The scope of the access request, used for refreshing an access token
+	Scope *string `form:"scope,omitempty" json:"scope,omitempty" xml:"scope,omitempty"`
+}
+
+// Validate validates the TokenPayload type instance.
+func (ut *TokenPayload) Validate() (err error) {
+	if ut.GrantType == "" {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "grant_type"))
+	}
+	if !(ut.GrantType == "authorization_code" || ut.GrantType == "refresh_token") {
+		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.grant_type`, ut.GrantType, []interface{}{"authorization_code", "refresh_token"}))
+	}
+	return
+}
+
+// A user of the API
+type user struct {
+	// Name of city, town etc.
+	AddressCity *string `form:"address_city,omitempty" json:"address_city,omitempty" xml:"address_city,omitempty"`
+	// Street name, number, direction & P.O. Box etc.
+	AddressLine *string `form:"address_line,omitempty" json:"address_line,omitempty" xml:"address_line,omitempty"`
+	// Postal code for area
+	AddressPostalCode *int `form:"address_postal_code,omitempty" json:"address_postal_code,omitempty" xml:"address_postal_code,omitempty"`
+	// Sub-unit of country (abbreviations ok)
+	AddressState *string `form:"address_state,omitempty" json:"address_state,omitempty" xml:"address_state,omitempty"`
+	// Date of creation
+	CreatedAt *time.Time `form:"created_at,omitempty" json:"created_at,omitempty" xml:"created_at,omitempty"`
+	// Email of user owner
+	CreatedBy *string `form:"created_by,omitempty" json:"created_by,omitempty" xml:"created_by,omitempty"`
+	// Email of user
+	Email *string `form:"email,omitempty" json:"email,omitempty" xml:"email,omitempty"`
+	// First name of user
+	FirstName *string `form:"first_name,omitempty" json:"first_name,omitempty" xml:"first_name,omitempty"`
+	// API href of user
+	Href *string `form:"href,omitempty" json:"href,omitempty" xml:"href,omitempty"`
+	// ID of user
+	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+	// Last name of user
+	LastName *string `form:"last_name,omitempty" json:"last_name,omitempty" xml:"last_name,omitempty"`
+	// Password of user
+	Password *string `form:"password,omitempty" json:"password,omitempty" xml:"password,omitempty"`
+	// Username of user
+	Username *string `form:"username,omitempty" json:"username,omitempty" xml:"username,omitempty"`
+}
+
+// Validate validates the user type instance.
+func (ut *user) Validate() (err error) {
+	if ut.ID == nil {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "id"))
+	}
+	if ut.Href == nil {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "href"))
+	}
+	if ut.Username == nil {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "username"))
+	}
+	if ut.Email == nil {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "email"))
+	}
+	if ut.Password == nil {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "password"))
+	}
+	if ut.FirstName == nil {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "first_name"))
+	}
+	if ut.LastName == nil {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "last_name"))
+	}
+	if ut.CreatedAt == nil {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "created_at"))
+	}
+	if ut.CreatedBy == nil {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "created_by"))
+	}
+	if ut.CreatedBy != nil {
+		if err2 := goa.ValidateFormat(goa.FormatEmail, *ut.CreatedBy); err2 != nil {
+			err = goa.MergeErrors(err, goa.InvalidFormatError(`response.created_by`, *ut.CreatedBy, goa.FormatEmail, err2))
+		}
+	}
+	if ut.Email != nil {
+		if err2 := goa.ValidateFormat(goa.FormatEmail, *ut.Email); err2 != nil {
+			err = goa.MergeErrors(err, goa.InvalidFormatError(`response.email`, *ut.Email, goa.FormatEmail, err2))
+		}
+	}
+	return
+}
+
+// Publicize creates User from user
+func (ut *user) Publicize() *User {
+	var pub User
+	if ut.AddressCity != nil {
+		pub.AddressCity = ut.AddressCity
+	}
+	if ut.AddressLine != nil {
+		pub.AddressLine = ut.AddressLine
+	}
+	if ut.AddressPostalCode != nil {
+		pub.AddressPostalCode = ut.AddressPostalCode
+	}
+	if ut.AddressState != nil {
+		pub.AddressState = ut.AddressState
+	}
+	if ut.CreatedAt != nil {
+		pub.CreatedAt = *ut.CreatedAt
+	}
+	if ut.CreatedBy != nil {
+		pub.CreatedBy = *ut.CreatedBy
+	}
+	if ut.Email != nil {
+		pub.Email = *ut.Email
+	}
+	if ut.FirstName != nil {
+		pub.FirstName = *ut.FirstName
+	}
+	if ut.Href != nil {
+		pub.Href = *ut.Href
+	}
+	if ut.ID != nil {
+		pub.ID = *ut.ID
+	}
+	if ut.LastName != nil {
+		pub.LastName = *ut.LastName
+	}
+	if ut.Password != nil {
+		pub.Password = *ut.Password
+	}
+	if ut.Username != nil {
+		pub.Username = *ut.Username
+	}
+	return &pub
+}
+
+// A user of the API
+type User struct {
+	// Name of city, town etc.
+	AddressCity *string `form:"address_city,omitempty" json:"address_city,omitempty" xml:"address_city,omitempty"`
+	// Street name, number, direction & P.O. Box etc.
+	AddressLine *string `form:"address_line,omitempty" json:"address_line,omitempty" xml:"address_line,omitempty"`
+	// Postal code for area
+	AddressPostalCode *int `form:"address_postal_code,omitempty" json:"address_postal_code,omitempty" xml:"address_postal_code,omitempty"`
+	// Sub-unit of country (abbreviations ok)
+	AddressState *string `form:"address_state,omitempty" json:"address_state,omitempty" xml:"address_state,omitempty"`
+	// Date of creation
+	CreatedAt time.Time `form:"created_at" json:"created_at" xml:"created_at"`
+	// Email of user owner
+	CreatedBy string `form:"created_by" json:"created_by" xml:"created_by"`
+	// Email of user
+	Email string `form:"email" json:"email" xml:"email"`
+	// First name of user
+	FirstName string `form:"first_name" json:"first_name" xml:"first_name"`
+	// API href of user
+	Href string `form:"href" json:"href" xml:"href"`
+	// ID of user
+	ID int `form:"id" json:"id" xml:"id"`
+	// Last name of user
+	LastName string `form:"last_name" json:"last_name" xml:"last_name"`
+	// Password of user
+	Password string `form:"password" json:"password" xml:"password"`
+	// Username of user
+	Username string `form:"username" json:"username" xml:"username"`
+}
+
+// Validate validates the User type instance.
+func (ut *User) Validate() (err error) {
+
+	if ut.Href == "" {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "href"))
+	}
+	if ut.Username == "" {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "username"))
+	}
+	if ut.Email == "" {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "email"))
+	}
+	if ut.Password == "" {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "password"))
+	}
+	if ut.FirstName == "" {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "first_name"))
+	}
+	if ut.LastName == "" {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "last_name"))
+	}
+
+	if ut.CreatedBy == "" {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "created_by"))
+	}
+	if err2 := goa.ValidateFormat(goa.FormatEmail, ut.CreatedBy); err2 != nil {
+		err = goa.MergeErrors(err, goa.InvalidFormatError(`response.created_by`, ut.CreatedBy, goa.FormatEmail, err2))
+	}
+	if err2 := goa.ValidateFormat(goa.FormatEmail, ut.Email); err2 != nil {
+		err = goa.MergeErrors(err, goa.InvalidFormatError(`response.email`, ut.Email, goa.FormatEmail, err2))
+	}
+	return
+}
+
 // userPayload user type.
 type userPayload struct {
-	AddressCity       *string `form:"address_city,omitempty" json:"address_city,omitempty" xml:"address_city,omitempty"`
-	AddressLine       *string `form:"address_line,omitempty" json:"address_line,omitempty" xml:"address_line,omitempty"`
-	AddressPostalCode *string `form:"address_postal_code,omitempty" json:"address_postal_code,omitempty" xml:"address_postal_code,omitempty"`
-	AddressState      *string `form:"address_state,omitempty" json:"address_state,omitempty" xml:"address_state,omitempty"`
-	Email             *string `form:"email,omitempty" json:"email,omitempty" xml:"email,omitempty"`
-	FirstName         *string `form:"first_name,omitempty" json:"first_name,omitempty" xml:"first_name,omitempty"`
-	LastName          *string `form:"last_name,omitempty" json:"last_name,omitempty" xml:"last_name,omitempty"`
-	Password          *string `form:"password,omitempty" json:"password,omitempty" xml:"password,omitempty"`
-	Username          *string `form:"username,omitempty" json:"username,omitempty" xml:"username,omitempty"`
+	// Name of city, town etc.
+	AddressCity *string `form:"address_city,omitempty" json:"address_city,omitempty" xml:"address_city,omitempty"`
+	// Street name, number, direction & P.O. Box etc.
+	AddressLine *string `form:"address_line,omitempty" json:"address_line,omitempty" xml:"address_line,omitempty"`
+	// Postal code for area
+	AddressPostalCode *int `form:"address_postal_code,omitempty" json:"address_postal_code,omitempty" xml:"address_postal_code,omitempty"`
+	// Sub-unit of country (abbreviations ok)
+	AddressState *string `form:"address_state,omitempty" json:"address_state,omitempty" xml:"address_state,omitempty"`
+	// Date of creation
+	CreatedAt *time.Time `form:"created_at,omitempty" json:"created_at,omitempty" xml:"created_at,omitempty"`
+	// Email of user owner
+	CreatedBy *string `form:"created_by,omitempty" json:"created_by,omitempty" xml:"created_by,omitempty"`
+	// Email of user
+	Email *string `form:"email,omitempty" json:"email,omitempty" xml:"email,omitempty"`
+	// First name of user
+	FirstName *string `form:"first_name,omitempty" json:"first_name,omitempty" xml:"first_name,omitempty"`
+	// API href of user
+	Href *string `form:"href,omitempty" json:"href,omitempty" xml:"href,omitempty"`
+	// ID of user
+	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+	// Last name of user
+	LastName *string `form:"last_name,omitempty" json:"last_name,omitempty" xml:"last_name,omitempty"`
+	// Username of user
+	Username *string `form:"username,omitempty" json:"username,omitempty" xml:"username,omitempty"`
 }
 
 // Validate validates the userPayload type instance.
 func (ut *userPayload) Validate() (err error) {
-	if ut.AddressCity != nil {
-		if utf8.RuneCountInString(*ut.AddressCity) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.address_city`, *ut.AddressCity, utf8.RuneCountInString(*ut.AddressCity), 2, true))
-		}
-	}
-	if ut.AddressLine != nil {
-		if utf8.RuneCountInString(*ut.AddressLine) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.address_line`, *ut.AddressLine, utf8.RuneCountInString(*ut.AddressLine), 2, true))
-		}
-	}
-	if ut.AddressPostalCode != nil {
-		if utf8.RuneCountInString(*ut.AddressPostalCode) < 5 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.address_postal_code`, *ut.AddressPostalCode, utf8.RuneCountInString(*ut.AddressPostalCode), 5, true))
-		}
-	}
-	if ut.AddressState != nil {
-		if utf8.RuneCountInString(*ut.AddressState) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.address_state`, *ut.AddressState, utf8.RuneCountInString(*ut.AddressState), 2, true))
+	if ut.CreatedBy != nil {
+		if err2 := goa.ValidateFormat(goa.FormatEmail, *ut.CreatedBy); err2 != nil {
+			err = goa.MergeErrors(err, goa.InvalidFormatError(`response.created_by`, *ut.CreatedBy, goa.FormatEmail, err2))
 		}
 	}
 	if ut.Email != nil {
-		if utf8.RuneCountInString(*ut.Email) < 4 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.email`, *ut.Email, utf8.RuneCountInString(*ut.Email), 4, true))
-		}
-	}
-	if ut.FirstName != nil {
-		if utf8.RuneCountInString(*ut.FirstName) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.first_name`, *ut.FirstName, utf8.RuneCountInString(*ut.FirstName), 2, true))
-		}
-	}
-	if ut.LastName != nil {
-		if utf8.RuneCountInString(*ut.LastName) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.last_name`, *ut.LastName, utf8.RuneCountInString(*ut.LastName), 2, true))
-		}
-	}
-	if ut.Password != nil {
-		if utf8.RuneCountInString(*ut.Password) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.password`, *ut.Password, utf8.RuneCountInString(*ut.Password), 2, true))
-		}
-	}
-	if ut.Username != nil {
-		if utf8.RuneCountInString(*ut.Username) < 3 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.username`, *ut.Username, utf8.RuneCountInString(*ut.Username), 3, true))
+		if err2 := goa.ValidateFormat(goa.FormatEmail, *ut.Email); err2 != nil {
+			err = goa.MergeErrors(err, goa.InvalidFormatError(`response.email`, *ut.Email, goa.FormatEmail, err2))
 		}
 	}
 	return
@@ -7063,17 +7442,26 @@ func (ut *userPayload) Publicize() *UserPayload {
 	if ut.AddressState != nil {
 		pub.AddressState = ut.AddressState
 	}
+	if ut.CreatedAt != nil {
+		pub.CreatedAt = ut.CreatedAt
+	}
+	if ut.CreatedBy != nil {
+		pub.CreatedBy = ut.CreatedBy
+	}
 	if ut.Email != nil {
 		pub.Email = ut.Email
 	}
 	if ut.FirstName != nil {
 		pub.FirstName = ut.FirstName
 	}
+	if ut.Href != nil {
+		pub.Href = ut.Href
+	}
+	if ut.ID != nil {
+		pub.ID = ut.ID
+	}
 	if ut.LastName != nil {
 		pub.LastName = ut.LastName
-	}
-	if ut.Password != nil {
-		pub.Password = ut.Password
 	}
 	if ut.Username != nil {
 		pub.Username = ut.Username
@@ -7083,62 +7471,42 @@ func (ut *userPayload) Publicize() *UserPayload {
 
 // UserPayload user type.
 type UserPayload struct {
-	AddressCity       *string `form:"address_city,omitempty" json:"address_city,omitempty" xml:"address_city,omitempty"`
-	AddressLine       *string `form:"address_line,omitempty" json:"address_line,omitempty" xml:"address_line,omitempty"`
-	AddressPostalCode *string `form:"address_postal_code,omitempty" json:"address_postal_code,omitempty" xml:"address_postal_code,omitempty"`
-	AddressState      *string `form:"address_state,omitempty" json:"address_state,omitempty" xml:"address_state,omitempty"`
-	Email             *string `form:"email,omitempty" json:"email,omitempty" xml:"email,omitempty"`
-	FirstName         *string `form:"first_name,omitempty" json:"first_name,omitempty" xml:"first_name,omitempty"`
-	LastName          *string `form:"last_name,omitempty" json:"last_name,omitempty" xml:"last_name,omitempty"`
-	Password          *string `form:"password,omitempty" json:"password,omitempty" xml:"password,omitempty"`
-	Username          *string `form:"username,omitempty" json:"username,omitempty" xml:"username,omitempty"`
+	// Name of city, town etc.
+	AddressCity *string `form:"address_city,omitempty" json:"address_city,omitempty" xml:"address_city,omitempty"`
+	// Street name, number, direction & P.O. Box etc.
+	AddressLine *string `form:"address_line,omitempty" json:"address_line,omitempty" xml:"address_line,omitempty"`
+	// Postal code for area
+	AddressPostalCode *int `form:"address_postal_code,omitempty" json:"address_postal_code,omitempty" xml:"address_postal_code,omitempty"`
+	// Sub-unit of country (abbreviations ok)
+	AddressState *string `form:"address_state,omitempty" json:"address_state,omitempty" xml:"address_state,omitempty"`
+	// Date of creation
+	CreatedAt *time.Time `form:"created_at,omitempty" json:"created_at,omitempty" xml:"created_at,omitempty"`
+	// Email of user owner
+	CreatedBy *string `form:"created_by,omitempty" json:"created_by,omitempty" xml:"created_by,omitempty"`
+	// Email of user
+	Email *string `form:"email,omitempty" json:"email,omitempty" xml:"email,omitempty"`
+	// First name of user
+	FirstName *string `form:"first_name,omitempty" json:"first_name,omitempty" xml:"first_name,omitempty"`
+	// API href of user
+	Href *string `form:"href,omitempty" json:"href,omitempty" xml:"href,omitempty"`
+	// ID of user
+	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+	// Last name of user
+	LastName *string `form:"last_name,omitempty" json:"last_name,omitempty" xml:"last_name,omitempty"`
+	// Username of user
+	Username *string `form:"username,omitempty" json:"username,omitempty" xml:"username,omitempty"`
 }
 
 // Validate validates the UserPayload type instance.
 func (ut *UserPayload) Validate() (err error) {
-	if ut.AddressCity != nil {
-		if utf8.RuneCountInString(*ut.AddressCity) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.address_city`, *ut.AddressCity, utf8.RuneCountInString(*ut.AddressCity), 2, true))
-		}
-	}
-	if ut.AddressLine != nil {
-		if utf8.RuneCountInString(*ut.AddressLine) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.address_line`, *ut.AddressLine, utf8.RuneCountInString(*ut.AddressLine), 2, true))
-		}
-	}
-	if ut.AddressPostalCode != nil {
-		if utf8.RuneCountInString(*ut.AddressPostalCode) < 5 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.address_postal_code`, *ut.AddressPostalCode, utf8.RuneCountInString(*ut.AddressPostalCode), 5, true))
-		}
-	}
-	if ut.AddressState != nil {
-		if utf8.RuneCountInString(*ut.AddressState) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.address_state`, *ut.AddressState, utf8.RuneCountInString(*ut.AddressState), 2, true))
+	if ut.CreatedBy != nil {
+		if err2 := goa.ValidateFormat(goa.FormatEmail, *ut.CreatedBy); err2 != nil {
+			err = goa.MergeErrors(err, goa.InvalidFormatError(`response.created_by`, *ut.CreatedBy, goa.FormatEmail, err2))
 		}
 	}
 	if ut.Email != nil {
-		if utf8.RuneCountInString(*ut.Email) < 4 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.email`, *ut.Email, utf8.RuneCountInString(*ut.Email), 4, true))
-		}
-	}
-	if ut.FirstName != nil {
-		if utf8.RuneCountInString(*ut.FirstName) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.first_name`, *ut.FirstName, utf8.RuneCountInString(*ut.FirstName), 2, true))
-		}
-	}
-	if ut.LastName != nil {
-		if utf8.RuneCountInString(*ut.LastName) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.last_name`, *ut.LastName, utf8.RuneCountInString(*ut.LastName), 2, true))
-		}
-	}
-	if ut.Password != nil {
-		if utf8.RuneCountInString(*ut.Password) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.password`, *ut.Password, utf8.RuneCountInString(*ut.Password), 2, true))
-		}
-	}
-	if ut.Username != nil {
-		if utf8.RuneCountInString(*ut.Username) < 3 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.username`, *ut.Username, utf8.RuneCountInString(*ut.Username), 3, true))
+		if err2 := goa.ValidateFormat(goa.FormatEmail, *ut.Email); err2 != nil {
+			err = goa.MergeErrors(err, goa.InvalidFormatError(`response.email`, *ut.Email, goa.FormatEmail, err2))
 		}
 	}
 	return

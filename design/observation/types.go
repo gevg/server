@@ -11,7 +11,11 @@ var Observation = Type("Observation", func() {
 	Description("Demographics and other administrative information about an individual or animal receiving care or other health-related services.")
 	//Comments:
 	//Reason for inclusion or contrainment:
-
+Attribute("meta", Meta, `The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	Changes to the content may not always be associated with version changes to the resource.`, func() {
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
 	Attribute("identifier", ArrayOf(Identifier), "A unique identifier for the simple observation instance.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
@@ -99,15 +103,15 @@ var Observation = Type("Observation", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("referenceRange", CollectionOf(ReferenceRangeMedia), "Guidance on how to interpret the value by comparison to a normal or recommended range.", func() {
+	Attribute("referenceRange", ReferenceRange, "Guidance on how to interpret the value by comparison to a normal or recommended range.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("related", CollectionOf(RelatedMedia), "A  reference to another resource (usually another Observation but could  also be a QuestionnaireAnswer) whose relationship is defined by the relationship type code.", func() {
+	Attribute("related", Related, "A  reference to another resource (usually another Observation but could  also be a QuestionnaireAnswer) whose relationship is defined by the relationship type code.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("component", CollectionOf(ComponentMedia), `Some observations have multiple component observations.  These component observations are expressed as separate code 
+	Attribute("component", Component, `Some observations have multiple component observations.  These component observations are expressed as separate code 
 		value pairs that share the same attributes.  Examples include systolic and diastolic component observations for blood pressure measurement and multiple 
 		component observations for genetics observations.`, func() {
 		//Comments:
@@ -182,7 +186,7 @@ var Component = Type("Component", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("referenceRange", ReferenceRange, "Guidance on how to interpret the value by comparison to a normal or recommended range.", func() {
+	Attribute("normalReferenceRange", ReferenceRange, "Guidance on how to interpret the value by comparison to a normal or recommended range.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment: Knowing what values are considered "normal" can help evaluate the significance of a particular result.
 		//Need to be able to provide multiple reference ranges for different contexts.

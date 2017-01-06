@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/goadesign/goa"
 	"github.com/goa-fhir/server/app"
+	"github.com/goadesign/goa"
 )
 
 // HealthController implements the health resource.

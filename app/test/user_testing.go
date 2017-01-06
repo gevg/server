@@ -22,13 +22,15 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strconv"
+	"time"
 )
 
 // CreateUserBadRequest runs the method Create of the given controller with the given parameters and payload.
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func CreateUserBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, payload *app.CreateUserPayload) (http.ResponseWriter, error) {
+func CreateUserBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.CreateUserPayload) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -58,14 +60,160 @@ func CreateUserBadRequest(t goatest.TInterface, ctx context.Context, service *go
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users"),
+		Path:     fmt.Sprintf("/nosh/users"),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
 		panic("invalid test " + err.Error()) // bug
 	}
 	prms := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -103,7 +251,7 @@ func CreateUserBadRequest(t goatest.TInterface, ctx context.Context, service *go
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func CreateUserCreated(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, payload *app.CreateUserPayload) http.ResponseWriter {
+func CreateUserCreated(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.CreateUserPayload) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -134,14 +282,160 @@ func CreateUserCreated(t goatest.TInterface, ctx context.Context, service *goa.S
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users"),
+		Path:     fmt.Sprintf("/nosh/users"),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
 		panic("invalid test " + err.Error()) // bug
 	}
 	prms := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -171,7 +465,7 @@ func CreateUserCreated(t goatest.TInterface, ctx context.Context, service *goa.S
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func DeleteUserBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int) (http.ResponseWriter, error) {
+func DeleteUserBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -191,8 +485,82 @@ func DeleteUserBadRequest(t goatest.TInterface, ctx context.Context, service *go
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users/%v", userID),
+		Path:     fmt.Sprintf("/nosh/users/%v", userID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("DELETE", u.String(), nil)
 	if err != nil {
@@ -200,6 +568,78 @@ func DeleteUserBadRequest(t goatest.TInterface, ctx context.Context, service *go
 	}
 	prms := url.Values{}
 	prms["userID"] = []string{fmt.Sprintf("%v", userID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -236,7 +676,7 @@ func DeleteUserBadRequest(t goatest.TInterface, ctx context.Context, service *go
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func DeleteUserNoContent(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int) http.ResponseWriter {
+func DeleteUserNoContent(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -256,8 +696,82 @@ func DeleteUserNoContent(t goatest.TInterface, ctx context.Context, service *goa
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users/%v", userID),
+		Path:     fmt.Sprintf("/nosh/users/%v", userID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("DELETE", u.String(), nil)
 	if err != nil {
@@ -265,6 +779,78 @@ func DeleteUserNoContent(t goatest.TInterface, ctx context.Context, service *goa
 	}
 	prms := url.Values{}
 	prms["userID"] = []string{fmt.Sprintf("%v", userID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -293,7 +879,7 @@ func DeleteUserNoContent(t goatest.TInterface, ctx context.Context, service *goa
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func DeleteUserNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int) http.ResponseWriter {
+func DeleteUserNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -313,8 +899,82 @@ func DeleteUserNotFound(t goatest.TInterface, ctx context.Context, service *goa.
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users/%v", userID),
+		Path:     fmt.Sprintf("/nosh/users/%v", userID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("DELETE", u.String(), nil)
 	if err != nil {
@@ -322,6 +982,78 @@ func DeleteUserNotFound(t goatest.TInterface, ctx context.Context, service *goa.
 	}
 	prms := url.Values{}
 	prms["userID"] = []string{fmt.Sprintf("%v", userID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -350,7 +1082,7 @@ func DeleteUserNotFound(t goatest.TInterface, ctx context.Context, service *goa.
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ListUserOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController) (http.ResponseWriter, app.UserCollection) {
+func ListUserOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, app.UserMediaCollection) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -370,14 +1102,160 @@ func ListUserOK(t goatest.TInterface, ctx context.Context, service *goa.Service,
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users"),
+		Path:     fmt.Sprintf("/nosh/users"),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
 		panic("invalid test " + err.Error()) // bug
 	}
 	prms := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -397,12 +1275,12 @@ func ListUserOK(t goatest.TInterface, ctx context.Context, service *goa.Service,
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt app.UserCollection
+	var mt app.UserMediaCollection
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(app.UserCollection)
+		mt, ok = resp.(app.UserMediaCollection)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.UserCollection", resp)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.UserMediaCollection", resp)
 		}
 		err = mt.Validate()
 		if err != nil {
@@ -418,7 +1296,7 @@ func ListUserOK(t goatest.TInterface, ctx context.Context, service *goa.Service,
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ListUserOKLink(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController) (http.ResponseWriter, app.UserLinkCollection) {
+func ListUserOKLink(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, app.UserMediaLinkCollection) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -438,14 +1316,160 @@ func ListUserOKLink(t goatest.TInterface, ctx context.Context, service *goa.Serv
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users"),
+		Path:     fmt.Sprintf("/nosh/users"),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
 		panic("invalid test " + err.Error()) // bug
 	}
 	prms := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -465,16 +1489,12 @@ func ListUserOKLink(t goatest.TInterface, ctx context.Context, service *goa.Serv
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt app.UserLinkCollection
+	var mt app.UserMediaLinkCollection
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(app.UserLinkCollection)
+		mt, ok = resp.(app.UserMediaLinkCollection)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.UserLinkCollection", resp)
-		}
-		err = mt.Validate()
-		if err != nil {
-			t.Errorf("invalid response media type: %s", err)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.UserMediaLinkCollection", resp)
 		}
 	}
 
@@ -486,7 +1506,7 @@ func ListUserOKLink(t goatest.TInterface, ctx context.Context, service *goa.Serv
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ListUserOKTiny(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController) (http.ResponseWriter, app.UserTinyCollection) {
+func ListUserOKTiny(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, app.UserMediaTinyCollection) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -506,14 +1526,160 @@ func ListUserOKTiny(t goatest.TInterface, ctx context.Context, service *goa.Serv
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users"),
+		Path:     fmt.Sprintf("/nosh/users"),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
 		panic("invalid test " + err.Error()) // bug
 	}
 	prms := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -533,12 +1699,12 @@ func ListUserOKTiny(t goatest.TInterface, ctx context.Context, service *goa.Serv
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt app.UserTinyCollection
+	var mt app.UserMediaTinyCollection
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(app.UserTinyCollection)
+		mt, ok = resp.(app.UserMediaTinyCollection)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.UserTinyCollection", resp)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.UserMediaTinyCollection", resp)
 		}
 		err = mt.Validate()
 		if err != nil {
@@ -554,7 +1720,7 @@ func ListUserOKTiny(t goatest.TInterface, ctx context.Context, service *goa.Serv
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ShowUserBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int) (http.ResponseWriter, error) {
+func ShowUserBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -574,8 +1740,82 @@ func ShowUserBadRequest(t goatest.TInterface, ctx context.Context, service *goa.
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users/%v", userID),
+		Path:     fmt.Sprintf("/nosh/users/%v", userID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -583,6 +1823,78 @@ func ShowUserBadRequest(t goatest.TInterface, ctx context.Context, service *goa.
 	}
 	prms := url.Values{}
 	prms["userID"] = []string{fmt.Sprintf("%v", userID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -619,7 +1931,7 @@ func ShowUserBadRequest(t goatest.TInterface, ctx context.Context, service *goa.
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ShowUserNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int) http.ResponseWriter {
+func ShowUserNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -639,8 +1951,82 @@ func ShowUserNotFound(t goatest.TInterface, ctx context.Context, service *goa.Se
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users/%v", userID),
+		Path:     fmt.Sprintf("/nosh/users/%v", userID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -648,6 +2034,78 @@ func ShowUserNotFound(t goatest.TInterface, ctx context.Context, service *goa.Se
 	}
 	prms := url.Values{}
 	prms["userID"] = []string{fmt.Sprintf("%v", userID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -676,7 +2134,7 @@ func ShowUserNotFound(t goatest.TInterface, ctx context.Context, service *goa.Se
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ShowUserOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int) (http.ResponseWriter, *app.User) {
+func ShowUserOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, *app.UserMedia) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -696,8 +2154,82 @@ func ShowUserOK(t goatest.TInterface, ctx context.Context, service *goa.Service,
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users/%v", userID),
+		Path:     fmt.Sprintf("/nosh/users/%v", userID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -705,6 +2237,78 @@ func ShowUserOK(t goatest.TInterface, ctx context.Context, service *goa.Service,
 	}
 	prms := url.Values{}
 	prms["userID"] = []string{fmt.Sprintf("%v", userID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -724,12 +2328,12 @@ func ShowUserOK(t goatest.TInterface, ctx context.Context, service *goa.Service,
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt *app.User
+	var mt *app.UserMedia
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(*app.User)
+		mt, ok = resp.(*app.UserMedia)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.User", resp)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.UserMedia", resp)
 		}
 		err = mt.Validate()
 		if err != nil {
@@ -745,7 +2349,7 @@ func ShowUserOK(t goatest.TInterface, ctx context.Context, service *goa.Service,
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ShowUserOKLink(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int) (http.ResponseWriter, *app.UserLink) {
+func ShowUserOKLink(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, *app.UserMediaLink) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -765,8 +2369,82 @@ func ShowUserOKLink(t goatest.TInterface, ctx context.Context, service *goa.Serv
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users/%v", userID),
+		Path:     fmt.Sprintf("/nosh/users/%v", userID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -774,6 +2452,78 @@ func ShowUserOKLink(t goatest.TInterface, ctx context.Context, service *goa.Serv
 	}
 	prms := url.Values{}
 	prms["userID"] = []string{fmt.Sprintf("%v", userID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -793,16 +2543,12 @@ func ShowUserOKLink(t goatest.TInterface, ctx context.Context, service *goa.Serv
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt *app.UserLink
+	var mt *app.UserMediaLink
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(*app.UserLink)
+		mt, ok = resp.(*app.UserMediaLink)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.UserLink", resp)
-		}
-		err = mt.Validate()
-		if err != nil {
-			t.Errorf("invalid response media type: %s", err)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.UserMediaLink", resp)
 		}
 	}
 
@@ -814,7 +2560,7 @@ func ShowUserOKLink(t goatest.TInterface, ctx context.Context, service *goa.Serv
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ShowUserOKTiny(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int) (http.ResponseWriter, *app.UserTiny) {
+func ShowUserOKTiny(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, *app.UserMediaTiny) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -834,8 +2580,82 @@ func ShowUserOKTiny(t goatest.TInterface, ctx context.Context, service *goa.Serv
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users/%v", userID),
+		Path:     fmt.Sprintf("/nosh/users/%v", userID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -843,6 +2663,78 @@ func ShowUserOKTiny(t goatest.TInterface, ctx context.Context, service *goa.Serv
 	}
 	prms := url.Values{}
 	prms["userID"] = []string{fmt.Sprintf("%v", userID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -862,12 +2754,12 @@ func ShowUserOKTiny(t goatest.TInterface, ctx context.Context, service *goa.Serv
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt *app.UserTiny
+	var mt *app.UserMediaTiny
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(*app.UserTiny)
+		mt, ok = resp.(*app.UserMediaTiny)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.UserTiny", resp)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.UserMediaTiny", resp)
 		}
 		err = mt.Validate()
 		if err != nil {
@@ -883,7 +2775,7 @@ func ShowUserOKTiny(t goatest.TInterface, ctx context.Context, service *goa.Serv
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func SigninUserBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, payload *app.SigninUserPayload) (http.ResponseWriter, error) {
+func SigninUserBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.SigninUserPayload) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -913,14 +2805,160 @@ func SigninUserBadRequest(t goatest.TInterface, ctx context.Context, service *go
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users/jwt/signin"),
+		Path:     fmt.Sprintf("/nosh/users/jwt/signin"),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
 		panic("invalid test " + err.Error()) // bug
 	}
 	prms := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -958,7 +2996,7 @@ func SigninUserBadRequest(t goatest.TInterface, ctx context.Context, service *go
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func SigninUserNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, payload *app.SigninUserPayload) http.ResponseWriter {
+func SigninUserNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.SigninUserPayload) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -989,14 +3027,160 @@ func SigninUserNotFound(t goatest.TInterface, ctx context.Context, service *goa.
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users/jwt/signin"),
+		Path:     fmt.Sprintf("/nosh/users/jwt/signin"),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
 		panic("invalid test " + err.Error()) // bug
 	}
 	prms := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -1026,7 +3210,7 @@ func SigninUserNotFound(t goatest.TInterface, ctx context.Context, service *goa.
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func SigninUserUnauthorized(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, payload *app.SigninUserPayload) http.ResponseWriter {
+func SigninUserUnauthorized(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.SigninUserPayload) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1057,14 +3241,160 @@ func SigninUserUnauthorized(t goatest.TInterface, ctx context.Context, service *
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users/jwt/signin"),
+		Path:     fmt.Sprintf("/nosh/users/jwt/signin"),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
 		panic("invalid test " + err.Error()) // bug
 	}
 	prms := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -1094,7 +3424,7 @@ func SigninUserUnauthorized(t goatest.TInterface, ctx context.Context, service *
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func SignupUserBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, payload *app.SignupUserPayload) (http.ResponseWriter, error) {
+func SignupUserBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.SignupUserPayload) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1124,14 +3454,160 @@ func SignupUserBadRequest(t goatest.TInterface, ctx context.Context, service *go
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users/jwt/signup"),
+		Path:     fmt.Sprintf("/nosh/users/jwt/signup"),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
 		panic("invalid test " + err.Error()) // bug
 	}
 	prms := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -1169,7 +3645,7 @@ func SignupUserBadRequest(t goatest.TInterface, ctx context.Context, service *go
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func SignupUserCreated(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, payload *app.SignupUserPayload) http.ResponseWriter {
+func SignupUserCreated(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.SignupUserPayload) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1200,14 +3676,160 @@ func SignupUserCreated(t goatest.TInterface, ctx context.Context, service *goa.S
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users/jwt/signup"),
+		Path:     fmt.Sprintf("/nosh/users/jwt/signup"),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
 		panic("invalid test " + err.Error()) // bug
 	}
 	prms := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -1237,7 +3859,7 @@ func SignupUserCreated(t goatest.TInterface, ctx context.Context, service *goa.S
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func SignupUserOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, payload *app.SignupUserPayload) (http.ResponseWriter, *app.User) {
+func SignupUserOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.SignupUserPayload) (http.ResponseWriter, *app.UserMedia) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1268,14 +3890,160 @@ func SignupUserOK(t goatest.TInterface, ctx context.Context, service *goa.Servic
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users/jwt/signup"),
+		Path:     fmt.Sprintf("/nosh/users/jwt/signup"),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
 		panic("invalid test " + err.Error()) // bug
 	}
 	prms := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -1296,12 +4064,12 @@ func SignupUserOK(t goatest.TInterface, ctx context.Context, service *goa.Servic
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt *app.User
+	var mt *app.UserMedia
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(*app.User)
+		mt, ok = resp.(*app.UserMedia)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.User", resp)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.UserMedia", resp)
 		}
 		err = mt.Validate()
 		if err != nil {
@@ -1317,7 +4085,7 @@ func SignupUserOK(t goatest.TInterface, ctx context.Context, service *goa.Servic
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func SignupUserOKLink(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, payload *app.SignupUserPayload) (http.ResponseWriter, *app.UserLink) {
+func SignupUserOKLink(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.SignupUserPayload) (http.ResponseWriter, *app.UserMediaLink) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1348,14 +4116,160 @@ func SignupUserOKLink(t goatest.TInterface, ctx context.Context, service *goa.Se
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users/jwt/signup"),
+		Path:     fmt.Sprintf("/nosh/users/jwt/signup"),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
 		panic("invalid test " + err.Error()) // bug
 	}
 	prms := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -1376,16 +4290,12 @@ func SignupUserOKLink(t goatest.TInterface, ctx context.Context, service *goa.Se
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt *app.UserLink
+	var mt *app.UserMediaLink
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(*app.UserLink)
+		mt, ok = resp.(*app.UserMediaLink)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.UserLink", resp)
-		}
-		err = mt.Validate()
-		if err != nil {
-			t.Errorf("invalid response media type: %s", err)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.UserMediaLink", resp)
 		}
 	}
 
@@ -1397,7 +4307,7 @@ func SignupUserOKLink(t goatest.TInterface, ctx context.Context, service *goa.Se
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func SignupUserOKTiny(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, payload *app.SignupUserPayload) (http.ResponseWriter, *app.UserTiny) {
+func SignupUserOKTiny(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.SignupUserPayload) (http.ResponseWriter, *app.UserMediaTiny) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1428,14 +4338,160 @@ func SignupUserOKTiny(t goatest.TInterface, ctx context.Context, service *goa.Se
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users/jwt/signup"),
+		Path:     fmt.Sprintf("/nosh/users/jwt/signup"),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
 		panic("invalid test " + err.Error()) // bug
 	}
 	prms := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -1456,12 +4512,12 @@ func SignupUserOKTiny(t goatest.TInterface, ctx context.Context, service *goa.Se
 	if rw.Code != 200 {
 		t.Errorf("invalid response status code: got %+v, expected 200", rw.Code)
 	}
-	var mt *app.UserTiny
+	var mt *app.UserMediaTiny
 	if resp != nil {
 		var ok bool
-		mt, ok = resp.(*app.UserTiny)
+		mt, ok = resp.(*app.UserMediaTiny)
 		if !ok {
-			t.Fatalf("invalid response media: got %+v, expected instance of app.UserTiny", resp)
+			t.Fatalf("invalid response media: got %+v, expected instance of app.UserMediaTiny", resp)
 		}
 		err = mt.Validate()
 		if err != nil {
@@ -1477,7 +4533,7 @@ func SignupUserOKTiny(t goatest.TInterface, ctx context.Context, service *goa.Se
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func UpdateUserBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int, payload *app.UpdateUserPayload) (http.ResponseWriter, error) {
+func UpdateUserBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.UpdateUserPayload) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1507,8 +4563,82 @@ func UpdateUserBadRequest(t goatest.TInterface, ctx context.Context, service *go
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users/%v", userID),
+		Path:     fmt.Sprintf("/nosh/users/%v", userID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("PUT", u.String(), nil)
 	if err != nil {
@@ -1516,6 +4646,78 @@ func UpdateUserBadRequest(t goatest.TInterface, ctx context.Context, service *go
 	}
 	prms := url.Values{}
 	prms["userID"] = []string{fmt.Sprintf("%v", userID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -1553,7 +4755,7 @@ func UpdateUserBadRequest(t goatest.TInterface, ctx context.Context, service *go
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func UpdateUserNoContent(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int, payload *app.UpdateUserPayload) http.ResponseWriter {
+func UpdateUserNoContent(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.UpdateUserPayload) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1584,8 +4786,82 @@ func UpdateUserNoContent(t goatest.TInterface, ctx context.Context, service *goa
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users/%v", userID),
+		Path:     fmt.Sprintf("/nosh/users/%v", userID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("PUT", u.String(), nil)
 	if err != nil {
@@ -1593,6 +4869,78 @@ func UpdateUserNoContent(t goatest.TInterface, ctx context.Context, service *goa
 	}
 	prms := url.Values{}
 	prms["userID"] = []string{fmt.Sprintf("%v", userID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -1622,7 +4970,7 @@ func UpdateUserNoContent(t goatest.TInterface, ctx context.Context, service *goa
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func UpdateUserNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int, payload *app.UpdateUserPayload) http.ResponseWriter {
+func UpdateUserNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.UserController, userID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.UpdateUserPayload) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1653,8 +5001,82 @@ func UpdateUserNotFound(t goatest.TInterface, ctx context.Context, service *goa.
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/users/%v", userID),
+		Path:     fmt.Sprintf("/nosh/users/%v", userID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("PUT", u.String(), nil)
 	if err != nil {
@@ -1662,6 +5084,78 @@ func UpdateUserNotFound(t goatest.TInterface, ctx context.Context, service *goa.
 	}
 	prms := url.Values{}
 	prms["userID"] = []string{fmt.Sprintf("%v", userID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}

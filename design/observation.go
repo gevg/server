@@ -19,7 +19,7 @@ var _ = Resource("Observation", func() {
 		)
 		Description("List all observations in patient optionally filtering by year")
 		Params(func() {
-			Param("years", ArrayOf(Integer), "Filter by years")
+			Param("code", ArrayOf(String), "Filter by code")
 		})
 		Response(OK, func() {
 			Media(CollectionOf(ObservationMedia, func() {

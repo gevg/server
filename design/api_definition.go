@@ -43,16 +43,61 @@ var _ = API("Secure", func() {
 		Credentials()
 	})
 
-	Origin("http://localhost:8080", func() {
-		Methods("GET", "POST", "PUT", "PATCH", "DELETE")
-		Headers("Accept", "Content-Type", "Authorization")
-		//Header("Access-Control-Expose-Headers")
-		Expose("Content-Type", "Origin", "Authorization")
 
+
+
+	Params(func() {
+		//Parameters for all resources
+		Param("_id", Integer) // A path parameter defined using e.g. GET("/:id")
+		Param("_lastUpdate", DateTime)
+		Param("_tag", String)
+		Param("_profile", String)  //?
+		Param("_security", String) //?
+		Param("_text", String)     //?
+		Param("_list", String)     //?
+		Param("_has", String)      //?
+		Param("_type", String)     //?
+		Param("_type", String)     //?
+		Param("_query", String)    //?
+	})
+
+	Params(func() {
+		//Search result parameters
+		Param("_sort", String, func() { // A query string parameter
+			Enum("", "-") //""=asc "-"=desc
+		})
+		Param("_count", Integer)
+		Param("_include", String)       //?
+		Param("_revinclude", String)    //?
+		Param("_summary", String)       //?
+		Param("_elements", String)      //?
+		Param("_contained", String)     //?
+		Param("_containedType", String) //?
+	})
+
+	Origin("*", func() {
+		//SMART on FHIR
+		// Access-Control-Allow-Credentials: true
+		// Access-Control-Allow-Headers: origin, authorization, accept, content-type, x-requested-with
+		// Access-Control-Allow-Methods: GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS
+		// Access-Control-Allow-Origin: *
+		Methods("GET", "HEAD", "POST", "PUT", "DELETE", "TRACE", "OPTIONS")
+		Headers("Origin", "Authorization", "Accept", "Content-Type", "X-Requested-With")
+		Expose("Origin", "Authorization", "Accept", "Content-Type", "X-Requested-With")
 		MaxAge(600)
 		Credentials()
 	})
 
+	Origin("http://localhost:8080", func() {
+		Methods("GET", "HEAD", "POST", "PUT", "DELETE", "TRACE", "OPTIONS")
+		Headers("Origin", "Authorization", "Accept", "Content-Type", "X-Requested-With")
+		//Header("Access-Control-Expose-Headers")
+		//Expose("Content-Type", "Origin", "Authorization")
+		Expose("Origin", "Authorization", "Accept", "Content-Type", "X-Requested-With")
+
+		MaxAge(600)
+		Credentials()
+	})
 
 	ResponseTemplate(Created, func(pattern string) {
 		Description("Resource created")

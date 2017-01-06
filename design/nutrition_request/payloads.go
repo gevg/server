@@ -7,6 +7,7 @@ import (
 // NutritionRequest is the nutrition_request resource media type.--------------------------------------------------------------------------------
 var NutritionRequestPayload = Type("NutritionRequestPayload", func() {
 	Reference(NutritionRequest)
+		Attribute("meta")
 	Attribute("patient")
 	Attribute("orderer")
 	Attribute("identifier")

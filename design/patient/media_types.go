@@ -16,6 +16,7 @@ var PatientMedia = MediaType("application/vnd.patient+json", func() {
 		Attribute("id")
 		Attribute("href")
 		//FHIR elements
+			Attribute("meta")
 		Required("gender")
 		Attribute("identifier")
 		Attribute("active")
@@ -45,6 +46,7 @@ var PatientMedia = MediaType("application/vnd.patient+json", func() {
 		Attribute("id")
 		Attribute("href")
 		//FHIR elements
+			Attribute("meta")
 		Required("gender")
 		Attribute("identifier")
 		Attribute("active")

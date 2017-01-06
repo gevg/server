@@ -14,7 +14,6 @@ import (
 	"github.com/goadesign/goa"
 	"net/http"
 	"time"
-	"unicode/utf8"
 )
 
 // AddressMedia media type (default view)
@@ -28,9 +27,9 @@ type AddressMedia struct {
 	// District is sometimes known as county, but in some regions 'county' in used in place of city (municipality), so county name should be conveyed in city instead.
 	Distinct *string `form:"distinct,omitempty" json:"distinct,omitempty" xml:"distinct,omitempty"`
 	// This component contains the house number, apartment number, street name, street direction,  P.O. Box number, delivery hints, and similar address information.
-	Line *string `form:"line,omitempty" json:"line,omitempty" xml:"line,omitempty"`
+	Line []string `form:"line,omitempty" json:"line,omitempty" xml:"line,omitempty"`
 	// A postal code designating a region defined by the postal service.
-	PostalCode *int `form:"postalCode,omitempty" json:"postalCode,omitempty" xml:"postalCode,omitempty"`
+	PostalCode *string `form:"postalCode,omitempty" json:"postalCode,omitempty" xml:"postalCode,omitempty"`
 	// Sub-unit of a country with limited sovereignty in a federally organized country. A code may be used if codes are in common use (i.e. US 2 letter state codes).
 	State *string `form:"state,omitempty" json:"state,omitempty" xml:"state,omitempty"`
 	// Distinguishes between physical addresses (those you can visit) and mailing addresses (e.g. PO Boxes and care-of addresses). Most addresses are both.
@@ -74,6 +73,9 @@ type AllergyIntoleranceMedia struct {
 	Identifier []*Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
 	// Represents the date and/or time of the last known occurrence of a reaction event.
 	LastOccurence *time.Time `form:"lastOccurence,omitempty" json:"lastOccurence,omitempty" xml:"lastOccurence,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *Meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Additional narrative about the propensity for the Adverse Reaction, not captured in other fields..
 	Note *Annotation `form:"note,omitempty" json:"note,omitempty" xml:"note,omitempty"`
 	// Record of the date and/or time of the onset of the Allergy or Intolerance.
@@ -111,6 +113,11 @@ func (mt *AllergyIntoleranceMedia) Validate() (err error) {
 			if err2 := e.Validate(); err2 != nil {
 				err = goa.MergeErrors(err, err2)
 			}
+		}
+	}
+	if mt.Meta != nil {
+		if err2 := mt.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
 		}
 	}
 	if mt.Reaction != nil {
@@ -327,9 +334,8 @@ type ComponentMedia struct {
 	// Describes what was observed. Sometimes this is called the observation 'code'. See http://hl7.org/fhir/ValueSet/observation-codes
 	Code *CodeableConcept `form:"code,omitempty" json:"code,omitempty" xml:"code,omitempty"`
 	// Provides a reason why the expected value in the element Observation.value[x] is missing. See http://hl7.org/fhir/ValueSet/observation-valueabsentreason
-	DataAbsentReason *CodeableConcept `form:"dataAbsentReason,omitempty" json:"dataAbsentReason,omitempty" xml:"dataAbsentReason,omitempty"`
-	// Guidance on how to interpret the value by comparison to a normal or recommended range.
-	ReferenceRange       *ReferenceRange  `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
+	DataAbsentReason     *CodeableConcept `form:"dataAbsentReason,omitempty" json:"dataAbsentReason,omitempty" xml:"dataAbsentReason,omitempty"`
+	ReferenceRange       *string          `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
 	ValueAttachment      *Attachment      `form:"valueAttachment,omitempty" json:"valueAttachment,omitempty" xml:"valueAttachment,omitempty"`
 	ValueCodeableConcept *CodeableConcept `form:"valueCodeableConcept,omitempty" json:"valueCodeableConcept,omitempty" xml:"valueCodeableConcept,omitempty"`
 	ValueDatTime         *time.Time       `form:"valueDatTime,omitempty" json:"valueDatTime,omitempty" xml:"valueDatTime,omitempty"`
@@ -342,11 +348,6 @@ type ComponentMedia struct {
 
 // Validate validates the ComponentMedia media type instance.
 func (mt *ComponentMedia) Validate() (err error) {
-	if mt.ReferenceRange != nil {
-		if err2 := mt.ReferenceRange.Validate(); err2 != nil {
-			err = goa.MergeErrors(err, err2)
-		}
-	}
 	if mt.ValueAttachment != nil {
 		if err2 := mt.ValueAttachment.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -375,30 +376,6 @@ func (c *Client) DecodeComponentMedia(resp *http.Response) (*ComponentMedia, err
 	var decoded ComponentMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
-}
-
-// ComponentMediaCollection is the media type for an array of ComponentMedia (default view)
-//
-// Identifier: application/vnd.component+json; type=collection; view=default
-type ComponentMediaCollection []*ComponentMedia
-
-// Validate validates the ComponentMediaCollection media type instance.
-func (mt ComponentMediaCollection) Validate() (err error) {
-	for _, e := range mt {
-		if e != nil {
-			if err2 := e.Validate(); err2 != nil {
-				err = goa.MergeErrors(err, err2)
-			}
-		}
-	}
-	return
-}
-
-// DecodeComponentMediaCollection decodes the ComponentMediaCollection instance encoded in resp body.
-func (c *Client) DecodeComponentMediaCollection(resp *http.Response) (ComponentMediaCollection, error) {
-	var decoded ComponentMediaCollection
-	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
-	return decoded, err
 }
 
 // HL7ContactMedia media type (default view)
@@ -514,10 +491,10 @@ func (c *Client) DecodeElelmentMedia(resp *http.Response) (*ElelmentMedia, error
 	return &decoded, err
 }
 
-// EnteralFormula media type (default view)
+// EnteralFormulaMedia media type (default view)
 //
 // Identifier: application/vnd.enteral.formula+json; view=default
-type EnteralFormula struct {
+type EnteralFormulaMedia struct {
 	// Product or brand name of the enteral or infant formula
 	AdditiveProductName *string `form:"additiveProductName,omitempty" json:"additiveProductName,omitempty" xml:"additiveProductName,omitempty"`
 	// Indicates the type of modular component such as protein, carbohydrate, fat or fiber to be provided in addition to or mixed with the base formula.
@@ -538,8 +515,8 @@ type EnteralFormula struct {
 	RouteofAdministration *CodeableConcept `form:"routeofAdministration,omitempty" json:"routeofAdministration,omitempty" xml:"routeofAdministration,omitempty"`
 }
 
-// Validate validates the EnteralFormula media type instance.
-func (mt *EnteralFormula) Validate() (err error) {
+// Validate validates the EnteralFormulaMedia media type instance.
+func (mt *EnteralFormulaMedia) Validate() (err error) {
 	if mt.CaloricDensity != nil {
 		if err2 := mt.CaloricDensity.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -553,35 +530,11 @@ func (mt *EnteralFormula) Validate() (err error) {
 	return
 }
 
-// DecodeEnteralFormula decodes the EnteralFormula instance encoded in resp body.
-func (c *Client) DecodeEnteralFormula(resp *http.Response) (*EnteralFormula, error) {
-	var decoded EnteralFormula
+// DecodeEnteralFormulaMedia decodes the EnteralFormulaMedia instance encoded in resp body.
+func (c *Client) DecodeEnteralFormulaMedia(resp *http.Response) (*EnteralFormulaMedia, error) {
+	var decoded EnteralFormulaMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
-}
-
-// EnteralFormulaCollection is the media type for an array of EnteralFormula (default view)
-//
-// Identifier: application/vnd.enteral.formula+json; type=collection; view=default
-type EnteralFormulaCollection []*EnteralFormula
-
-// Validate validates the EnteralFormulaCollection media type instance.
-func (mt EnteralFormulaCollection) Validate() (err error) {
-	for _, e := range mt {
-		if e != nil {
-			if err2 := e.Validate(); err2 != nil {
-				err = goa.MergeErrors(err, err2)
-			}
-		}
-	}
-	return
-}
-
-// DecodeEnteralFormulaCollection decodes the EnteralFormulaCollection instance encoded in resp body.
-func (c *Client) DecodeEnteralFormulaCollection(resp *http.Response) (EnteralFormulaCollection, error) {
-	var decoded EnteralFormulaCollection
-	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
-	return decoded, err
 }
 
 // ExtensionMedia media type (default view)
@@ -669,6 +622,70 @@ func (c *Client) DecodeExtensionMedia(resp *http.Response) (*ExtensionMedia, err
 // DecodeErrorResponse decodes the ErrorResponse instance encoded in resp body.
 func (c *Client) DecodeErrorResponse(resp *http.Response) (*goa.ErrorResponse, error) {
 	var decoded goa.ErrorResponse
+	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
+	return &decoded, err
+}
+
+// OAuth2 error response, See https://tools.ietf.org/html/rfc6749#section-5.2 (default view)
+//
+// Identifier: application/vnd.goa.fhir.oauth2.error+json; view=default
+type OAuth2ErrorMedia struct {
+	// Error returned by authorization server
+	Error string `form:"error" json:"error" xml:"error"`
+	// Human readable ASCII text providing additional information
+	ErrorDescription *string `form:"error_description,omitempty" json:"error_description,omitempty" xml:"error_description,omitempty"`
+	// A URI identifying a human-readable web page with information about the error
+	ErrorURI *string `form:"error_uri,omitempty" json:"error_uri,omitempty" xml:"error_uri,omitempty"`
+}
+
+// Validate validates the OAuth2ErrorMedia media type instance.
+func (mt *OAuth2ErrorMedia) Validate() (err error) {
+	if mt.Error == "" {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "error"))
+	}
+	if !(mt.Error == "invalid_request" || mt.Error == "invalid_client" || mt.Error == "invalid_grant" || mt.Error == "unauthorized_client" || mt.Error == "unsupported_grant_type") {
+		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.error`, mt.Error, []interface{}{"invalid_request", "invalid_client", "invalid_grant", "unauthorized_client", "unsupported_grant_type"}))
+	}
+	return
+}
+
+// DecodeOAuth2ErrorMedia decodes the OAuth2ErrorMedia instance encoded in resp body.
+func (c *Client) DecodeOAuth2ErrorMedia(resp *http.Response) (*OAuth2ErrorMedia, error) {
+	var decoded OAuth2ErrorMedia
+	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
+	return &decoded, err
+}
+
+// OAuth2 access token request successful response, See https://tools.ietf.org/html/rfc6749#section-5.1 (default view)
+//
+// Identifier: application/vnd.goa.fhir.oauth2.token+json; view=default
+type TokenMedia struct {
+	// The access token issued by the authorization server
+	AccessToken string `form:"access_token" json:"access_token" xml:"access_token"`
+	// The lifetime in seconds of the access token
+	ExpiresIn *int `form:"expires_in,omitempty" json:"expires_in,omitempty" xml:"expires_in,omitempty"`
+	// The refresh token
+	RefreshToken *string `form:"refresh_token,omitempty" json:"refresh_token,omitempty" xml:"refresh_token,omitempty"`
+	// The scope of the access token
+	Scope *string `form:"scope,omitempty" json:"scope,omitempty" xml:"scope,omitempty"`
+	// The type of the token issued, e.g. "bearer" or "mac"
+	TokenType string `form:"token_type" json:"token_type" xml:"token_type"`
+}
+
+// Validate validates the TokenMedia media type instance.
+func (mt *TokenMedia) Validate() (err error) {
+	if mt.AccessToken == "" {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "access_token"))
+	}
+	if mt.TokenType == "" {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "token_type"))
+	}
+	return
+}
+
+// DecodeTokenMedia decodes the TokenMedia instance encoded in resp body.
+func (c *Client) DecodeTokenMedia(resp *http.Response) (*TokenMedia, error) {
+	var decoded TokenMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
@@ -861,7 +878,7 @@ type NutritionRequestMedia struct {
 	// An encounter that provides additional information about the healthcare context in which this request is made.
 	Encounter *HL7Reference `form:"encounter,omitempty" json:"encounter,omitempty" xml:"encounter,omitempty"`
 	// Feeding provided through the gastrointestinal tract via a tube, catheter, or stoma that delivers nutrition distal to the oral cavity.
-	EnteralFormula EnteralFormulaCollection `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
+	EnteralFormula *EnteralFormula `form:"enteralFormula,omitempty" json:"enteralFormula,omitempty" xml:"enteralFormula,omitempty"`
 	// This modifier is used to convey order-specific modifiers about the type of food that should NOT be given. These can be derived from
 	// 		patient allergies, intolerances, or preferences such as No Red Meat, No Soy or No Wheat or  Gluten-Free.  While it should not be necessary to repeat allergy or intolerance
 	// 		information captured in the referenced allergyIntolerance resource in the excludeFoodModifier, this element may be used to convey additional specificity related to foods that should be
@@ -874,8 +891,11 @@ type NutritionRequestMedia struct {
 	FoodPreferenceModifier []*CodeableConcept `form:"foodPreferenceModifier,omitempty" json:"foodPreferenceModifier,omitempty" xml:"foodPreferenceModifier,omitempty"`
 	// Identifiers assigned to this order by the order sender or by the order receiver.
 	Identifier []*Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *Meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Diet given orally in contrast to enteral (tube) feeding.
-	OralDiet OralDietMediaCollection `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
+	OralDiet *OralDiet `form:"oralDiet,omitempty" json:"oralDiet,omitempty" xml:"oralDiet,omitempty"`
 	// The practitioner that holds legal responsibility for ordering the diet, nutritional supplement, or formula feedings.
 	Orderer *HL7Reference `form:"orderer,omitempty" json:"orderer,omitempty" xml:"orderer,omitempty"`
 	// The person (patient) who needs the nutrition order for an oral diet, nutritional supplement and/or enteral or formula feeding.
@@ -888,8 +908,10 @@ type NutritionRequestMedia struct {
 
 // Validate validates the NutritionRequestMedia media type instance.
 func (mt *NutritionRequestMedia) Validate() (err error) {
-	if err2 := mt.EnteralFormula.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if mt.EnteralFormula != nil {
+		if err2 := mt.EnteralFormula.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	for _, e := range mt.Identifier {
 		if e != nil {
@@ -898,8 +920,15 @@ func (mt *NutritionRequestMedia) Validate() (err error) {
 			}
 		}
 	}
-	if err2 := mt.OralDiet.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if mt.Meta != nil {
+		if err2 := mt.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	if mt.OralDiet != nil {
+		if err2 := mt.OralDiet.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	if mt.Status != nil {
 		if !(*mt.Status == "proposed" || *mt.Status == "draft" || *mt.Status == "planned" || *mt.Status == "requested" || *mt.Status == "active" || *mt.Status == "on-hold" || *mt.Status == "completed" || *mt.Status == "cancelled") {
@@ -962,7 +991,7 @@ type ObservationMedia struct {
 	// Some observations have multiple component observations.  These component observations are expressed as separate code
 	// 		value pairs that share the same attributes.  Examples include systolic and diastolic component observations for blood pressure measurement and multiple
 	// 		component observations for genetics observations.
-	Component ComponentMediaCollection `form:"component,omitempty" json:"component,omitempty" xml:"component,omitempty"`
+	Component *Component `form:"component,omitempty" json:"component,omitempty" xml:"component,omitempty"`
 	// Provides a reason why the expected value in the element Observation.value[x] is missing. See http://hl7.org/fhir/ValueSet/observation-valueabsentreason
 	DateAbsentReason *CodeableConcept `form:"dateAbsentReason,omitempty" json:"dateAbsentReason,omitempty" xml:"dateAbsentReason,omitempty"`
 	// The device used to generate the observation data.
@@ -985,14 +1014,17 @@ type ObservationMedia struct {
 	Interpretation *CodeableConcept `form:"interpretation,omitempty" json:"interpretation,omitempty" xml:"interpretation,omitempty"`
 	// The date and time this observation was made available to providers, typically after the results have been reviewed and verified.
 	Issued *time.Time `form:"issued,omitempty" json:"issued,omitempty" xml:"issued,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *Meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Indicates the mechanism used to perform the observation. See http://hl7.org/fhir/ValueSet/observation-methods
 	Method *CodeableConcept `form:"method,omitempty" json:"method,omitempty" xml:"method,omitempty"`
 	// Who was responsible for asserting the observed value as 'true'.
 	Performer []*HL7Reference `form:"performer,omitempty" json:"performer,omitempty" xml:"performer,omitempty"`
 	// Guidance on how to interpret the value by comparison to a normal or recommended range.
-	ReferenceRange ReferenceRangeMediaCollection `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
+	ReferenceRange *ReferenceRange `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
 	// A  reference to another resource (usually another Observation but could  also be a QuestionnaireAnswer) whose relationship is defined by the relationship type code.
-	Related RelatedMediaCollection `form:"related,omitempty" json:"related,omitempty" xml:"related,omitempty"`
+	Related *Related `form:"related,omitempty" json:"related,omitempty" xml:"related,omitempty"`
 	// The specimen that was used when this observation was made.
 	Specimen *HL7Reference `form:"specimen,omitempty" json:"specimen,omitempty" xml:"specimen,omitempty"`
 	// The status of the result value. See http://hl7.org/fhir/ValueSet/observation-status
@@ -1010,8 +1042,10 @@ type ObservationMedia struct {
 
 // Validate validates the ObservationMedia media type instance.
 func (mt *ObservationMedia) Validate() (err error) {
-	if err2 := mt.Component.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if mt.Component != nil {
+		if err2 := mt.Component.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	for _, e := range mt.Identifier {
 		if e != nil {
@@ -1020,8 +1054,15 @@ func (mt *ObservationMedia) Validate() (err error) {
 			}
 		}
 	}
-	if err2 := mt.ReferenceRange.Validate(); err2 != nil {
-		err = goa.MergeErrors(err, err2)
+	if mt.Meta != nil {
+		if err2 := mt.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	if mt.ReferenceRange != nil {
+		if err2 := mt.ReferenceRange.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
 	}
 	if mt.Status != nil {
 		if !(*mt.Status == "registered" || *mt.Status == "preliminary" || *mt.Status == "final" || *mt.Status == "amended +") {
@@ -1122,30 +1163,6 @@ func (c *Client) DecodeOralDietMedia(resp *http.Response) (*OralDietMedia, error
 	return &decoded, err
 }
 
-// OralDietMediaCollection is the media type for an array of OralDietMedia (default view)
-//
-// Identifier: application/vnd.oral.diet+json; type=collection; view=default
-type OralDietMediaCollection []*OralDietMedia
-
-// Validate validates the OralDietMediaCollection media type instance.
-func (mt OralDietMediaCollection) Validate() (err error) {
-	for _, e := range mt {
-		if e != nil {
-			if err2 := e.Validate(); err2 != nil {
-				err = goa.MergeErrors(err, err2)
-			}
-		}
-	}
-	return
-}
-
-// DecodeOralDietMediaCollection decodes the OralDietMediaCollection instance encoded in resp body.
-func (c *Client) DecodeOralDietMediaCollection(resp *http.Response) (OralDietMediaCollection, error) {
-	var decoded OralDietMediaCollection
-	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
-	return decoded, err
-}
-
 // PatientMedia media type (default view)
 //
 // Identifier: application/vnd.patient+json; view=default
@@ -1184,6 +1201,9 @@ type PatientMedia struct {
 	Link []*HL7Link `form:"link,omitempty" json:"link,omitempty" xml:"link,omitempty"`
 	// Organization that is the custodian of the patient record.
 	ManagingOrganization *HL7Reference `form:"managingOrganization,omitempty" json:"managingOrganization,omitempty" xml:"managingOrganization,omitempty"`
+	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	// 	Changes to the content may not always be associated with version changes to the resource.
+	Meta *Meta `form:"meta,omitempty" json:"meta,omitempty" xml:"meta,omitempty"`
 	// Indicates whether the patient is part of a multiple or indicates the actual birth order..
 	MultipleBirthBoolean *bool `form:"multipleBirthBoolean,omitempty" json:"multipleBirthBoolean,omitempty" xml:"multipleBirthBoolean,omitempty"`
 	// Indicates whether the patient is part of a multiple or indicates the actual birth order..
@@ -1233,6 +1253,11 @@ func (mt *PatientMedia) Validate() (err error) {
 			if err2 := e.Validate(); err2 != nil {
 				err = goa.MergeErrors(err, err2)
 			}
+		}
+	}
+	if mt.Meta != nil {
+		if err2 := mt.Meta.Validate(); err2 != nil {
+			err = goa.MergeErrors(err, err2)
 		}
 	}
 	for _, e := range mt.Name {
@@ -1293,21 +1318,9 @@ func (mt PatientMediaCollection) Validate() (err error) {
 	return
 }
 
-// PatientMediaCollection is the media type for an array of PatientMedia (link view)
-//
-// Identifier: application/vnd.patient+json; type=collection; view=link
-type PatientMediaLinkCollection []*PatientMediaLink
-
 // DecodePatientMediaCollection decodes the PatientMediaCollection instance encoded in resp body.
 func (c *Client) DecodePatientMediaCollection(resp *http.Response) (PatientMediaCollection, error) {
 	var decoded PatientMediaCollection
-	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
-	return decoded, err
-}
-
-// DecodePatientMediaLinkCollection decodes the PatientMediaLinkCollection instance encoded in resp body.
-func (c *Client) DecodePatientMediaLinkCollection(resp *http.Response) (PatientMediaLinkCollection, error) {
-	var decoded PatientMediaLinkCollection
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return decoded, err
 }
@@ -1544,30 +1557,6 @@ func (c *Client) DecodeReferenceRangeMedia(resp *http.Response) (*ReferenceRange
 	return &decoded, err
 }
 
-// ReferenceRangeMediaCollection is the media type for an array of ReferenceRangeMedia (default view)
-//
-// Identifier: application/vnd.reference.range+json; type=collection; view=default
-type ReferenceRangeMediaCollection []*ReferenceRangeMedia
-
-// Validate validates the ReferenceRangeMediaCollection media type instance.
-func (mt ReferenceRangeMediaCollection) Validate() (err error) {
-	for _, e := range mt {
-		if e != nil {
-			if err2 := e.Validate(); err2 != nil {
-				err = goa.MergeErrors(err, err2)
-			}
-		}
-	}
-	return
-}
-
-// DecodeReferenceRangeMediaCollection decodes the ReferenceRangeMediaCollection instance encoded in resp body.
-func (c *Client) DecodeReferenceRangeMediaCollection(resp *http.Response) (ReferenceRangeMediaCollection, error) {
-	var decoded ReferenceRangeMediaCollection
-	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
-	return decoded, err
-}
-
 // RelatedMedia media type (default view)
 //
 // Identifier: application/vnd.related+json; view=default
@@ -1583,18 +1572,6 @@ func (c *Client) DecodeRelatedMedia(resp *http.Response) (*RelatedMedia, error) 
 	var decoded RelatedMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
-}
-
-// RelatedMediaCollection is the media type for an array of RelatedMedia (default view)
-//
-// Identifier: application/vnd.related+json; type=collection; view=default
-type RelatedMediaCollection []*RelatedMedia
-
-// DecodeRelatedMediaCollection decodes the RelatedMediaCollection instance encoded in resp body.
-func (c *Client) DecodeRelatedMediaCollection(resp *http.Response) (RelatedMediaCollection, error) {
-	var decoded RelatedMediaCollection
-	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
-	return decoded, err
 }
 
 // RepeatMedia media type (default view)
@@ -1767,7 +1744,7 @@ func (c *Client) DecodeTimingMedia(resp *http.Response) (*TimingMedia, error) {
 // A user of the API (default view)
 //
 // Identifier: application/vnd.user+json; view=default
-type User struct {
+type UserMedia struct {
 	// Name of city, town etc.
 	AddressCity *string `form:"address_city,omitempty" json:"address_city,omitempty" xml:"address_city,omitempty"`
 	// Street name, number, direction & P.O. Box etc.
@@ -1777,82 +1754,34 @@ type User struct {
 	// Sub-unit of country (abbreviations ok)
 	AddressState *string `form:"address_state,omitempty" json:"address_state,omitempty" xml:"address_state,omitempty"`
 	// Date of creation
-	CreatedAt time.Time `form:"created_at" json:"created_at" xml:"created_at"`
+	CreatedAt *time.Time `form:"created_at,omitempty" json:"created_at,omitempty" xml:"created_at,omitempty"`
 	// Email of user owner
-	CreatedBy string `form:"created_by" json:"created_by" xml:"created_by"`
+	CreatedBy *string `form:"created_by,omitempty" json:"created_by,omitempty" xml:"created_by,omitempty"`
 	// Email of user
-	Email string `form:"email" json:"email" xml:"email"`
+	Email *string `form:"email,omitempty" json:"email,omitempty" xml:"email,omitempty"`
 	// First name of user
-	FirstName string `form:"first_name" json:"first_name" xml:"first_name"`
+	FirstName *string `form:"first_name,omitempty" json:"first_name,omitempty" xml:"first_name,omitempty"`
 	// API href of user
-	Href string `form:"href" json:"href" xml:"href"`
+	Href *string `form:"href,omitempty" json:"href,omitempty" xml:"href,omitempty"`
 	// ID of user
-	ID int `form:"id" json:"id" xml:"id"`
+	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
 	// Last name of user
-	LastName string `form:"last_name" json:"last_name" xml:"last_name"`
+	LastName *string `form:"last_name,omitempty" json:"last_name,omitempty" xml:"last_name,omitempty"`
 	// Username of user
-	Username string `form:"username" json:"username" xml:"username"`
+	Username *string `form:"username,omitempty" json:"username,omitempty" xml:"username,omitempty"`
 }
 
-// Validate validates the User media type instance.
-func (mt *User) Validate() (err error) {
-
-	if mt.Href == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "href"))
-	}
-	if mt.Username == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "username"))
-	}
-	if mt.Email == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "email"))
-	}
-	if mt.FirstName == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "first_name"))
-	}
-	if mt.LastName == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "last_name"))
-	}
-
-	if mt.CreatedBy == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "created_by"))
-	}
-	if mt.AddressCity != nil {
-		if utf8.RuneCountInString(*mt.AddressCity) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.address_city`, *mt.AddressCity, utf8.RuneCountInString(*mt.AddressCity), 2, true))
+// Validate validates the UserMedia media type instance.
+func (mt *UserMedia) Validate() (err error) {
+	if mt.CreatedBy != nil {
+		if err2 := goa.ValidateFormat(goa.FormatEmail, *mt.CreatedBy); err2 != nil {
+			err = goa.MergeErrors(err, goa.InvalidFormatError(`response.created_by`, *mt.CreatedBy, goa.FormatEmail, err2))
 		}
 	}
-	if mt.AddressLine != nil {
-		if utf8.RuneCountInString(*mt.AddressLine) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.address_line`, *mt.AddressLine, utf8.RuneCountInString(*mt.AddressLine), 2, true))
+	if mt.Email != nil {
+		if err2 := goa.ValidateFormat(goa.FormatEmail, *mt.Email); err2 != nil {
+			err = goa.MergeErrors(err, goa.InvalidFormatError(`response.email`, *mt.Email, goa.FormatEmail, err2))
 		}
-	}
-	if mt.AddressPostalCode != nil {
-		if len(*mt.AddressPostalCode) < 5 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.address_postal_code`, *mt.AddressPostalCode, len(*mt.AddressPostalCode), 5, true))
-		}
-	}
-	if mt.AddressState != nil {
-		if utf8.RuneCountInString(*mt.AddressState) < 2 {
-			err = goa.MergeErrors(err, goa.InvalidLengthError(`response.address_state`, *mt.AddressState, utf8.RuneCountInString(*mt.AddressState), 2, true))
-		}
-	}
-	if err2 := goa.ValidateFormat(goa.FormatEmail, mt.CreatedBy); err2 != nil {
-		err = goa.MergeErrors(err, goa.InvalidFormatError(`response.created_by`, mt.CreatedBy, goa.FormatEmail, err2))
-	}
-	if err2 := goa.ValidateFormat(goa.FormatEmail, mt.Email); err2 != nil {
-		err = goa.MergeErrors(err, goa.InvalidFormatError(`response.email`, mt.Email, goa.FormatEmail, err2))
-	}
-	if utf8.RuneCountInString(mt.Email) < 4 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`response.email`, mt.Email, utf8.RuneCountInString(mt.Email), 4, true))
-	}
-	if utf8.RuneCountInString(mt.FirstName) < 2 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`response.first_name`, mt.FirstName, utf8.RuneCountInString(mt.FirstName), 2, true))
-	}
-	if utf8.RuneCountInString(mt.LastName) < 2 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`response.last_name`, mt.LastName, utf8.RuneCountInString(mt.LastName), 2, true))
-	}
-	if utf8.RuneCountInString(mt.Username) < 3 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`response.username`, mt.Username, utf8.RuneCountInString(mt.Username), 3, true))
 	}
 	return
 }
@@ -1860,104 +1789,69 @@ func (mt *User) Validate() (err error) {
 // A user of the API (link view)
 //
 // Identifier: application/vnd.user+json; view=link
-type UserLink struct {
+type UserMediaLink struct {
 	// API href of user
-	Href string `form:"href" json:"href" xml:"href"`
+	Href *string `form:"href,omitempty" json:"href,omitempty" xml:"href,omitempty"`
 	// ID of user
-	ID int `form:"id" json:"id" xml:"id"`
-}
-
-// Validate validates the UserLink media type instance.
-func (mt *UserLink) Validate() (err error) {
-
-	if mt.Href == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "href"))
-	}
-	return
+	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
 }
 
 // A user of the API (tiny view)
 //
 // Identifier: application/vnd.user+json; view=tiny
-type UserTiny struct {
+type UserMediaTiny struct {
 	// Email of user
-	Email string `form:"email" json:"email" xml:"email"`
+	Email *string `form:"email,omitempty" json:"email,omitempty" xml:"email,omitempty"`
 	// First name of user
-	FirstName string `form:"first_name" json:"first_name" xml:"first_name"`
+	FirstName *string `form:"first_name,omitempty" json:"first_name,omitempty" xml:"first_name,omitempty"`
 	// API href of user
-	Href string `form:"href" json:"href" xml:"href"`
+	Href *string `form:"href,omitempty" json:"href,omitempty" xml:"href,omitempty"`
 	// ID of user
-	ID int `form:"id" json:"id" xml:"id"`
+	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
 	// Last name of user
-	LastName string `form:"last_name" json:"last_name" xml:"last_name"`
+	LastName *string `form:"last_name,omitempty" json:"last_name,omitempty" xml:"last_name,omitempty"`
 	// Username of user
-	Username string `form:"username" json:"username" xml:"username"`
+	Username *string `form:"username,omitempty" json:"username,omitempty" xml:"username,omitempty"`
 }
 
-// Validate validates the UserTiny media type instance.
-func (mt *UserTiny) Validate() (err error) {
-
-	if mt.Href == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "href"))
-	}
-	if mt.Username == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "username"))
-	}
-	if mt.Email == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "email"))
-	}
-	if mt.FirstName == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "first_name"))
-	}
-	if mt.LastName == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "last_name"))
-	}
-	if err2 := goa.ValidateFormat(goa.FormatEmail, mt.Email); err2 != nil {
-		err = goa.MergeErrors(err, goa.InvalidFormatError(`response.email`, mt.Email, goa.FormatEmail, err2))
-	}
-	if utf8.RuneCountInString(mt.Email) < 4 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`response.email`, mt.Email, utf8.RuneCountInString(mt.Email), 4, true))
-	}
-	if utf8.RuneCountInString(mt.FirstName) < 2 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`response.first_name`, mt.FirstName, utf8.RuneCountInString(mt.FirstName), 2, true))
-	}
-	if utf8.RuneCountInString(mt.LastName) < 2 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`response.last_name`, mt.LastName, utf8.RuneCountInString(mt.LastName), 2, true))
-	}
-	if utf8.RuneCountInString(mt.Username) < 3 {
-		err = goa.MergeErrors(err, goa.InvalidLengthError(`response.username`, mt.Username, utf8.RuneCountInString(mt.Username), 3, true))
+// Validate validates the UserMediaTiny media type instance.
+func (mt *UserMediaTiny) Validate() (err error) {
+	if mt.Email != nil {
+		if err2 := goa.ValidateFormat(goa.FormatEmail, *mt.Email); err2 != nil {
+			err = goa.MergeErrors(err, goa.InvalidFormatError(`response.email`, *mt.Email, goa.FormatEmail, err2))
+		}
 	}
 	return
 }
 
-// DecodeUser decodes the User instance encoded in resp body.
-func (c *Client) DecodeUser(resp *http.Response) (*User, error) {
-	var decoded User
+// DecodeUserMedia decodes the UserMedia instance encoded in resp body.
+func (c *Client) DecodeUserMedia(resp *http.Response) (*UserMedia, error) {
+	var decoded UserMedia
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// DecodeUserLink decodes the UserLink instance encoded in resp body.
-func (c *Client) DecodeUserLink(resp *http.Response) (*UserLink, error) {
-	var decoded UserLink
+// DecodeUserMediaLink decodes the UserMediaLink instance encoded in resp body.
+func (c *Client) DecodeUserMediaLink(resp *http.Response) (*UserMediaLink, error) {
+	var decoded UserMediaLink
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// DecodeUserTiny decodes the UserTiny instance encoded in resp body.
-func (c *Client) DecodeUserTiny(resp *http.Response) (*UserTiny, error) {
-	var decoded UserTiny
+// DecodeUserMediaTiny decodes the UserMediaTiny instance encoded in resp body.
+func (c *Client) DecodeUserMediaTiny(resp *http.Response) (*UserMediaTiny, error) {
+	var decoded UserMediaTiny
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return &decoded, err
 }
 
-// UserCollection is the media type for an array of User (default view)
+// UserMediaCollection is the media type for an array of UserMedia (default view)
 //
 // Identifier: application/vnd.user+json; type=collection; view=default
-type UserCollection []*User
+type UserMediaCollection []*UserMedia
 
-// Validate validates the UserCollection media type instance.
-func (mt UserCollection) Validate() (err error) {
+// Validate validates the UserMediaCollection media type instance.
+func (mt UserMediaCollection) Validate() (err error) {
 	for _, e := range mt {
 		if e != nil {
 			if err2 := e.Validate(); err2 != nil {
@@ -1968,30 +1862,18 @@ func (mt UserCollection) Validate() (err error) {
 	return
 }
 
-// UserCollection is the media type for an array of User (link view)
+// UserMediaCollection is the media type for an array of UserMedia (link view)
 //
 // Identifier: application/vnd.user+json; type=collection; view=link
-type UserLinkCollection []*UserLink
+type UserMediaLinkCollection []*UserMediaLink
 
-// Validate validates the UserLinkCollection media type instance.
-func (mt UserLinkCollection) Validate() (err error) {
-	for _, e := range mt {
-		if e != nil {
-			if err2 := e.Validate(); err2 != nil {
-				err = goa.MergeErrors(err, err2)
-			}
-		}
-	}
-	return
-}
-
-// UserCollection is the media type for an array of User (tiny view)
+// UserMediaCollection is the media type for an array of UserMedia (tiny view)
 //
 // Identifier: application/vnd.user+json; type=collection; view=tiny
-type UserTinyCollection []*UserTiny
+type UserMediaTinyCollection []*UserMediaTiny
 
-// Validate validates the UserTinyCollection media type instance.
-func (mt UserTinyCollection) Validate() (err error) {
+// Validate validates the UserMediaTinyCollection media type instance.
+func (mt UserMediaTinyCollection) Validate() (err error) {
 	for _, e := range mt {
 		if e != nil {
 			if err2 := e.Validate(); err2 != nil {
@@ -2002,23 +1884,23 @@ func (mt UserTinyCollection) Validate() (err error) {
 	return
 }
 
-// DecodeUserCollection decodes the UserCollection instance encoded in resp body.
-func (c *Client) DecodeUserCollection(resp *http.Response) (UserCollection, error) {
-	var decoded UserCollection
+// DecodeUserMediaCollection decodes the UserMediaCollection instance encoded in resp body.
+func (c *Client) DecodeUserMediaCollection(resp *http.Response) (UserMediaCollection, error) {
+	var decoded UserMediaCollection
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return decoded, err
 }
 
-// DecodeUserLinkCollection decodes the UserLinkCollection instance encoded in resp body.
-func (c *Client) DecodeUserLinkCollection(resp *http.Response) (UserLinkCollection, error) {
-	var decoded UserLinkCollection
+// DecodeUserMediaLinkCollection decodes the UserMediaLinkCollection instance encoded in resp body.
+func (c *Client) DecodeUserMediaLinkCollection(resp *http.Response) (UserMediaLinkCollection, error) {
+	var decoded UserMediaLinkCollection
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return decoded, err
 }
 
-// DecodeUserTinyCollection decodes the UserTinyCollection instance encoded in resp body.
-func (c *Client) DecodeUserTinyCollection(resp *http.Response) (UserTinyCollection, error) {
-	var decoded UserTinyCollection
+// DecodeUserMediaTinyCollection decodes the UserMediaTinyCollection instance encoded in resp body.
+func (c *Client) DecodeUserMediaTinyCollection(resp *http.Response) (UserMediaTinyCollection, error) {
+	var decoded UserMediaTinyCollection
 	err := c.Decoder.Decode(&decoded, resp.Body, resp.Header.Get("Content-Type"))
 	return decoded, err
 }

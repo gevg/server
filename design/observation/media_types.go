@@ -11,6 +11,7 @@ var ObservationMedia = MediaType("application/vnd.observation+json", func() {
 	TypeName("ObservationMedia")
 	Reference(ObservationPayload)
 	Attributes(func() {
+		Attribute("meta")
 		Attribute("identifier")
 		Attribute("status")
 		Attribute("category")
@@ -45,6 +46,7 @@ var ObservationMedia = MediaType("application/vnd.observation+json", func() {
 	})
 	View("default", func() {
 		Description("Default view for Observation resource.")
+		Attribute("meta")
 		Attribute("identifier")
 		Attribute("status")
 		Attribute("category")

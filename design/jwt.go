@@ -1,12 +1,9 @@
 package design
 
 import (
+	. "github.com/goa-fhir/server/design/security"
 	. "github.com/goadesign/goa/design"
 	. "github.com/goadesign/goa/design/apidsl"
-		. "github.com/goa-fhir/server/design/public"
-
-
-	
 )
 
 // JWT defines a security scheme using JWT.  The scheme uses the "Authorization" header to lookup

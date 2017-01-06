@@ -109,7 +109,7 @@ var Address = Type("Address", func() {
 		Enum("postal", "physical", "both")
 		Example("postal")
 	})
-	Attribute("line", String, "This component contains the house number, apartment number, street name, street direction,  P.O. Box number, delivery hints, and similar address information.", func() {
+	Attribute("line", ArrayOf(String), "This component contains the house number, apartment number, street name, street direction,  P.O. Box number, delivery hints, and similar address information.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
@@ -125,7 +125,7 @@ var Address = Type("Address", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("postalCode", Integer, "A postal code designating a region defined by the postal service.", func() {
+	Attribute("postalCode", String, "A postal code designating a region defined by the postal service.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})

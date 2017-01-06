@@ -22,13 +22,15 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strconv"
+	"time"
 )
 
 // CreateObservationBadRequest runs the method Create of the given controller with the given parameters and payload.
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func CreateObservationBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, payload *app.CreateObservationPayload) (http.ResponseWriter, error) {
+func CreateObservationBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.CreateObservationPayload) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -58,8 +60,82 @@ func CreateObservationBadRequest(t goatest.TInterface, ctx context.Context, serv
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/observation", patientID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/observation", patientID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
@@ -67,6 +143,78 @@ func CreateObservationBadRequest(t goatest.TInterface, ctx context.Context, serv
 	}
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -104,7 +252,7 @@ func CreateObservationBadRequest(t goatest.TInterface, ctx context.Context, serv
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func CreateObservationCreated(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, payload *app.CreateObservationPayload) http.ResponseWriter {
+func CreateObservationCreated(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.CreateObservationPayload) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -135,8 +283,82 @@ func CreateObservationCreated(t goatest.TInterface, ctx context.Context, service
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/observation", patientID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/observation", patientID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
@@ -144,6 +366,78 @@ func CreateObservationCreated(t goatest.TInterface, ctx context.Context, service
 	}
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -173,7 +467,7 @@ func CreateObservationCreated(t goatest.TInterface, ctx context.Context, service
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func CreateObservationNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, payload *app.CreateObservationPayload) http.ResponseWriter {
+func CreateObservationNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.CreateObservationPayload) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -204,8 +498,82 @@ func CreateObservationNotFound(t goatest.TInterface, ctx context.Context, servic
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/observation", patientID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/observation", patientID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
@@ -213,6 +581,78 @@ func CreateObservationNotFound(t goatest.TInterface, ctx context.Context, servic
 	}
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -242,7 +682,7 @@ func CreateObservationNotFound(t goatest.TInterface, ctx context.Context, servic
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func DeleteObservationBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int) (http.ResponseWriter, error) {
+func DeleteObservationBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -262,8 +702,82 @@ func DeleteObservationBadRequest(t goatest.TInterface, ctx context.Context, serv
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/observation/%v", patientID, observationID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/observation/%v", patientID, observationID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("DELETE", u.String(), nil)
 	if err != nil {
@@ -272,6 +786,78 @@ func DeleteObservationBadRequest(t goatest.TInterface, ctx context.Context, serv
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["observationID"] = []string{fmt.Sprintf("%v", observationID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -308,7 +894,7 @@ func DeleteObservationBadRequest(t goatest.TInterface, ctx context.Context, serv
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func DeleteObservationNoContent(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int) http.ResponseWriter {
+func DeleteObservationNoContent(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -328,8 +914,82 @@ func DeleteObservationNoContent(t goatest.TInterface, ctx context.Context, servi
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/observation/%v", patientID, observationID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/observation/%v", patientID, observationID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("DELETE", u.String(), nil)
 	if err != nil {
@@ -338,6 +998,78 @@ func DeleteObservationNoContent(t goatest.TInterface, ctx context.Context, servi
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["observationID"] = []string{fmt.Sprintf("%v", observationID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -366,7 +1098,7 @@ func DeleteObservationNoContent(t goatest.TInterface, ctx context.Context, servi
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func DeleteObservationNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int) http.ResponseWriter {
+func DeleteObservationNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -386,8 +1118,82 @@ func DeleteObservationNotFound(t goatest.TInterface, ctx context.Context, servic
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/observation/%v", patientID, observationID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/observation/%v", patientID, observationID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("DELETE", u.String(), nil)
 	if err != nil {
@@ -396,6 +1202,78 @@ func DeleteObservationNotFound(t goatest.TInterface, ctx context.Context, servic
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["observationID"] = []string{fmt.Sprintf("%v", observationID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -424,7 +1302,7 @@ func DeleteObservationNotFound(t goatest.TInterface, ctx context.Context, servic
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ListObservationBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, years []int) (http.ResponseWriter, error) {
+func ListObservationBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, code []string) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -445,12 +1323,81 @@ func ListObservationBadRequest(t goatest.TInterface, ctx context.Context, servic
 	// Setup request context
 	rw := httptest.NewRecorder()
 	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	{
-		sliceVal := make([]string, len(years))
-		for i, v := range years {
-			sliceVal[i] = fmt.Sprintf("%v", v)
-		}
-		query["years"] = sliceVal
+		sliceVal := code
+		query["code"] = sliceVal
 	}
 	u := &url.URL{
 		Path:     fmt.Sprintf("/nosh/patients/%v/observation", patientID),
@@ -462,12 +1409,81 @@ func ListObservationBadRequest(t goatest.TInterface, ctx context.Context, servic
 	}
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	{
-		sliceVal := make([]string, len(years))
-		for i, v := range years {
-			sliceVal[i] = fmt.Sprintf("%v", v)
-		}
-		prms["years"] = sliceVal
+		sliceVal := code
+		prms["code"] = sliceVal
 	}
 	if ctx == nil {
 		ctx = context.Background()
@@ -505,7 +1521,7 @@ func ListObservationBadRequest(t goatest.TInterface, ctx context.Context, servic
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ListObservationNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, years []int) http.ResponseWriter {
+func ListObservationNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, code []string) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -526,12 +1542,81 @@ func ListObservationNotFound(t goatest.TInterface, ctx context.Context, service 
 	// Setup request context
 	rw := httptest.NewRecorder()
 	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	{
-		sliceVal := make([]string, len(years))
-		for i, v := range years {
-			sliceVal[i] = fmt.Sprintf("%v", v)
-		}
-		query["years"] = sliceVal
+		sliceVal := code
+		query["code"] = sliceVal
 	}
 	u := &url.URL{
 		Path:     fmt.Sprintf("/nosh/patients/%v/observation", patientID),
@@ -543,12 +1628,81 @@ func ListObservationNotFound(t goatest.TInterface, ctx context.Context, service 
 	}
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	{
-		sliceVal := make([]string, len(years))
-		for i, v := range years {
-			sliceVal[i] = fmt.Sprintf("%v", v)
-		}
-		prms["years"] = sliceVal
+		sliceVal := code
+		prms["code"] = sliceVal
 	}
 	if ctx == nil {
 		ctx = context.Background()
@@ -578,7 +1732,7 @@ func ListObservationNotFound(t goatest.TInterface, ctx context.Context, service 
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ListObservationOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, years []int) (http.ResponseWriter, app.ObservationMediaCollection) {
+func ListObservationOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, code []string) (http.ResponseWriter, app.ObservationMediaCollection) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -599,12 +1753,81 @@ func ListObservationOK(t goatest.TInterface, ctx context.Context, service *goa.S
 	// Setup request context
 	rw := httptest.NewRecorder()
 	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	{
-		sliceVal := make([]string, len(years))
-		for i, v := range years {
-			sliceVal[i] = fmt.Sprintf("%v", v)
-		}
-		query["years"] = sliceVal
+		sliceVal := code
+		query["code"] = sliceVal
 	}
 	u := &url.URL{
 		Path:     fmt.Sprintf("/nosh/patients/%v/observation", patientID),
@@ -616,12 +1839,81 @@ func ListObservationOK(t goatest.TInterface, ctx context.Context, service *goa.S
 	}
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	{
-		sliceVal := make([]string, len(years))
-		for i, v := range years {
-			sliceVal[i] = fmt.Sprintf("%v", v)
-		}
-		prms["years"] = sliceVal
+		sliceVal := code
+		prms["code"] = sliceVal
 	}
 	if ctx == nil {
 		ctx = context.Background()
@@ -663,7 +1955,7 @@ func ListObservationOK(t goatest.TInterface, ctx context.Context, service *goa.S
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func RateObservationBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int) (http.ResponseWriter, error) {
+func RateObservationBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -683,8 +1975,82 @@ func RateObservationBadRequest(t goatest.TInterface, ctx context.Context, servic
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/observation/%v/actions/rate", patientID, observationID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/observation/%v/actions/rate", patientID, observationID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("PUT", u.String(), nil)
 	if err != nil {
@@ -693,6 +2059,78 @@ func RateObservationBadRequest(t goatest.TInterface, ctx context.Context, servic
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["observationID"] = []string{fmt.Sprintf("%v", observationID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -729,7 +2167,7 @@ func RateObservationBadRequest(t goatest.TInterface, ctx context.Context, servic
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func RateObservationNoContent(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int) http.ResponseWriter {
+func RateObservationNoContent(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -749,8 +2187,82 @@ func RateObservationNoContent(t goatest.TInterface, ctx context.Context, service
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/observation/%v/actions/rate", patientID, observationID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/observation/%v/actions/rate", patientID, observationID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("PUT", u.String(), nil)
 	if err != nil {
@@ -759,6 +2271,78 @@ func RateObservationNoContent(t goatest.TInterface, ctx context.Context, service
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["observationID"] = []string{fmt.Sprintf("%v", observationID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -787,7 +2371,7 @@ func RateObservationNoContent(t goatest.TInterface, ctx context.Context, service
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func RateObservationNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int) http.ResponseWriter {
+func RateObservationNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -807,8 +2391,82 @@ func RateObservationNotFound(t goatest.TInterface, ctx context.Context, service 
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/observation/%v/actions/rate", patientID, observationID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/observation/%v/actions/rate", patientID, observationID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("PUT", u.String(), nil)
 	if err != nil {
@@ -817,6 +2475,78 @@ func RateObservationNotFound(t goatest.TInterface, ctx context.Context, service 
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["observationID"] = []string{fmt.Sprintf("%v", observationID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -845,7 +2575,7 @@ func RateObservationNotFound(t goatest.TInterface, ctx context.Context, service 
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ShowObservationBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int) (http.ResponseWriter, error) {
+func ShowObservationBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -865,8 +2595,82 @@ func ShowObservationBadRequest(t goatest.TInterface, ctx context.Context, servic
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/observation/%v", patientID, observationID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/observation/%v", patientID, observationID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -875,6 +2679,78 @@ func ShowObservationBadRequest(t goatest.TInterface, ctx context.Context, servic
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["observationID"] = []string{fmt.Sprintf("%v", observationID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -911,7 +2787,7 @@ func ShowObservationBadRequest(t goatest.TInterface, ctx context.Context, servic
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ShowObservationNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int) http.ResponseWriter {
+func ShowObservationNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -931,8 +2807,82 @@ func ShowObservationNotFound(t goatest.TInterface, ctx context.Context, service 
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/observation/%v", patientID, observationID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/observation/%v", patientID, observationID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -941,6 +2891,78 @@ func ShowObservationNotFound(t goatest.TInterface, ctx context.Context, service 
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["observationID"] = []string{fmt.Sprintf("%v", observationID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -969,7 +2991,7 @@ func ShowObservationNotFound(t goatest.TInterface, ctx context.Context, service 
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ShowObservationOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int) (http.ResponseWriter, *app.ObservationMedia) {
+func ShowObservationOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, *app.ObservationMedia) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -989,8 +3011,82 @@ func ShowObservationOK(t goatest.TInterface, ctx context.Context, service *goa.S
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/observation/%v", patientID, observationID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/observation/%v", patientID, observationID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -999,6 +3095,78 @@ func ShowObservationOK(t goatest.TInterface, ctx context.Context, service *goa.S
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["observationID"] = []string{fmt.Sprintf("%v", observationID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -1039,7 +3207,7 @@ func ShowObservationOK(t goatest.TInterface, ctx context.Context, service *goa.S
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func UpdateObservationBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int, payload *app.ObservationPayload) (http.ResponseWriter, error) {
+func UpdateObservationBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.ObservationPayload) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1069,8 +3237,82 @@ func UpdateObservationBadRequest(t goatest.TInterface, ctx context.Context, serv
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/observation/%v", patientID, observationID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/observation/%v", patientID, observationID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("PATCH", u.String(), nil)
 	if err != nil {
@@ -1079,6 +3321,78 @@ func UpdateObservationBadRequest(t goatest.TInterface, ctx context.Context, serv
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["observationID"] = []string{fmt.Sprintf("%v", observationID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -1116,7 +3430,7 @@ func UpdateObservationBadRequest(t goatest.TInterface, ctx context.Context, serv
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func UpdateObservationNoContent(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int, payload *app.ObservationPayload) http.ResponseWriter {
+func UpdateObservationNoContent(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.ObservationPayload) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1147,8 +3461,82 @@ func UpdateObservationNoContent(t goatest.TInterface, ctx context.Context, servi
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/observation/%v", patientID, observationID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/observation/%v", patientID, observationID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("PATCH", u.String(), nil)
 	if err != nil {
@@ -1157,6 +3545,78 @@ func UpdateObservationNoContent(t goatest.TInterface, ctx context.Context, servi
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["observationID"] = []string{fmt.Sprintf("%v", observationID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -1186,7 +3646,7 @@ func UpdateObservationNoContent(t goatest.TInterface, ctx context.Context, servi
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func UpdateObservationNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int, payload *app.ObservationPayload) http.ResponseWriter {
+func UpdateObservationNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.ObservationPayload) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1217,8 +3677,82 @@ func UpdateObservationNotFound(t goatest.TInterface, ctx context.Context, servic
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/observation/%v", patientID, observationID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/observation/%v", patientID, observationID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("PATCH", u.String(), nil)
 	if err != nil {
@@ -1227,6 +3761,78 @@ func UpdateObservationNotFound(t goatest.TInterface, ctx context.Context, servic
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["observationID"] = []string{fmt.Sprintf("%v", observationID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -1256,7 +3862,7 @@ func UpdateObservationNotFound(t goatest.TInterface, ctx context.Context, servic
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func WatchObservationBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int) (http.ResponseWriter, error) {
+func WatchObservationBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.ObservationController, patientID int, observationID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1276,8 +3882,82 @@ func WatchObservationBadRequest(t goatest.TInterface, ctx context.Context, servi
 
 	// Setup request context
 	rw := httptest.NewRecorder()
+	query := url.Values{}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		query["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		query["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		query["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		query["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		query["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		query["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		query["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		query["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		query["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		query["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		query["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		query["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		query["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		query["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		query["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		query["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		query["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		query["_type"] = sliceVal
+	}
 	u := &url.URL{
-		Path: fmt.Sprintf("/nosh/patients/%v/observation/%v/watch", patientID, observationID),
+		Path:     fmt.Sprintf("/nosh/patients/%v/observation/%v/watch", patientID, observationID),
+		RawQuery: query.Encode(),
 	}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
@@ -1286,6 +3966,78 @@ func WatchObservationBadRequest(t goatest.TInterface, ctx context.Context, servi
 	prms := url.Values{}
 	prms["patientID"] = []string{fmt.Sprintf("%v", patientID)}
 	prms["observationID"] = []string{fmt.Sprintf("%v", observationID)}
+	if contained != nil {
+		sliceVal := []string{*contained}
+		prms["_contained"] = sliceVal
+	}
+	if containedType != nil {
+		sliceVal := []string{*containedType}
+		prms["_containedType"] = sliceVal
+	}
+	if count != nil {
+		sliceVal := []string{strconv.Itoa(*count)}
+		prms["_count"] = sliceVal
+	}
+	if elements != nil {
+		sliceVal := []string{*elements}
+		prms["_elements"] = sliceVal
+	}
+	if has != nil {
+		sliceVal := []string{*has}
+		prms["_has"] = sliceVal
+	}
+	if id != nil {
+		sliceVal := []string{strconv.Itoa(*id)}
+		prms["_id"] = sliceVal
+	}
+	if include != nil {
+		sliceVal := []string{*include}
+		prms["_include"] = sliceVal
+	}
+	if lastUpdate != nil {
+		sliceVal := []string{(*lastUpdate).Format(time.RFC3339)}
+		prms["_lastUpdate"] = sliceVal
+	}
+	if list != nil {
+		sliceVal := []string{*list}
+		prms["_list"] = sliceVal
+	}
+	if profile != nil {
+		sliceVal := []string{*profile}
+		prms["_profile"] = sliceVal
+	}
+	if query != nil {
+		sliceVal := []string{*query}
+		prms["_query"] = sliceVal
+	}
+	if revinclude != nil {
+		sliceVal := []string{*revinclude}
+		prms["_revinclude"] = sliceVal
+	}
+	if security != nil {
+		sliceVal := []string{*security}
+		prms["_security"] = sliceVal
+	}
+	if sort != nil {
+		sliceVal := []string{*sort}
+		prms["_sort"] = sliceVal
+	}
+	if summary != nil {
+		sliceVal := []string{*summary}
+		prms["_summary"] = sliceVal
+	}
+	if tag != nil {
+		sliceVal := []string{*tag}
+		prms["_tag"] = sliceVal
+	}
+	if text != nil {
+		sliceVal := []string{*text}
+		prms["_text"] = sliceVal
+	}
+	if type_ != nil {
+		sliceVal := []string{*type_}
+		prms["_type"] = sliceVal
+	}
 	if ctx == nil {
 		ctx = context.Background()
 	}

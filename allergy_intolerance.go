@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/goadesign/goa"
 	"github.com/goa-fhir/server/app"
+	"github.com/goadesign/goa"
 	"golang.org/x/net/websocket"
 	"io"
 )
@@ -44,7 +44,7 @@ func (c *AllergyIntoleranceController) List(ctx *app.ListAllergyIntoleranceConte
 	// Put your logic here
 
 	// AllergyIntoleranceController_List: end_implement
-	res := app.AllergyIntoleranceCollection{}
+	res := app.AllergyIntoleranceMediaCollection{}
 	return ctx.OK(res)
 }
 
@@ -58,14 +58,14 @@ func (c *AllergyIntoleranceController) Rate(ctx *app.RateAllergyIntoleranceConte
 	return nil
 }
 
-// Show runs the show action.
-func (c *AllergyIntoleranceController) Show(ctx *app.ShowAllergyIntoleranceContext) error {
-	// AllergyIntoleranceController_Show: start_implement
+// Read runs the read action.
+func (c *AllergyIntoleranceController) Read(ctx *app.ReadAllergyIntoleranceContext) error {
+	// AllergyIntoleranceController_Read: start_implement
 
 	// Put your logic here
 
-	// AllergyIntoleranceController_Show: end_implement
-	res := &app.AllergyIntolerance{}
+	// AllergyIntoleranceController_Read: end_implement
+	res := &app.AllergyIntoleranceMedia{}
 	return ctx.OK(res)
 }
 

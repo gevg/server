@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/goadesign/goa"
 	"github.com/goa-fhir/server/app"
+	"github.com/goadesign/goa"
 	"golang.org/x/net/websocket"
 	"io"
 )
@@ -44,7 +44,7 @@ func (c *NutritionRequestController) List(ctx *app.ListNutritionRequestContext) 
 	// Put your logic here
 
 	// NutritionRequestController_List: end_implement
-	res := app.NutritionRequestCollection{}
+	res := app.NutritionRequestMediaCollection{}
 	return ctx.OK(res)
 }
 
@@ -58,14 +58,14 @@ func (c *NutritionRequestController) Rate(ctx *app.RateNutritionRequestContext) 
 	return nil
 }
 
-// Show runs the show action.
-func (c *NutritionRequestController) Show(ctx *app.ShowNutritionRequestContext) error {
-	// NutritionRequestController_Show: start_implement
+// Read runs the read action.
+func (c *NutritionRequestController) Read(ctx *app.ReadNutritionRequestContext) error {
+	// NutritionRequestController_Read: start_implement
 
 	// Put your logic here
 
-	// NutritionRequestController_Show: end_implement
-	res := &app.NutritionRequest{}
+	// NutritionRequestController_Read: end_implement
+	res := &app.NutritionRequestMedia{}
 	return ctx.OK(res)
 }
 

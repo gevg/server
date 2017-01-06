@@ -10,6 +10,11 @@ var Specimen = Type("Specimen", func() {
 	Description("Demographics and other administrative information about an individual or animal receiving care or other health-related services.")
 	//Comments:
 	//Reason for inclusion or contrainment:
+	Attribute("meta", Meta, `The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	Changes to the content may not always be associated with version changes to the resource.`, func() {
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
 	Attribute("identifier", Identifier, "Id for specimen.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:

@@ -11,6 +11,7 @@ var SpecimenMedia = MediaType("application/vnd.specimen+json", func() {
 	TypeName("SpecimenMedia")
 	Reference(SpecimenPayload)
 	Attributes(func() {
+		Attribute("meta")
 		Attribute("identifier")
 		Attribute("status")
 		Attribute("type")
@@ -24,6 +25,7 @@ var SpecimenMedia = MediaType("application/vnd.specimen+json", func() {
 	})
 	View("default", func() {
 		Description("Default view for Specimen resource.")
+		Attribute("meta")
 		Attribute("identifier")
 		Attribute("status")
 		Attribute("type")

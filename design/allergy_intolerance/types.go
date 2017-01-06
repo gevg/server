@@ -26,6 +26,11 @@ var AllergyIntolerance = Type("AllergyIntolerance", func() {
 	//Local End-----------------------------------------------------------------------------------
 
 	Required("status", "type")
+	Attribute("meta", Meta, `The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
+	Changes to the content may not always be associated with version changes to the resource.`, func() {
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
 	Attribute("identifier", ArrayOf(Identifier), `This records identifiers associated with this allergy/intolerance concern that are defined by business processes and/or
 		used to refer to it when a direct URL reference to the resource itself is not appropriate (e.g. in CDA documents, or in written / printed documentation).`, func() {
 		//Comments:

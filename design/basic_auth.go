@@ -1,8 +1,7 @@
 package design
 
 import (
-	. "github.com/goa-fhir/server/design/public"
-
+	. "github.com/goa-fhir/server/design/security"
 	. "github.com/goadesign/goa/design"
 	. "github.com/goadesign/goa/design/apidsl"
 )

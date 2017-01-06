@@ -11,6 +11,7 @@ var NutritionRequestMedia = MediaType("application/vnd.nutrition.request+json", 
 	TypeName("NutritionRequestMedia")
 	Reference(NutritionRequestPayload)
 	Attributes(func() {
+			Attribute("meta")
 		Attribute("patient")
 		Attribute("orderer")
 		Attribute("identifier")
@@ -25,6 +26,7 @@ var NutritionRequestMedia = MediaType("application/vnd.nutrition.request+json", 
 		Attribute("enteralFormula")
 	})
 	View("default", func() {
+			Attribute("meta")
 		Attribute("patient")
 		Attribute("orderer")
 		Attribute("identifier")

@@ -1,53 +1,38 @@
 package main
 
 import (
-	"net/http"
-
-	"github.com/goadesign/goa"
 	"github.com/goa-fhir/server/app"
-	"golang.org/x/net/context"
+	"github.com/goadesign/goa"
 )
 
-// NewBasicAuthMiddleware creates a middleware that checks for the presence of a basic auth header
-// and validates its content.
-func NewBasicAuthMiddleware() goa.Middleware {
-	return func(h goa.Handler) goa.Handler {
-		return func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
-			// Retrieve and log basic auth info
-			user, pass, ok := req.BasicAuth()
-			// A real app would do something more interesting here
-			if !ok {
-				goa.LogInfo(ctx, "failed basic auth")
-				return ErrUnauthorized("missing auth")
-			}
-
-			// Proceed
-			goa.LogInfo(ctx, "basic", "user", user, "pass", pass)
-			//goa.LogInfo(ctx, "basic", "email", user, "password", pass)
-
-			return h(ctx, rw, req)
-		}
-	}
-}
-
-// BasicController implements the BasicAuth resource.
+// BasicController implements the basic resource.
 type BasicController struct {
 	*goa.Controller
 }
 
-// NewBasicController creates a BasicAuth controller.
+// NewBasicController creates a basic controller.
 func NewBasicController(service *goa.Service) *BasicController {
 	return &BasicController{Controller: service.NewController("BasicController")}
 }
 
 // Secure runs the secure action.
 func (c *BasicController) Secure(ctx *app.SecureBasicContext) error {
-	res := &app.Success{OK: true}
+	// BasicController_Secure: start_implement
+
+	// Put your logic here
+
+	// BasicController_Secure: end_implement
+	res := &app.Success{}
 	return ctx.OK(res)
 }
 
 // Unsecure runs the unsecure action.
 func (c *BasicController) Unsecure(ctx *app.UnsecureBasicContext) error {
-	res := &app.Success{OK: true}
+	// BasicController_Unsecure: start_implement
+
+	// Put your logic here
+
+	// BasicController_Unsecure: end_implement
+	res := &app.Success{}
 	return ctx.OK(res)
 }

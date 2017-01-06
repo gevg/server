@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/goadesign/goa"
 	"github.com/goa-fhir/server/app"
+	"github.com/goadesign/goa"
 )
 
 // UserController implements the user resource.
@@ -42,7 +42,7 @@ func (c *UserController) List(ctx *app.ListUserContext) error {
 	// Put your logic here
 
 	// UserController_List: end_implement
-	res := app.UserCollection{}
+	res := app.UserMediaCollection{}
 	return ctx.OK(res)
 }
 
@@ -53,7 +53,7 @@ func (c *UserController) Show(ctx *app.ShowUserContext) error {
 	// Put your logic here
 
 	// UserController_Show: end_implement
-	res := &app.User{}
+	res := &app.UserMedia{}
 	return ctx.OK(res)
 }
 
@@ -74,7 +74,7 @@ func (c *UserController) Signup(ctx *app.SignupUserContext) error {
 	// Put your logic here
 
 	// UserController_Signup: end_implement
-	res := &app.Success{}
+	res := &app.UserMedia{}
 	return ctx.OK(res)
 }
 

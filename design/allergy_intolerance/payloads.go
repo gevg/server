@@ -7,6 +7,7 @@ import (
 // AllergyIntolerance is the allergy_intolerance resource media type.--------------------------------------------------------------------------------
 var AllergyIntolerancePayload = Type("AllergyIntolerancePayload", func() {
 	Reference(AllergyIntolerance)
+		Attribute("meta")
 	Attribute("identifier")
 	Attribute("onset")
 	Attribute("recordedDate")
