@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/goa-fhir/server/app"
 	"github.com/goadesign/goa"
 )
@@ -18,7 +20,7 @@ func NewHealthController(service *goa.Service) *HealthController {
 // Health runs the health action.
 func (c *HealthController) Health(ctx *app.HealthHealthContext) error {
 	// HealthController_Health: start_implement
-
+	fmt.Println("Health")
 	// Put your logic here
 
 	// HealthController_Health: end_implement

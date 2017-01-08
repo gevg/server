@@ -7,7 +7,7 @@ import (
 
 // This is the cellar application API design used by goa to generate
 // the application code, client, tests, documentation etc.
-var _ = API("Secure", func() {
+var _ = API("goa-FHIR", func() {
 	Description("This artifical API shows 4 different ways to secure API endpoints: using " +
 		"basic auth, shared secret header, JWT or OAuth2")
 	Scheme("https")
@@ -42,9 +42,6 @@ var _ = API("Secure", func() {
 		MaxAge(600)
 		Credentials()
 	})
-
-
-
 
 	Params(func() {
 		//Parameters for all resources

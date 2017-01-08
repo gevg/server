@@ -235,6 +235,31 @@ var ContactPoint = Type("ContactPoint", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
+var DomainResource = Type("DomainResource", func() {
+	Description("")
+	//Comments:
+	//Reason for inclusion or contrainment:
+	Attribute("resource", HL7Resource, "", func() {
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
+	Attribute("text", Narrative, "", func() {
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
+	Attribute("contained", ArrayOf(Any), "", func() {
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
+	Attribute("extension", Extension, "", func() {
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
+	Attribute("modifierExtension", Extension, "", func() {
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
+})
 var HL7Reference = Type("HL7Reference", func() {
 	Description("A reference from one resource to another.")
 	//Comments:
@@ -249,6 +274,31 @@ var HL7Reference = Type("HL7Reference", func() {
 	})
 	Attribute("display", String, "Plain text narrative that identifies the resource in addition to the resource reference.", func() {
 		//Comments: This is generally not the same as the Resource.text of the referenced resource.  The purpose is to identify what's being referenced, not to fully describe it.
+		//Reason for inclusion or contrainment:
+	})
+})
+var HL7Resource = Type("HL7Resource", func() {
+	Description("")
+	//Comments:
+	//Reason for inclusion or contrainment:
+	Attribute("resourceType", String, "", func() {
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
+	Attribute("display", String, "", func() {
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
+	Attribute("tyoe", Meta, "", func() {
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
+	Attribute("ReferenceId", String, "", func() {
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
+	Attribute("External", Boolean, "", func() {
+		//Comments:
 		//Reason for inclusion or contrainment:
 	})
 })
@@ -352,7 +402,27 @@ var Meta = Type("Meta", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
+var Narrative = Type("Narrative", func() {
+	Description("A time period defined by a start and end date and optionally time.")
+	//Comments:
+	//Reason for inclusion or contrainment:
+	Attribute("status", String, `The status of the narrative - whether it's entirely generated (from just the defined data or the extensions too),
+	or whether a human authored it and it may contain additional data. See http://hl7.org/fhir/ValueSet/narrative-status.`, func() {
+		//Type: code
+		//Comments:
+		//Reason for inclusion or contrainment:
+		Enum("generated", "extensions", "additional", "empty")
+	})
+	Attribute("div", String, "The actual narrative content, a stripped down version of XHTML.", func() {
+		//Type: XHTML
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
+})
 var Period = Type("Period", func() {
+	Description("A time period defined by a start and end date and optionally time.")
+	//Comments:
+	//Reason for inclusion or contrainment:
 	Attribute("start", DateTime, "Starting time with inclusive boundary", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
@@ -480,6 +550,7 @@ var Repeat = Type("Repeat", func() {
 		//Reason for inclusion or contrainment:
 	})
 })
+
 var SampleData = Type("SampleData", func() {
 	Description("A series of measurements taken by a device, with upper and lower limits. There may be more than one dimension in the data.")
 	//Comments:

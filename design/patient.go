@@ -43,13 +43,20 @@ var _ = Resource("patient", func() {
 	// 	Credentials()              // Sets Access-Control-Allow-Credentials header
 	// })
 
-	Response(Unauthorized, ErrorMedia) // Common responses to all actions
-	Response(BadRequest, ErrorMedia)
+	// Response(Unauthorized, ErrorMedia) // Common responses to all actions
+	// Response(BadRequest, ErrorMedia)
 
 	//DefaultMedia(SuccessMedia)
 
 	// Security(JWT, func() { // Use JWT to auth requests to this endpoint
 	// 	Scope("api:access") // Enforce presence of "api" scope in JWT claims.
+	// })
+	// var BasicAuth = BasicAuthSecurity("basic_auth")
+
+	// 	Security(BasicAuth)
+
+	// Security(OAuth2Sec, func() {
+	// 	Scope("api:read")
 	// })
 
 	Action("read", func() {
@@ -106,8 +113,9 @@ var _ = Resource("patient", func() {
 		Payload(PatientPayload) // Request payload is described by the BottlePayload type
 		Routing(
 			GET(""),
-			POST(""),
 		)
+		//			POST(""),
+
 		Params(func() {
 			Param("active", Boolean, "Filter by active")
 			Param("birthDate", ArrayOf(DateTime), "Filter by birth date")
@@ -138,6 +146,12 @@ var _ = Resource("patient", func() {
 	})
 
 	Action("delete", func() {
+		Description("Delete record")
+
+		Security(OAuth2Sec, func() {
+			Scope("api:write")
+		})
+
 		Routing(
 			DELETE("/:patientID"),
 		)
@@ -148,4 +162,39 @@ var _ = Resource("patient", func() {
 		Response(NotFound)
 		Response(BadRequest, ErrorMedia)
 	})
+
+	// Action("Update2", func() {
+	// 	Description("Update account")
+
+	// 	Security(OAuth2Sec, func() {
+	// 		Scope("api:write")
+	// 	})
+	// 	Docs(func() {
+	// 		Description("Update docs")
+	// 		URL("http//cellarapi.com/docs/actions/update")
+	// 	})
+	// 	Scheme("http")
+	// 	Routing(
+	// 		PUT("/:id"),                     // Action path is relative to parent resource base path
+	// 		PUT("//orgs/:org/accounts/:id"), // The // prefix indicates an absolute path
+	// 	)
+	// 	Params(func() { // Params describe the action parameters
+	// 		Param("org", String) // Parameters may correspond to path wildcards
+	// 		Param("id", Integer)
+	// 		Param("sort", func() { // or URL query string values.
+	// 			Enum("asc", "desc")
+	// 		})
+	// 	})
+
+	// 	Headers(func() { // Headers describe relevant action headers
+	// 		Header("Authorization", String)
+	// 		Header("X-Account", Integer)
+	// 		Required("Authorization", "X-Account")
+	// 	})
+	// 	Payload(PatientPayload) // Payload describes the HTTP request body
+	// 	// OptionalPayload(UpdatePayload)     // OptionalPayload defines an HTTP request body which may be omitted
+	// 	Response(NoContent) // Each possible HTTP response is described via Response
+	// 	Response(NotFound)
+	// })
+
 })

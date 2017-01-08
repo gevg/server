@@ -32,11 +32,11 @@ import (
 //
 // Example:
 //
-//    var OAuth2Sec = OAuth2("/oauth2/auth", "/oauth2/token", func() {
-//        Scope("api:read", "Scope granting read access")
-//        Scope("api:write", "Scope granting write access")
-//    })
-//
+var OAuth2Sec = OAuth2("/oauth2/auth", "/oauth2/token", func() {
+	Scope("api:read", "Scope granting read access")
+	Scope("api:write", "Scope granting write access")
+})
+
 func OAuth2(authorizationEndpoint, tokenEndpoint string, dsl ...func()) *SecuritySchemeDefinition {
 	// The resource that implements the OAuth2 standard defined by RFC 6749.
 	// See https://tools.ietf.org/html/rfc6749

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/goa-fhir/server/app"
 	"github.com/goadesign/goa"
 )
@@ -38,6 +40,7 @@ func (c *UserController) Delete(ctx *app.DeleteUserContext) error {
 // List runs the list action.
 func (c *UserController) List(ctx *app.ListUserContext) error {
 	// UserController_List: start_implement
+	fmt.Println("signin jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
 
 	// Put your logic here
 
@@ -46,9 +49,22 @@ func (c *UserController) List(ctx *app.ListUserContext) error {
 	return ctx.OK(res)
 }
 
+// Secure runs the secure action.
+func (c *UserController) Secure(ctx *app.SecureUserContext) error {
+	// UserController_Secure: start_implement
+	fmt.Println("signin jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
+
+	// Put your logic here
+
+	// UserController_Secure: end_implement
+	res := &app.Success{}
+	return ctx.OK(res)
+}
+
 // Show runs the show action.
 func (c *UserController) Show(ctx *app.ShowUserContext) error {
 	// UserController_Show: start_implement
+	fmt.Println("signin jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
 
 	// Put your logic here
 
@@ -62,7 +78,7 @@ func (c *UserController) Signin(ctx *app.SigninUserContext) error {
 	// UserController_Signin: start_implement
 
 	// Put your logic here
-
+	fmt.Println("signin jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
 	// UserController_Signin: end_implement
 	return nil
 }
@@ -70,10 +86,23 @@ func (c *UserController) Signin(ctx *app.SigninUserContext) error {
 // Signup runs the signup action.
 func (c *UserController) Signup(ctx *app.SignupUserContext) error {
 	// UserController_Signup: start_implement
+	fmt.Println("signin jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
 
 	// Put your logic here
 
 	// UserController_Signup: end_implement
+	res := &app.UserMedia{}
+	return ctx.OK(res)
+}
+
+// Unsecure runs the unsecure action.
+func (c *UserController) Unsecure(ctx *app.UnsecureUserContext) error {
+	// UserController_Unsecure: start_implement
+	fmt.Println("signin jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
+
+	// Put your logic here
+
+	// UserController_Unsecure: end_implement
 	res := &app.UserMedia{}
 	return ctx.OK(res)
 }

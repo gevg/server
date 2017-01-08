@@ -1,0 +1,34 @@
+version: '2'
+
+services:
+  api:
+    build: . 
+    container_name: goa-fhir #cannot scale with named containers
+    depends_on:
+        - db
+    links: 
+       - db
+    ports:
+        - 8088:80
+    environment: 
+        POSTGRES_PASSWORD: iceman22
+        POSTGRES_USER: postgres
+        POSTGRES_DB: nc
+        POSTGRES_HOST: localhost
+        POSTGRES_PORT: 5432
+    restart: always
+
+  db:
+    image: postgres:latest
+    container_name: postgres #cannot scale with named containers
+    environment: 
+        POSTGRES_PASSWORD: iceman22
+        POSTGRES_USER: postgres
+        POSTGRES_DB: nc
+        POSTGRES_HOST: localhost
+        POSTGRES_PORT: 5432
+    volumes:
+      - postgres-db-volume:/data/postgres
+    restart: always
+volumes:
+  postgres-db-volume:
