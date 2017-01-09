@@ -3,55 +3,60 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"os"
 
 	"github.com/goa-fhir/server/app"
-	"github.com/goa-fhir/server/models"
 	"github.com/goadesign/goa"
 	"github.com/goadesign/goa/middleware"
-	"github.com/inconshreveable/log15"
-	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
 )
 
-var (
-	// ErrUnauthorized is the error returned for unauthorized requests.
-	ErrUnauthorized = goa.NewErrorClass("unauthorized", 401)
-	db              *gorm.DB
-	logger          log15.Logger
-	patient_db      *models.PatientDB
-	//vitals_db       *models.VitalDB
-	user_db *models.UserDB
-)
+//	"github.com/jinzhu/gorm"
+
+// var (
+// 	// ErrUnauthorized is the error returned for unauthorized requests.
+// 	ErrUnauthorized = goa.NewErrorClass("unauthorized", 401)
+// 	db              *gorm.DB
+// 	logger          log15.Logger
+// 	patient_db      *models.PatientDB
+// 	//vitals_db       *models.VitalDB
+// 	user_db *models.UserDB
+// )
 
 const (
-	host     = "localhost" //set to ip address of postgres container
-	port     = 5432
-	user     = "postgres"
-	password = "iceman22"
-	dbname   = "nc"
+	POSTGRES_PASSWORD = "iceman22"
+	POSTGRES_USER     = "postgres"
+	POSTGRES_DB       = "postgres"
+	POSTGRES_HOST     = "localhost"
+	POSTGRES_PORT     = 5432
 )
 
 func main() {
 
-	psqlInfo := fmt.Sprintf(" host =% s port =% d user =% s "+"password =% s dbname =% s sslmode = disable", host, port, user, password, dbname)
+	psqlInfo := fmt.Sprintf(" host =% s port =% d user =% s "+"password =% s dbname =% s sslmode = disable", POSTGRES_HOST, POSTGRES_PORT, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB)
 
 	//db, err := sql.Open(" postgres", psqlInfo)
-	db, err := gorm.Open("postgres", psqlInfo)
+	db, err := sql.Open("postgres", psqlInfo)
 
 	if err != nil {
 		panic(err)
 	}
 
-	db.LogMode(true)
+	err = db.Ping()
+	if err != nil {
+		fmt.Println("Could not connect to db!")
+	}
 
-	db.DropTable(&models.User{}, &models.Patient{})
-	db.AutoMigrate(&models.User{}, &models.Patient{})
+	// db.LogMode(true)
 
-	user_db = models.NewUserDB(db)
-	patient_db = models.NewPatientDB(db)
-	db.DB().SetMaxOpenConns(50)
+	// db.DropTable(&models.User{}, &models.Patient{})
+	// db.AutoMigrate(&models.User{}, &models.Patient{})
+
+	// user_db = models.NewUserDB(db)
+	// patient_db = models.NewPatientDB(db)
+	// db.DB().SetMaxOpenConns(50)
 
 	// Create service
 	service := goa.New("Secure")

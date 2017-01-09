@@ -22,6 +22,7 @@ func (c *NutritionRequestController) Read(ctx *app.ReadNutritionRequestContext) 
 	// Put your logic here
 
 	// NutritionRequestController_Read: end_implement
-	res := &app.NutritionRequestMedia{}
-	return ctx.OK(res)
+	// res := &app.NutritionRequestMedia{}
+	// return ctx.OK(res)
+	return nil
 }

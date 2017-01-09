@@ -32,6 +32,8 @@ func (c *Oauth2ProviderController) GetToken(ctx *app.GetTokenOauth2ProviderConte
 	// Put your logic here
 
 	// Oauth2ProviderController_GetToken: end_implement
-	res := &app.TokenMedia{}
-	return ctx.OK(res)
+	// res := &app.TokenMedia{}
+	// return ctx.OK(res)
+	return nil
+
 }

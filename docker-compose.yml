@@ -1,34 +1,154 @@
 version: '2'
 
 services:
-  api:
-    build: . 
-    container_name: goa-fhir #cannot scale with named containers
-    depends_on:
-        - db
-    links: 
-       - db
-    ports:
-        - 8088:80
-    environment: 
-        POSTGRES_PASSWORD: iceman22
-        POSTGRES_USER: postgres
-        POSTGRES_DB: nc
-        POSTGRES_HOST: localhost
-        POSTGRES_PORT: 5432
-    restart: always
+    store:
+        # data-only container
+        image: postgres:latest # reuse postgres container
+        container_name: db_store
+        volumes:
+            - /var/lib/postgresql/data
+        command: "true"
 
-  db:
-    image: postgres:latest
-    container_name: postgres #cannot scale with named containers
-    environment: 
-        POSTGRES_PASSWORD: iceman22
-        POSTGRES_USER: postgres
-        POSTGRES_DB: nc
-        POSTGRES_HOST: localhost
-        POSTGRES_PORT: 5432
-    volumes:
-      - postgres-db-volume:/data/postgres
-    restart: always
-volumes:
-  postgres-db-volume:
+    postgres:
+        image: postgres
+        container_name: pg_db
+        ports:
+            - 5432:5432
+        volumes_from:
+            - store # connect postgres and the data-only container
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+            - POSTGRES_DB=postgres
+
+    api:
+        container_name: app
+        build: .
+        #   build: ./api
+        ports:
+            - 8088:8088
+        depends_on:
+            - postgres
+        volumes:
+            - ./api:/go/src/github.com/goa-fhir/server
+        links:
+            - postgres:db
+        environment:
+            - DB_ADDR=db
+            - DB_PORT=5432
+            - DB_NAME=postgres
+            - DB_USER=postgres
+            - DB_PSWD=iceman22
+            - PORT=8088
+
+# #   api:
+# #     build: . 
+# #     container_name: goa-fhir #cannot scale with named containers
+# #     depends_on:
+# #         - db
+# #     links: 
+# #        - db
+# #     ports:
+# #         - 8088:8088
+# #         # tells it to link the host container’s port 80 to port 5000 of the docker container
+# #     # environment: 
+# #     #     POSTGRES_PASSWORD: iceman22
+# #     #     POSTGRES_USER: postgres
+# #         # POSTGRES_DB: nc
+# #        # POSTGRES_HOST: localhost
+# #         # POSTGRES_PORT: 5432
+# #     restart: always
+
+# #   db:
+# #     image: postgres:latest
+# #     container_name: postgres #cannot scale with named containers
+# #     # ports: 
+# #     #    - "5432"
+# #     environment: 
+# #         POSTGRES_PASSWORD: iceman22
+# #         POSTGRES_USER: postgres
+# #         POSTGRES_DB: nc
+# #         POSTGRES_HOST: localhost
+# #         POSTGRES_PORT: 5432
+# #     volumes:
+# #     #   - postgres-db-volume:/data/postgres
+# #       - postgres-data:/var/lib/postgresql/data
+
+# #     restart: always
+# # volumes:
+# #   postgres-data:
+
+
+#     db:
+#         image: postgres:latest
+#         volumes: 
+#             - db-data:/var/lib/postgresql/data
+#         restart: always
+#         # ports:
+#         #     - "5432" # random available host port will be chosen, same as -P
+
+#         environment: 
+#             POSTGRES_PASSWORD: iceman22
+#             POSTGRES_USER: postgres
+#             POSTGRES_DB: postgres
+#             # POSTGRES_HOST: localhost
+#             # POSTGRES_PORT: 5432
+#         environment:
+#             - POSTGRES_PASSWORD=iceman22
+#             # you can also set the postgres username and database name
+
+#     app:
+#         build: .
+#         depends_on:
+#             - db
+#         links:
+#             - db # [other container]:[alias in this container]
+#             # this will create environment variables in the go container
+#             # with ip and port info for the postgres container
+#             # also creates entries in /etc/hosts with ip info
+#         ports:
+#             - "8088:80" # this is port i'm exposing in the container
+    
+# volumes:
+#     db_data:
+#     # proxy:
+#     #     image: nginx:latest
+#     #     ports:
+#     #         - "80:80" # host:container
+#     #         - "443:443"
+#     #     volumes:
+#     #         - ./nginx.conf:/etc/nginx/nginx.conf:ro
+#     #         # connect host's ./nginx.conf with container's nginx.conf
+#     #         # :ro == read only perms in container
+#     #     links:
+#     #         - go:app # [other container]:[alias in this container]
+#     #         # creates environment variables in proxy container
+#     #         # with ip and port info for go container
+#     #         # also creates entries in /etc/hosts with ip info
+
+# ie-server:
+#     image: interventionengine/ie-server:v1.0.0-rc.1
+#     ports:
+#       - "3001"
+#     volumes:
+#       - ./config/ie-server:/config
+#       - ./logs/ie-server:/etc/ie-server/logs
+#     depends_on:
+#       - mongo
+#     env_file:
+#       - ./config/default.env
+#     command: dockerize -wait tcp://postgres:5432 -timeout 300s ./server
+
+# postgres:
+#     image: postgres
+#     ports:
+#       - "5432"
+#     volumes:
+#       - /usr/local/pgsql/data
+
+# mongo:
+#     image: mongo:3.2.10
+#     ports:
+#       - "27017"
+#     volumes:
+#       - ./data/mongo/db:/data/db
