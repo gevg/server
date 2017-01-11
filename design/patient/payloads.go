@@ -17,6 +17,7 @@ var PatientPayload = Type("PatientPayload", func() {
 	Attribute("identifier")
 	Attribute("active")
 	Attribute("name")
+		Attribute("telecom")
 	Attribute("gender")
 	Attribute("birthDate")
 	Attribute("deceasedBoolean")

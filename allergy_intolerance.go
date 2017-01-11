@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 
 	"net/http"
 
@@ -12,8 +13,6 @@ import (
 	"net"
 	"net/url"
 	"strings"
-
-	"io"
 
 	"github.com/goa-fhir/server/app"
 	"github.com/goadesign/goa"
@@ -34,11 +33,13 @@ func getJson(url string, target interface{}) error {
 	}
 	defer r.Body.Close()
 
-	io.Copy(os.Stdout, r.Body)
-	// body, _ := ioutil.ReadAll(r.Body)
-	// fmt.Printf("%s", body)
+	//io.Copy(os.Stdout, r.Body)
+	body, _ := ioutil.ReadAll(r.Body)
+	fmt.Printf("%s", body)
 
-	return json.NewDecoder(r.Body).Decode(target)
+	//b, _ := json.Marshal(body)
+	return json.Unmarshal(body, &target)
+	//return json.NewDecoder(r.Body).Decode(target)
 }
 
 // NewAllergyIntoleranceController creates a AllergyIntolerance controller.
@@ -68,8 +69,37 @@ func (c *AllergyIntoleranceController) Read(ctx *app.ReadAllergyIntoleranceConte
 	//--A simple custom JSON-parsing example
 	foo1 := new(app.Patient)
 	getJson("http://nprogram.azurewebsites.net/Patient/1?_format=json", foo1)
-	fmt.Println("Active:", foo1.BirthDate)
-	fmt.Printf("%v\n", foo1.Active)
+	fmt.Println("Name:", foo1.Address)
+	//fmt.Println("Length:", len(foo1.Address))
+
+	//fmt.Println("Name:", *foo1.Address[1].PostalCode)
+
+	for f := range foo1.Name {
+		fmt.Println("Use:", foo1.Name[f].Use)
+		fmt.Println("Family:", foo1.Name[f].Family)
+		fmt.Println("Given:", foo1.Name[f].Given)
+		fmt.Println("Prefix:", foo1.Name[f].Prefix)
+	}
+
+	//fmt.Println("Name:", *foo1.Address[1].PostalCode)
+
+	for f := range foo1.Address {
+		fmt.Println("Use:", foo1.Address[f].Use)
+		fmt.Println("Line:", foo1.Address[f].Line)
+		fmt.Println("City:", foo1.Address[f].City)
+		fmt.Println("PostalCode:", foo1.Address[f].PostalCode)
+	}
+
+	for f := range foo1.Identifier {
+		fmt.Println("Use:", foo1.Identifier[f].Use)
+		fmt.Println("Type:", foo1.Identifier[f].Type.Coding)
+		fmt.Println("System:", *foo1.Identifier[f].System)
+		fmt.Println("Value:", *foo1.Identifier[f].Value)
+
+	}
+	// json.Marshal(foo1)
+	// fmt.Println("Marshal:", foo1)
+	//fmt.Printf("%v\n", *foo1.Gender)
 
 	//foo2 := app.PatientMedia{}
 	var foo2 interface{}

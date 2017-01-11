@@ -57,6 +57,7 @@ var AddressPayload = Type("AddressPayload", func() {
 	Reference(Address)
 	Attribute("use")
 	Attribute("type")
+		Attribute("text")
 	Attribute("line")
 	Attribute("city")
 	Attribute("distinct")

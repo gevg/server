@@ -115,6 +115,7 @@ var AddressMedia = MediaType("application/vnd.Address+json", func() {
 	Attributes(func() {
 		Attribute("use")
 		Attribute("type")
+		Attribute("text")
 		Attribute("line")
 		Attribute("city")
 		Attribute("distinct")
@@ -126,6 +127,7 @@ var AddressMedia = MediaType("application/vnd.Address+json", func() {
 		Description("Default view for Address data type")
 		Attribute("use")
 		Attribute("type")
+		Attribute("text")
 		Attribute("line")
 		Attribute("city")
 		Attribute("distinct")

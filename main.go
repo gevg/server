@@ -1,4 +1,4 @@
-//go:generate goagen bootstrap -d github.com/jamesallain/goa-fhir/design
+//go:generate goagen bootstrap -d github.com/goa-fhir/server/design
 
 package main
 

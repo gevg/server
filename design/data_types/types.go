@@ -109,6 +109,10 @@ var Address = Type("Address", func() {
 		Enum("postal", "physical", "both")
 		Example("postal")
 	})
+	Attribute("text", String, "Text representation of the address.", func() {
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
 	Attribute("line", ArrayOf(String), "This component contains the house number, apartment number, street name, street direction,  P.O. Box number, delivery hints, and similar address information.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
@@ -319,15 +323,15 @@ var HumanName = Type("HumanName", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("given", String, "Given names (not always 'first'). Includes middle names", func() {
+	Attribute("given", ArrayOf(String), "Given names (not always 'first'). Includes middle names", func() {
 		//Comments:
 		//Reason for inclusion or contrainment: If only initials are recorded, they may be used in place of the full name.  Not called "first name" since given names do not always come first.
 	})
-	Attribute("prefix", String, "Part of the name that is acquired as a title due to academic, legal, employment or nobility status, etc. and that appears at the start of the name.", func() {
+	Attribute("prefix", ArrayOf(String), "Part of the name that is acquired as a title due to academic, legal, employment or nobility status, etc. and that appears at the start of the name.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("suffix", String, "Part of the name that is acquired as a title due to academic, legal, employment or nobility status, etc. and that appears at the end of the name.", func() {
+	Attribute("suffix", ArrayOf(String), "Part of the name that is acquired as a title due to academic, legal, employment or nobility status, etc. and that appears at the end of the name.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
