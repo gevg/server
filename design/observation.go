@@ -1,7 +1,7 @@
 package design
 
 import (
-	. "github.com/goa-fhir/server/design/observation"
+	. "github.com/goa-fhir/server/design/Clinical/observation"
 	. "github.com/goadesign/goa/design"
 	. "github.com/goadesign/goa/design/apidsl"
 )

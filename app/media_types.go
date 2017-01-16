@@ -610,24 +610,12 @@ func (mt *IdentifierMedia) Validate() (err error) {
 	return
 }
 
-// HL7LinkMedia media type (default view)
+// PatientLinkMedia media type (default view)
 //
 // Identifier: application/vnd.link+json; view=default
-type HL7LinkMedia struct {
-	// The other patient resource that the link refers to.
-	Other *HL7Reference `form:"other,omitempty" json:"other,omitempty" xml:"other,omitempty"`
-	// The type of link between this patient resource and another patient resource. See http://hl7.org/fhir/ValueSet/link-type
-	Type *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
-}
-
-// Validate validates the HL7LinkMedia media type instance.
-func (mt *HL7LinkMedia) Validate() (err error) {
-	if mt.Type != nil {
-		if !(*mt.Type == "replace" || *mt.Type == "refer" || *mt.Type == "See also") {
-			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.type`, *mt.Type, []interface{}{"replace", "refer", "See also"}))
-		}
-	}
-	return
+type PatientLinkMedia struct {
+	Other *string `form:"other,omitempty" json:"other,omitempty" xml:"other,omitempty"`
+	Type  *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
 }
 
 // MetaMedia media type (default view)
@@ -938,7 +926,7 @@ type PatientMedia struct {
 	// Patient identifer
 	Identifier []*Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
 	// Link to another patient resource that concerns the same actual patient.
-	Link []*HL7Link `form:"link,omitempty" json:"link,omitempty" xml:"link,omitempty"`
+	Link []*Link `form:"link,omitempty" json:"link,omitempty" xml:"link,omitempty"`
 	// Organization that is the custodian of the patient record.
 	ManagingOrganization *HL7Reference `form:"managingOrganization,omitempty" json:"managingOrganization,omitempty" xml:"managingOrganization,omitempty"`
 	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
@@ -1289,7 +1277,7 @@ func (mt *RepeatMedia) Validate() (err error) {
 
 // SampleDataMedia media type (default view)
 //
-// Identifier: application/vnd.sampledata+json; view=default
+// Identifier: application/vnd.sample.data+json; view=default
 type SampleDataMedia struct {
 	// A series of data points which are decimal values separated by a single space (character u20). The special values 'E' (error), 'L' (below detection limit) and 'U' (above detection limit) can also be used in place of a decimal value.
 	Data *string `form:"data,omitempty" json:"data,omitempty" xml:"data,omitempty"`
@@ -1315,6 +1303,26 @@ func (mt *SampleDataMedia) Validate() (err error) {
 		}
 	}
 	return
+}
+
+// SignatureDataMedia media type (default view)
+//
+// Identifier: application/vnd.signature+json; view=default
+type SignatureDataMedia struct {
+	// The base64 encoding of the Signature content.
+	Blob *string `form:"blob,omitempty" json:"blob,omitempty" xml:"blob,omitempty"`
+	// A mime type that indicates the technical format of the signature. Important mime types are application/signature+
+	// 		for X ML DigSig, application/jwt for JWT, and image/* for a graphical image of a signature. See http://www.rfc-editor.org/bcp/bcp13.txt
+	ContentType *string `form:"contentType,omitempty" json:"contentType,omitempty" xml:"contentType,omitempty"`
+	// An indication of the reason that the entity signed this document. This may be explicitly included as part of the signature
+	// 	information and can be used when determining accountability for various actions concerning the document. See http://hl7.org/fhir/ValueSet/signature-type
+	Type *Coding `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
+	// A reference to an application-usable description of the person that signed the certificate (e.g. the signature used their private key.
+	When *time.Time `form:"when,omitempty" json:"when,omitempty" xml:"when,omitempty"`
+	//  A reference to an application-usable description of the person that signed the certificate (e.g. the signature used their private key).
+	WhoReference *HL7Reference `form:"whoReference,omitempty" json:"whoReference,omitempty" xml:"whoReference,omitempty"`
+	// A reference to an application-usable description of the person that signed the certificate (e.g. the signature used their private key).
+	WhoURI *string `form:"whoUri,omitempty" json:"whoUri,omitempty" xml:"whoUri,omitempty"`
 }
 
 // SupplementMedia media type (default view)

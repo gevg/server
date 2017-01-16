@@ -44,9 +44,6 @@ func (ut *address) Validate() (err error) {
 	if ut.Use == nil {
 		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "use"))
 	}
-	if ut.Type == nil {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "type"))
-	}
 	if ut.Type != nil {
 		if !(*ut.Type == "postal" || *ut.Type == "physical" || *ut.Type == "both") {
 			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.type`, *ut.Type, []interface{}{"postal", "physical", "both"}))
@@ -88,7 +85,7 @@ func (ut *address) Publicize() *Address {
 		pub.Text = ut.Text
 	}
 	if ut.Type != nil {
-		pub.Type = *ut.Type
+		pub.Type = ut.Type
 	}
 	if ut.Use != nil {
 		pub.Use = *ut.Use
@@ -115,7 +112,7 @@ type Address struct {
 	// Text representation of the address.
 	Text *string `form:"text,omitempty" json:"text,omitempty" xml:"text,omitempty"`
 	// Distinguishes between physical addresses (those you can visit) and mailing addresses (e.g. PO Boxes and care-of addresses). Most addresses are both.
-	Type string `form:"type" json:"type" xml:"type"`
+	Type *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
 	// The use of an address
 	Use string `form:"use" json:"use" xml:"use"`
 }
@@ -125,11 +122,10 @@ func (ut *Address) Validate() (err error) {
 	if ut.Use == "" {
 		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "use"))
 	}
-	if ut.Type == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "type"))
-	}
-	if !(ut.Type == "postal" || ut.Type == "physical" || ut.Type == "both") {
-		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.type`, ut.Type, []interface{}{"postal", "physical", "both"}))
+	if ut.Type != nil {
+		if !(*ut.Type == "postal" || *ut.Type == "physical" || *ut.Type == "both") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.type`, *ut.Type, []interface{}{"postal", "physical", "both"}))
+		}
 	}
 	if !(ut.Use == "home" || ut.Use == "work" || ut.Use == "temp" || ut.Use == "old - purpose of this address") {
 		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.use`, ut.Use, []interface{}{"home", "work", "temp", "old - purpose of this address"}))
@@ -2877,102 +2873,6 @@ func (ut *HL7ContactPayload) Validate() (err error) {
 	return
 }
 
-// Link to another patient resource that concerns the same actual patient.
-type hL7Link struct {
-	// The other patient resource that the link refers to.
-	Other *hL7Reference `form:"other,omitempty" json:"other,omitempty" xml:"other,omitempty"`
-	// The type of link between this patient resource and another patient resource. See http://hl7.org/fhir/ValueSet/link-type
-	Type *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
-}
-
-// Validate validates the hL7Link type instance.
-func (ut *hL7Link) Validate() (err error) {
-	if ut.Type != nil {
-		if !(*ut.Type == "replace" || *ut.Type == "refer" || *ut.Type == "See also") {
-			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.type`, *ut.Type, []interface{}{"replace", "refer", "See also"}))
-		}
-	}
-	return
-}
-
-// Publicize creates HL7Link from hL7Link
-func (ut *hL7Link) Publicize() *HL7Link {
-	var pub HL7Link
-	if ut.Other != nil {
-		pub.Other = ut.Other.Publicize()
-	}
-	if ut.Type != nil {
-		pub.Type = ut.Type
-	}
-	return &pub
-}
-
-// Link to another patient resource that concerns the same actual patient.
-type HL7Link struct {
-	// The other patient resource that the link refers to.
-	Other *HL7Reference `form:"other,omitempty" json:"other,omitempty" xml:"other,omitempty"`
-	// The type of link between this patient resource and another patient resource. See http://hl7.org/fhir/ValueSet/link-type
-	Type *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
-}
-
-// Validate validates the HL7Link type instance.
-func (ut *HL7Link) Validate() (err error) {
-	if ut.Type != nil {
-		if !(*ut.Type == "replace" || *ut.Type == "refer" || *ut.Type == "See also") {
-			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.type`, *ut.Type, []interface{}{"replace", "refer", "See also"}))
-		}
-	}
-	return
-}
-
-// hL7LinkPayload user type.
-type hL7LinkPayload struct {
-	// The other patient resource that the link refers to.
-	Other *hL7Reference `form:"other,omitempty" json:"other,omitempty" xml:"other,omitempty"`
-	// The type of link between this patient resource and another patient resource. See http://hl7.org/fhir/ValueSet/link-type
-	Type *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
-}
-
-// Validate validates the hL7LinkPayload type instance.
-func (ut *hL7LinkPayload) Validate() (err error) {
-	if ut.Type != nil {
-		if !(*ut.Type == "replace" || *ut.Type == "refer" || *ut.Type == "See also") {
-			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.type`, *ut.Type, []interface{}{"replace", "refer", "See also"}))
-		}
-	}
-	return
-}
-
-// Publicize creates HL7LinkPayload from hL7LinkPayload
-func (ut *hL7LinkPayload) Publicize() *HL7LinkPayload {
-	var pub HL7LinkPayload
-	if ut.Other != nil {
-		pub.Other = ut.Other.Publicize()
-	}
-	if ut.Type != nil {
-		pub.Type = ut.Type
-	}
-	return &pub
-}
-
-// HL7LinkPayload user type.
-type HL7LinkPayload struct {
-	// The other patient resource that the link refers to.
-	Other *HL7Reference `form:"other,omitempty" json:"other,omitempty" xml:"other,omitempty"`
-	// The type of link between this patient resource and another patient resource. See http://hl7.org/fhir/ValueSet/link-type
-	Type *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
-}
-
-// Validate validates the HL7LinkPayload type instance.
-func (ut *HL7LinkPayload) Validate() (err error) {
-	if ut.Type != nil {
-		if !(*ut.Type == "replace" || *ut.Type == "refer" || *ut.Type == "See also") {
-			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.type`, *ut.Type, []interface{}{"replace", "refer", "See also"}))
-		}
-	}
-	return
-}
-
 // A reference from one resource to another.
 type hL7Reference struct {
 	// Plain text narrative that identifies the resource in addition to the resource reference.
@@ -5037,7 +4937,7 @@ type patient struct {
 	// Patient identifer
 	Identifier []*identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
 	// Link to another patient resource that concerns the same actual patient.
-	Link []*hL7Link `form:"link,omitempty" json:"link,omitempty" xml:"link,omitempty"`
+	Link []*link `form:"link,omitempty" json:"link,omitempty" xml:"link,omitempty"`
 	// Organization that is the custodian of the patient record.
 	ManagingOrganization *hL7Reference `form:"managingOrganization,omitempty" json:"managingOrganization,omitempty" xml:"managingOrganization,omitempty"`
 	// This field contains a patient's most recent marital (civil) status. See http://hl7.org/fhir/ValueSet/marital-status
@@ -5205,7 +5105,7 @@ func (ut *patient) Publicize() *Patient {
 		}
 	}
 	if ut.Link != nil {
-		pub.Link = make([]*HL7Link, len(ut.Link))
+		pub.Link = make([]*Link, len(ut.Link))
 		for i2, elem2 := range ut.Link {
 			pub.Link[i2] = elem2.Publicize()
 		}
@@ -5279,7 +5179,7 @@ type Patient struct {
 	// Patient identifer
 	Identifier []*Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
 	// Link to another patient resource that concerns the same actual patient.
-	Link []*HL7Link `form:"link,omitempty" json:"link,omitempty" xml:"link,omitempty"`
+	Link []*Link `form:"link,omitempty" json:"link,omitempty" xml:"link,omitempty"`
 	// Organization that is the custodian of the patient record.
 	ManagingOrganization *HL7Reference `form:"managingOrganization,omitempty" json:"managingOrganization,omitempty" xml:"managingOrganization,omitempty"`
 	// This field contains a patient's most recent marital (civil) status. See http://hl7.org/fhir/ValueSet/marital-status
@@ -5378,6 +5278,30 @@ func (ut *Patient) Validate() (err error) {
 	return
 }
 
+// patientLinkPayload user type.
+type patientLinkPayload struct {
+	Other *string `form:"other,omitempty" json:"other,omitempty" xml:"other,omitempty"`
+	Type  *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
+}
+
+// Publicize creates PatientLinkPayload from patientLinkPayload
+func (ut *patientLinkPayload) Publicize() *PatientLinkPayload {
+	var pub PatientLinkPayload
+	if ut.Other != nil {
+		pub.Other = ut.Other
+	}
+	if ut.Type != nil {
+		pub.Type = ut.Type
+	}
+	return &pub
+}
+
+// PatientLinkPayload user type.
+type PatientLinkPayload struct {
+	Other *string `form:"other,omitempty" json:"other,omitempty" xml:"other,omitempty"`
+	Type  *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
+}
+
 // patientPayload user type.
 type patientPayload struct {
 	// Whether this patient record is in active use.
@@ -5411,7 +5335,7 @@ type patientPayload struct {
 	// Patient identifer
 	Identifier []*identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
 	// Link to another patient resource that concerns the same actual patient.
-	Link []*hL7Link `form:"link,omitempty" json:"link,omitempty" xml:"link,omitempty"`
+	Link []*link `form:"link,omitempty" json:"link,omitempty" xml:"link,omitempty"`
 	// Organization that is the custodian of the patient record.
 	ManagingOrganization *hL7Reference `form:"managingOrganization,omitempty" json:"managingOrganization,omitempty" xml:"managingOrganization,omitempty"`
 	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
@@ -5562,7 +5486,7 @@ func (ut *patientPayload) Publicize() *PatientPayload {
 		}
 	}
 	if ut.Link != nil {
-		pub.Link = make([]*HL7Link, len(ut.Link))
+		pub.Link = make([]*Link, len(ut.Link))
 		for i2, elem2 := range ut.Link {
 			pub.Link[i2] = elem2.Publicize()
 		}
@@ -5633,7 +5557,7 @@ type PatientPayload struct {
 	// Patient identifer
 	Identifier []*Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
 	// Link to another patient resource that concerns the same actual patient.
-	Link []*HL7Link `form:"link,omitempty" json:"link,omitempty" xml:"link,omitempty"`
+	Link []*Link `form:"link,omitempty" json:"link,omitempty" xml:"link,omitempty"`
 	// Organization that is the custodian of the patient record.
 	ManagingOrganization *HL7Reference `form:"managingOrganization,omitempty" json:"managingOrganization,omitempty" xml:"managingOrganization,omitempty"`
 	// The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
@@ -7050,6 +6974,144 @@ func (ut *SampleDataPayload) Validate() (err error) {
 	return
 }
 
+// A digital signature along with supporting context. The signature may be electronic/cryptographic in nature, or a graphical image
+// 	representing a hand-written signature, or a signature process. Different Signature approaches have different utilities.
+type signature struct {
+	// The base64 encoding of the Signature content.
+	Blob *string `form:"blob,omitempty" json:"blob,omitempty" xml:"blob,omitempty"`
+	// A mime type that indicates the technical format of the signature. Important mime types are application/signature+
+	// 		for X ML DigSig, application/jwt for JWT, and image/* for a graphical image of a signature. See http://www.rfc-editor.org/bcp/bcp13.txt
+	ContentType *string `form:"contentType,omitempty" json:"contentType,omitempty" xml:"contentType,omitempty"`
+	// An indication of the reason that the entity signed this document. This may be explicitly included as part of the signature
+	// 	information and can be used when determining accountability for various actions concerning the document. See http://hl7.org/fhir/ValueSet/signature-type
+	Type *coding `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
+	// A reference to an application-usable description of the person that signed the certificate (e.g. the signature used their private key.
+	When *time.Time `form:"when,omitempty" json:"when,omitempty" xml:"when,omitempty"`
+	//  A reference to an application-usable description of the person that signed the certificate (e.g. the signature used their private key).
+	WhoReference *hL7Reference `form:"whoReference,omitempty" json:"whoReference,omitempty" xml:"whoReference,omitempty"`
+	// A reference to an application-usable description of the person that signed the certificate (e.g. the signature used their private key).
+	WhoURI *string `form:"whoUri,omitempty" json:"whoUri,omitempty" xml:"whoUri,omitempty"`
+}
+
+// Validate validates the signature type instance.
+func (ut *signature) Validate() (err error) {
+	if ut.ContentType == nil {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "contentType"))
+	}
+	return
+}
+
+// Publicize creates Signature from signature
+func (ut *signature) Publicize() *Signature {
+	var pub Signature
+	if ut.Blob != nil {
+		pub.Blob = ut.Blob
+	}
+	if ut.ContentType != nil {
+		pub.ContentType = *ut.ContentType
+	}
+	if ut.Type != nil {
+		pub.Type = ut.Type.Publicize()
+	}
+	if ut.When != nil {
+		pub.When = ut.When
+	}
+	if ut.WhoReference != nil {
+		pub.WhoReference = ut.WhoReference.Publicize()
+	}
+	if ut.WhoURI != nil {
+		pub.WhoURI = ut.WhoURI
+	}
+	return &pub
+}
+
+// A digital signature along with supporting context. The signature may be electronic/cryptographic in nature, or a graphical image
+// 	representing a hand-written signature, or a signature process. Different Signature approaches have different utilities.
+type Signature struct {
+	// The base64 encoding of the Signature content.
+	Blob *string `form:"blob,omitempty" json:"blob,omitempty" xml:"blob,omitempty"`
+	// A mime type that indicates the technical format of the signature. Important mime types are application/signature+
+	// 		for X ML DigSig, application/jwt for JWT, and image/* for a graphical image of a signature. See http://www.rfc-editor.org/bcp/bcp13.txt
+	ContentType string `form:"contentType" json:"contentType" xml:"contentType"`
+	// An indication of the reason that the entity signed this document. This may be explicitly included as part of the signature
+	// 	information and can be used when determining accountability for various actions concerning the document. See http://hl7.org/fhir/ValueSet/signature-type
+	Type *Coding `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
+	// A reference to an application-usable description of the person that signed the certificate (e.g. the signature used their private key.
+	When *time.Time `form:"when,omitempty" json:"when,omitempty" xml:"when,omitempty"`
+	//  A reference to an application-usable description of the person that signed the certificate (e.g. the signature used their private key).
+	WhoReference *HL7Reference `form:"whoReference,omitempty" json:"whoReference,omitempty" xml:"whoReference,omitempty"`
+	// A reference to an application-usable description of the person that signed the certificate (e.g. the signature used their private key).
+	WhoURI *string `form:"whoUri,omitempty" json:"whoUri,omitempty" xml:"whoUri,omitempty"`
+}
+
+// Validate validates the Signature type instance.
+func (ut *Signature) Validate() (err error) {
+	if ut.ContentType == "" {
+		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "contentType"))
+	}
+	return
+}
+
+// signaturePayload user type.
+type signaturePayload struct {
+	// The base64 encoding of the Signature content.
+	Blob *string `form:"blob,omitempty" json:"blob,omitempty" xml:"blob,omitempty"`
+	// A mime type that indicates the technical format of the signature. Important mime types are application/signature+
+	// 		for X ML DigSig, application/jwt for JWT, and image/* for a graphical image of a signature. See http://www.rfc-editor.org/bcp/bcp13.txt
+	ContentType *string `form:"contentType,omitempty" json:"contentType,omitempty" xml:"contentType,omitempty"`
+	// An indication of the reason that the entity signed this document. This may be explicitly included as part of the signature
+	// 	information and can be used when determining accountability for various actions concerning the document. See http://hl7.org/fhir/ValueSet/signature-type
+	Type *coding `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
+	// A reference to an application-usable description of the person that signed the certificate (e.g. the signature used their private key.
+	When *time.Time `form:"when,omitempty" json:"when,omitempty" xml:"when,omitempty"`
+	//  A reference to an application-usable description of the person that signed the certificate (e.g. the signature used their private key).
+	WhoReference *hL7Reference `form:"whoReference,omitempty" json:"whoReference,omitempty" xml:"whoReference,omitempty"`
+	// A reference to an application-usable description of the person that signed the certificate (e.g. the signature used their private key).
+	WhoURI *string `form:"whoUri,omitempty" json:"whoUri,omitempty" xml:"whoUri,omitempty"`
+}
+
+// Publicize creates SignaturePayload from signaturePayload
+func (ut *signaturePayload) Publicize() *SignaturePayload {
+	var pub SignaturePayload
+	if ut.Blob != nil {
+		pub.Blob = ut.Blob
+	}
+	if ut.ContentType != nil {
+		pub.ContentType = ut.ContentType
+	}
+	if ut.Type != nil {
+		pub.Type = ut.Type.Publicize()
+	}
+	if ut.When != nil {
+		pub.When = ut.When
+	}
+	if ut.WhoReference != nil {
+		pub.WhoReference = ut.WhoReference.Publicize()
+	}
+	if ut.WhoURI != nil {
+		pub.WhoURI = ut.WhoURI
+	}
+	return &pub
+}
+
+// SignaturePayload user type.
+type SignaturePayload struct {
+	// The base64 encoding of the Signature content.
+	Blob *string `form:"blob,omitempty" json:"blob,omitempty" xml:"blob,omitempty"`
+	// A mime type that indicates the technical format of the signature. Important mime types are application/signature+
+	// 		for X ML DigSig, application/jwt for JWT, and image/* for a graphical image of a signature. See http://www.rfc-editor.org/bcp/bcp13.txt
+	ContentType *string `form:"contentType,omitempty" json:"contentType,omitempty" xml:"contentType,omitempty"`
+	// An indication of the reason that the entity signed this document. This may be explicitly included as part of the signature
+	// 	information and can be used when determining accountability for various actions concerning the document. See http://hl7.org/fhir/ValueSet/signature-type
+	Type *Coding `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
+	// A reference to an application-usable description of the person that signed the certificate (e.g. the signature used their private key.
+	When *time.Time `form:"when,omitempty" json:"when,omitempty" xml:"when,omitempty"`
+	//  A reference to an application-usable description of the person that signed the certificate (e.g. the signature used their private key).
+	WhoReference *HL7Reference `form:"whoReference,omitempty" json:"whoReference,omitempty" xml:"whoReference,omitempty"`
+	// A reference to an application-usable description of the person that signed the certificate (e.g. the signature used their private key).
+	WhoURI *string `form:"whoUri,omitempty" json:"whoUri,omitempty" xml:"whoUri,omitempty"`
+}
+
 // Oral nutritional products given in order to add further nutritional value to the patient's diet.
 type supplement struct {
 	// Free text or additional instructions or information pertaining to the oral supplement.
@@ -7743,6 +7805,54 @@ func (ut *UserPayload) Validate() (err error) {
 	if ut.Email != nil {
 		if err2 := goa.ValidateFormat(goa.FormatEmail, *ut.Email); err2 != nil {
 			err = goa.MergeErrors(err, goa.InvalidFormatError(`response.email`, *ut.Email, goa.FormatEmail, err2))
+		}
+	}
+	return
+}
+
+// Link to another patient resource that concerns the same actual patient.
+type link struct {
+	// The other patient resource that the link refers to.
+	Other *hL7Reference `form:"other,omitempty" json:"other,omitempty" xml:"other,omitempty"`
+	// The type of link between this patient resource and another patient resource. See http://hl7.org/fhir/ValueSet/link-type
+	Type *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
+}
+
+// Validate validates the link type instance.
+func (ut *link) Validate() (err error) {
+	if ut.Type != nil {
+		if !(*ut.Type == "replace" || *ut.Type == "refer" || *ut.Type == "See also") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.type`, *ut.Type, []interface{}{"replace", "refer", "See also"}))
+		}
+	}
+	return
+}
+
+// Publicize creates Link from link
+func (ut *link) Publicize() *Link {
+	var pub Link
+	if ut.Other != nil {
+		pub.Other = ut.Other.Publicize()
+	}
+	if ut.Type != nil {
+		pub.Type = ut.Type
+	}
+	return &pub
+}
+
+// Link to another patient resource that concerns the same actual patient.
+type Link struct {
+	// The other patient resource that the link refers to.
+	Other *HL7Reference `form:"other,omitempty" json:"other,omitempty" xml:"other,omitempty"`
+	// The type of link between this patient resource and another patient resource. See http://hl7.org/fhir/ValueSet/link-type
+	Type *string `form:"type,omitempty" json:"type,omitempty" xml:"type,omitempty"`
+}
+
+// Validate validates the Link type instance.
+func (ut *Link) Validate() (err error) {
+	if ut.Type != nil {
+		if !(*ut.Type == "replace" || *ut.Type == "refer" || *ut.Type == "See also") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.type`, *ut.Type, []interface{}{"replace", "refer", "See also"}))
 		}
 	}
 	return

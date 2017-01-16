@@ -3,7 +3,7 @@ package design
 // goagen --design=github.com/goa-fhir/server/design gen --pkg-path=github.com/goadesign/gorma
 
 import (
-	. "github.com/goa-fhir/server/design/patient"
+	. "github.com/goa-fhir/server/design/Administrative/patient"
 	. "github.com/goa-fhir/server/design/user"
 	"github.com/goadesign/gorma"
 	. "github.com/goadesign/gorma/dsl"

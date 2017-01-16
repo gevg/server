@@ -1,7 +1,7 @@
 package design
 
 import (
-	. "github.com/goa-fhir/server/design/allergy_intolerance"
+	. "github.com/goa-fhir/server/design/Clinical/allergy_intolerance"
 	. "github.com/goadesign/goa/design"
 	. "github.com/goadesign/goa/design/apidsl"
 )

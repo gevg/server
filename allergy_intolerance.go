@@ -1,9 +1,14 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"io/ioutil"
+	"log"
+	"path/filepath"
+	"reflect"
 
 	"net/http"
 
@@ -16,11 +21,37 @@ import (
 
 	"github.com/goa-fhir/server/app"
 	"github.com/goadesign/goa"
+	"github.com/satori/go.uuid"
+	"github.com/tidwall/gjson"
 )
+
+//"github.com/pquerna/ffjson""
+
+type Sections map[string]json.RawMessage
+
+type patient struct {
+	patientJSON json.RawMessage
+	app.Patient
+}
+
+// Decode Gob file
+func Load(path string, object interface{}) error {
+	file, err := os.Open(path)
+	if err == nil {
+		decoder := json.NewDecoder(file)
+		err = decoder.Decode(object)
+	}
+	file.Close()
+	return err
+}
 
 // AllergyIntoleranceController implements the AllergyIntolerance resource.
 type AllergyIntoleranceController struct {
 	*goa.Controller
+}
+
+type Results struct {
+	Matches []app.Patient
 }
 
 var cc = &http.Client{Timeout: time.Second}
@@ -35,6 +66,7 @@ func getJson(url string, target interface{}) error {
 
 	//io.Copy(os.Stdout, r.Body)
 	body, _ := ioutil.ReadAll(r.Body)
+	fmt.Println("body")
 	fmt.Printf("%s", body)
 
 	//b, _ := json.Marshal(body)
@@ -50,88 +82,201 @@ func NewAllergyIntoleranceController(service *goa.Service) *AllergyIntoleranceCo
 // Read runs the read action.
 func (c *AllergyIntoleranceController) Read(ctx *app.ReadAllergyIntoleranceContext) error {
 	// AllergyIntoleranceController_Read: start_implement
-	//cc := &http.Client{Timeout: time.Second}
+	//var x app.Patient
+	var sqlParams []interface{}
 
-	//response, err := http.Get("https://fhir-open-api.smarthealthit.org/AllergyIntolerance/59")
-	// r, err := cc.Get("http://nprogram.azurewebsites.net/Patient/1?_format=json")
-	// if err != nil && hasTimedOut(err) {
-	// 	fmt.Println("A timeout error occured")
-	// 	os.Exit(3)
-	// }
+	var x json.RawMessage
+	//x := &app.Patient{}
 
-	// fmt.Println("AllergyIntolerance read: ", response.StatusCode, " ", response.Status)
+	//getJson("http://nprogram.azurewebsites.net/Patient/1?_format=json", patient)
+	//getJson("http://localhost:3001", patient)
 
-	//--A simple http GET
-	// body, _ := ioutil.ReadAll(response.Body)
-	// response.Body.Close()
-	// fmt.Printf("%s", body)
+	//curl -i -H "Accept: application/json+fhir" "https://fhir-open.sandboxcerner.com/dstu2/d075cf8b-3261-481d-97e5-ba6c48d3b41f/MedicationOrder?patient=2744010&status=active"
+	// //--A simple custom JSON-parsing example
+	// //getJson("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/Patient/Tbt3KuCY0B5PSrJvCu2j-PlK.aiHsu2xUjUM8bWpetXoB", patient)
+	// //getJson("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/Patient/Tbt3KuCY0B5PSrJvCu2j-PlK.aiHsu2xUjUM8bWpetXoB", patient)
+	// //getJson("https://fhir-open.sandboxcerner.com/dstu2/d075cf8b-3261-481d-97e5-ba6c48d3b41f/MedicationOrder?patient=2744010&status=active", patient)
+	// //getJson("https://fhir-open.sandboxcerner.com/dstu2/d075cf8b-3261-481d-97e5-ba6c48d3b41f/MedicationOrder?_format=json&patient=2744010&status=active", patient)
+	//_, err = json.NewDecoder(file).Decode(patient)
+	//, err := cc.Get("http://fhirtest.uhn.ca/baseDstu2/Patient/EXexample")
+	r, err := cc.Get("http://fhirtest.uhn.ca/baseDstu2/Observation/2927")
+	//r, err := cc.Get("http://nprogram.azurewebsites.net/Patient/1?_format=json")
+	//r, err := cc.Get("https://fhir-open-api.smarthealthit.org/Observation/691-bp")
 
-	//--A simple custom JSON-parsing example
-	foo1 := new(app.Patient)
-	getJson("http://nprogram.azurewebsites.net/Patient/1?_format=json", foo1)
-	fmt.Println("Name:", foo1.Address)
-	//fmt.Println("Length:", len(foo1.Address))
+	//r, err := cc.Get("https://fhir-open-api.smarthealthit.org/AllergyIntolerance/59")
 
-	//fmt.Println("Name:", *foo1.Address[1].PostalCode)
+	if err != nil {
+		fmt.Println("A timeout error occured")
+		os.Exit(3)
+	}
+	defer r.Body.Close()
 
-	for f := range foo1.Name {
-		fmt.Println("Use:", foo1.Name[f].Use)
-		fmt.Println("Family:", foo1.Name[f].Family)
-		fmt.Println("Given:", foo1.Name[f].Given)
-		fmt.Println("Prefix:", foo1.Name[f].Prefix)
+	body, _ := ioutil.ReadAll(r.Body)
+
+	isJSON := IsJSON(string(body))
+	if isJSON == true {
+		fmt.Println("Yesssssssssssssssssssssssssssssssssssssssssssssssss")
+		_ = json.Unmarshal(body, &x)
+	} else {
+		fmt.Println("NOoooooooooooooooooooooooooooooooooooooooooooo")
+		_ = xml.Unmarshal(body, &x)
 	}
 
-	//fmt.Println("Name:", *foo1.Address[1].PostalCode)
+	// fmt.Println("body")
 
-	for f := range foo1.Address {
-		fmt.Println("Use:", foo1.Address[f].Use)
-		fmt.Println("Line:", foo1.Address[f].Line)
-		fmt.Println("City:", foo1.Address[f].City)
-		fmt.Println("PostalCode:", foo1.Address[f].PostalCode)
+	//err = json.Unmarshal([]byte(r), &f)
+
+	// //b, _ := json.Marshal(body)
+	// return json.Unmarshal(body, &target)
+	fmt.Printf("%s", body)
+
+	fmt.Println()
+	value11 := gjson.Get(string(x), "resourceType")
+
+	value1 := gjson.Get(string(body), "*")
+	value2 := gjson.Get(string(body), "subject")
+	value3 := gjson.Get(string(body), "identifier")
+	fmt.Println()
+	fmt.Println("value *:", value1.String())
+
+	fmt.Println("resource:", value11.String())
+	fmt.Println("Subject:", value2.String())
+	fmt.Println("value:", value3.String())
+
+	//_ = json.Unmarshal(x, &patient)
+	//_, _ = json.Marshal(string(x))
+
+	//_ = json.NewDecoder(r.Body).Decode(&x)
+	fmt.Println()
+	//fmt.Printf("Indentifer:", x.Matches[0].Ad, "\n")
+	//fmt.Println("Address:", x.Address)
+	//fmt.Println("Telecom:", x.Telecom)
+	//fmt.Println("CareProvider:", x.CareProvider)
+	//fmt.Println("Name:", x.Name)
+	//fmt.Printf("Contact:", x.Contact)
+	fmt.Println()
+
+	//fmt.Println("x is equal to:", x.Address[0].Text)
+
+	psqlInfo := fmt.Sprintf(" host =% s port =% d user =% s "+"password =% s dbname =% s sslmode = disable", POSTGRES_HOST, POSTGRES_PORT, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB)
+
+	//db, err := sql.Open(" postgres", psqlInfo)
+	db, err := sql.Open("postgres", psqlInfo)
+
+	if err != nil {
+		panic(err)
 	}
 
-	for f := range foo1.Identifier {
-		fmt.Println("Use:", foo1.Identifier[f].Use)
-		fmt.Println("Type:", foo1.Identifier[f].Type.Coding)
-		fmt.Println("System:", *foo1.Identifier[f].System)
-		fmt.Println("Value:", *foo1.Identifier[f].Value)
+	err = db.Ping()
+	if err != nil {
+		fmt.Println("Could not connect to db!")
+	}
+
+	tx, err := db.Begin()
+
+	if err != nil {
+		fmt.Println("Error beginning transaction")
+		return err
+	}
+
+	//fmt.Println("unmarshal json", x.Identifier)
+
+	//var query = `INSERT INTO nc.hl7.patient (id, address) VALUES ($1, $2);`
+	var query = `INSERT INTO nc.hl7.patient (id, address) VALUES ($1, $2);`
+	//var query = `INSERT INTO nc.hl7.patient (id, address) VALUES ($1, json_each($2));`
+
+	//var query = `INSERT INTO nc.hl7.patient (id, address) VALUES ($1, $2, $3, '{"telecom":$4}');`
+	//var query = `INSERT INTO nc.hl7.patient (id, active, birth_date, telecom) VALUES ($1, $2, $3, $4);`
+
+	sqlParams = append(sqlParams, uuid.NewV4().String())
+	//sqlParams = append(sqlParams, patient.patientJSON)
+	//sqlParams = append(sqlParams, *patient.BirthDate)
+	//sqlParams = append(sqlParams, patient.Gender)
+	//sqlParams = append(sqlParams, patient.Telecom)
+	fmt.Println()
+	fmt.Println(sqlParams)
+	fmt.Println()
+	//fmt.Println(patient.Telecom, patient.patientJSON)
+
+	stmt, err := tx.Prepare(query)
+	if err != nil {
+		fmt.Println("Error beginning transaction")
+		fmt.Println(err.Error())
+		return err
+	}
+
+	defer func() {
+		if err == nil {
+			log.Println("Commit Item")
+			tx.Commit()
+		} else {
+			log.Println("Rollback Item")
+			tx.Rollback()
+			fmt.Println(err.Error())
+
+			//return ctx.NotFound()
+		}
+		stmt.Close()
+	}()
+
+	// res := &app.Patient{}
+	// res.Active = patient.Active
+	// res.BirthDate = patient.BirthDate
+	// res.Gender = patient.Gender
+	// //res.Telecom = patient.Telecom
+	//res.Address=patient.Address
+	//res.Address=
+
+	//json.Marshal(patient)
+
+	// 	type int64array []int64
+
+	// func (a int64array) Value() (driver.Value, error) {
+	//     // Format a in PostgreSQL's array input format {1,2,3} and return it as as string or []byte.
+	// }
+	//_, _ = json.Marshal(x)
+
+	g, _ := json.Marshal(x)
+	fmt.Println(string(g))
+	_, err = stmt.Exec(uuid.NewV4().String(), string(g))
+	if err != nil {
+		fmt.Println(err.Error())
+		fmt.Println("Error with db")
+	}
+
+	//json.Marshal(x)
+
+	type T struct {
+		A int
+		B string
+	}
+
+	t := app.Observation{}
+	s := reflect.ValueOf(&t).Elem()
+	typeOfT := s.Type()
+
+	for i := 0; i < s.NumField(); i++ {
+		//f := s.Field(i)
+		//fmt.Printf("%d: %s %s = %v\n", i,
+		//typeOfT.Field(i).Name, f.Type(), f.Interface())
+		//test2 := fmt.Sprintf("%T", s.Field(i))
+		test2 := fmt.Sprintf("%T", s.Field(i))
+
+		fmt.Println(reflect.TypeOf(test2).Kind())
+		//fmt.Println(*test2)
+
+		test := fmt.Sprintf("%s", strings.ToLower(typeOfT.Field(i).Name))
+		fmt.Println(test)
+
+		value := gjson.Get(string(x), test)
+		fmt.Println()
+		fmt.Println("value *:", value.String())
 
 	}
-	// json.Marshal(foo1)
-	// fmt.Println("Marshal:", foo1)
-	//fmt.Printf("%v\n", *foo1.Gender)
 
-	//foo2 := app.PatientMedia{}
-	var foo2 interface{}
-	getJson("http://nprogram.azurewebsites.net/Patient/1?_format=json", &foo2)
-	fmt.Println("Active:", foo2)
-	fmt.Printf("%T\n", foo2)
-
-	//fooEndcode :=
-
-	// var p app.AllergyIntoleranceMedia
-	// err = json.Unmarshal([]byte(response.Body), &p)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	return
-	// }
-	// fmt.Fprintln(p)
-
-	//--Parse into an interface
-	// var ks = []byte(response)
-	// var f interface{}
-	// err := json.Unmarshal(ks, &f)
-	// if err != nil {
-	// 	fmt.Fprintln(err)
-	// 	os.Exit(1)
-	// }
-	// fmt.Fprintln(f)
-
-	res := &app.AllergyIntoleranceMedia{}
-	return ctx.OK(res)
-
-	// Put your logic here
-	//AllergyIntoleranceController_Read: end_implement
+	//res := &app.AllergyIntoleranceMedia{}
+	return nil
+	//return ctx.OK(res)
 
 }
 
@@ -160,4 +305,19 @@ func hasTimedOut(err error) bool {
 		return true
 	}
 	return false
+}
+
+func OpenFile(object interface{}) (j json.RawMessage) {
+	absPath, _ := filepath.Abs("patient.json")
+	//absPath, _ := filepath.Abs("../mypackage/data/file.txt")
+	fmt.Println(absPath)
+	file, err := os.Open(absPath)
+	if err == nil {
+		decoder := json.NewDecoder(file)
+		err = decoder.Decode(object)
+	}
+	file.Close()
+
+	//return file
+	return nil
 }

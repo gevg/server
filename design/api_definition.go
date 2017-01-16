@@ -16,6 +16,9 @@ var _ = API("goa-FHIR", func() {
 	Consumes("application/json")
 	Produces("application/json")
 
+	//Produces("application/json+fhir")
+	//Consumes("application/json+fhir")
+
 	//original----------------------------------------------------------------------------------------
 	Title("The virtual wine cellar")
 	//Description("A basic example of a CRUD API implemented with goa")
@@ -42,6 +45,8 @@ var _ = API("goa-FHIR", func() {
 		MaxAge(600)
 		Credentials()
 	})
+
+
 
 	Params(func() {
 		//Parameters for all resources

@@ -28,7 +28,7 @@ import (
 const (
 	POSTGRES_PASSWORD = "iceman22"
 	POSTGRES_USER     = "postgres"
-	POSTGRES_DB       = "postgres"
+	POSTGRES_DB       = "nc"
 	POSTGRES_HOST     = "localhost"
 	POSTGRES_PORT     = 5432
 )

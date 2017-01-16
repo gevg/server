@@ -1,7 +1,7 @@
 package design
 
 import (
-	. "github.com/goa-fhir/server/design/nutrition_request"
+	. "github.com/goa-fhir/server/design/Clinical/nutrition_request"
 	. "github.com/goadesign/goa/design"
 	. "github.com/goadesign/goa/design/apidsl"
 )
