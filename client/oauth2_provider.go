@@ -52,8 +52,8 @@ func (c *Client) NewAuthorizeOauth2ProviderRequest(ctx context.Context, path str
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp59 := strconv.Itoa(*count)
-		values.Set("_count", tmp59)
+		tmp57 := strconv.Itoa(*count)
+		values.Set("_count", tmp57)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -62,15 +62,15 @@ func (c *Client) NewAuthorizeOauth2ProviderRequest(ctx context.Context, path str
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp60 := strconv.Itoa(*id)
-		values.Set("_id", tmp60)
+		tmp58 := strconv.Itoa(*id)
+		values.Set("_id", tmp58)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp61 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp61)
+		tmp59 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp59)
 	}
 	if list != nil {
 		values.Set("_list", *list)
@@ -154,8 +154,8 @@ func (c *Client) NewGetTokenOauth2ProviderRequest(ctx context.Context, path stri
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp62 := strconv.Itoa(*count)
-		values.Set("_count", tmp62)
+		tmp60 := strconv.Itoa(*count)
+		values.Set("_count", tmp60)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -164,15 +164,15 @@ func (c *Client) NewGetTokenOauth2ProviderRequest(ctx context.Context, path stri
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp63 := strconv.Itoa(*id)
-		values.Set("_id", tmp63)
+		tmp61 := strconv.Itoa(*id)
+		values.Set("_id", tmp61)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp64 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp64)
+		tmp62 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp62)
 	}
 	if list != nil {
 		values.Set("_list", *list)

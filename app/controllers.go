@@ -616,10 +616,9 @@ func MountPatientController(service *goa.Service, ctrl PatientController) {
 		}
 		return ctrl.Delete(rctx)
 	}
-	h = handleSecurity("OAuth2", h, "api:write")
 	h = handlePatientOrigin(h)
 	service.Mux.Handle("DELETE", "/nosh/patients/:patientID", ctrl.MuxHandler("Delete", h, nil))
-	service.LogInfo("mount", "ctrl", "Patient", "action", "Delete", "route", "DELETE /nosh/patients/:patientID", "security", "OAuth2")
+	service.LogInfo("mount", "ctrl", "Patient", "action", "Delete", "route", "DELETE /nosh/patients/:patientID")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
 		// Check if there was an error loading the request
@@ -631,16 +630,10 @@ func MountPatientController(service *goa.Service, ctrl PatientController) {
 		if err != nil {
 			return err
 		}
-		// Build the payload
-		if rawPayload := goa.ContextRequest(ctx).Payload; rawPayload != nil {
-			rctx.Payload = rawPayload.(*PatientPayload)
-		} else {
-			return goa.MissingPayloadError()
-		}
 		return ctrl.Read(rctx)
 	}
 	h = handlePatientOrigin(h)
-	service.Mux.Handle("GET", "/nosh/patients/:patientID", ctrl.MuxHandler("Read", h, unmarshalReadPatientPayload))
+	service.Mux.Handle("GET", "/nosh/patients/:patientID", ctrl.MuxHandler("Read", h, nil))
 	service.LogInfo("mount", "ctrl", "Patient", "action", "Read", "route", "GET /nosh/patients/:patientID")
 
 	h = func(ctx context.Context, rw http.ResponseWriter, req *http.Request) error {
@@ -768,21 +761,6 @@ func handlePatientOrigin(h goa.Handler) goa.Handler {
 // unmarshalCreatePatientPayload unmarshals the request body into the context request data Payload field.
 func unmarshalCreatePatientPayload(ctx context.Context, service *goa.Service, req *http.Request) error {
 	payload := &createPatientPayload{}
-	if err := service.DecodeRequest(req, payload); err != nil {
-		return err
-	}
-	if err := payload.Validate(); err != nil {
-		// Initialize payload with private data structure so it can be logged
-		goa.ContextRequest(ctx).Payload = payload
-		return err
-	}
-	goa.ContextRequest(ctx).Payload = payload.Publicize()
-	return nil
-}
-
-// unmarshalReadPatientPayload unmarshals the request body into the context request data Payload field.
-func unmarshalReadPatientPayload(ctx context.Context, service *goa.Service, req *http.Request) error {
-	payload := &patientPayload{}
 	if err := service.DecodeRequest(req, payload); err != nil {
 		return err
 	}

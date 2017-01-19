@@ -46,8 +46,6 @@ var _ = API("goa-FHIR", func() {
 		Credentials()
 	})
 
-
-
 	Params(func() {
 		//Parameters for all resources
 		Param("_id", Integer) // A path parameter defined using e.g. GET("/:id")

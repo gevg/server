@@ -109,11 +109,6 @@ func (mt *AllergyIntoleranceMedia) Validate() (err error) {
 			}
 		}
 	}
-	if mt.Meta != nil {
-		if err2 := mt.Meta.Validate(); err2 != nil {
-			err = goa.MergeErrors(err, err2)
-		}
-	}
 	if mt.Reaction != nil {
 		if err2 := mt.Reaction.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -478,11 +473,6 @@ func (mt *ExtensionMedia) Validate() (err error) {
 			err = goa.MergeErrors(err, err2)
 		}
 	}
-	if mt.ValueMeta != nil {
-		if err2 := mt.ValueMeta.Validate(); err2 != nil {
-			err = goa.MergeErrors(err, err2)
-		}
-	}
 	if mt.ValueQuantity != nil {
 		if err2 := mt.ValueQuantity.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -625,23 +615,13 @@ type MetaMedia struct {
 	// When the resource last changed - e.g. when the version changed.
 	LastUpdated *time.Time `form:"lastUpdated,omitempty" json:"lastUpdated,omitempty" xml:"lastUpdated,omitempty"`
 	// A list of profiles [[[StructureDefinition]]]s that this resource claims to conform to. The URL is a reference to [[[StructureDefinition.url]]].
-	Profile *string `form:"profile,omitempty" json:"profile,omitempty" xml:"profile,omitempty"`
+	Profile []string `form:"profile,omitempty" json:"profile,omitempty" xml:"profile,omitempty"`
 	// Security labels applied to this resource. These tags connect specific resources to the overall security policy and infrastructure.
-	Security *Coding `form:"security,omitempty" json:"security,omitempty" xml:"security,omitempty"`
+	Security []*Coding `form:"security,omitempty" json:"security,omitempty" xml:"security,omitempty"`
 	// Tags applied to this resource. Tags are intended to be used to identify and relate resources to process and workflow, and applications are not required to consider the tags when interpreting the meaning of a resource.
-	Tag *Coding `form:"tag,omitempty" json:"tag,omitempty" xml:"tag,omitempty"`
+	Tag []*Coding `form:"tag,omitempty" json:"tag,omitempty" xml:"tag,omitempty"`
 	// The version specific identifier, as it appears in the version portion of the URL. This values changes when the resource is created, updated, or deleted.
 	VersionID *string `form:"versionId,omitempty" json:"versionId,omitempty" xml:"versionId,omitempty"`
-}
-
-// Validate validates the MetaMedia media type instance.
-func (mt *MetaMedia) Validate() (err error) {
-	if mt.Profile != nil {
-		if err2 := goa.ValidateFormat(goa.FormatURI, *mt.Profile); err2 != nil {
-			err = goa.MergeErrors(err, goa.InvalidFormatError(`response.profile`, *mt.Profile, goa.FormatURI, err2))
-		}
-	}
-	return
 }
 
 // NutrientMedia media type (default view)
@@ -717,11 +697,6 @@ func (mt *NutritionRequestMedia) Validate() (err error) {
 			}
 		}
 	}
-	if mt.Meta != nil {
-		if err2 := mt.Meta.Validate(); err2 != nil {
-			err = goa.MergeErrors(err, err2)
-		}
-	}
 	if mt.OralDiet != nil {
 		if err2 := mt.OralDiet.Validate(); err2 != nil {
 			err = goa.MergeErrors(err, err2)
@@ -757,7 +732,7 @@ type ObservationMedia struct {
 	// Some observations have multiple component observations.  These component observations are expressed as separate code
 	// 		value pairs that share the same attributes.  Examples include systolic and diastolic component observations for blood pressure measurement and multiple
 	// 		component observations for genetics observations.
-	Component *Component `form:"component,omitempty" json:"component,omitempty" xml:"component,omitempty"`
+	Component []*Component `form:"component,omitempty" json:"component,omitempty" xml:"component,omitempty"`
 	// Provides a reason why the expected value in the element Observation.value[x] is missing. See http://hl7.org/fhir/ValueSet/observation-valueabsentreason
 	DateAbsentReason *CodeableConcept `form:"dateAbsentReason,omitempty" json:"dateAbsentReason,omitempty" xml:"dateAbsentReason,omitempty"`
 	// The device used to generate the observation data.
@@ -788,9 +763,9 @@ type ObservationMedia struct {
 	// Who was responsible for asserting the observed value as 'true'.
 	Performer []*HL7Reference `form:"performer,omitempty" json:"performer,omitempty" xml:"performer,omitempty"`
 	// Guidance on how to interpret the value by comparison to a normal or recommended range.
-	ReferenceRange *ReferenceRange `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
+	ReferenceRange []*ReferenceRange `form:"referenceRange,omitempty" json:"referenceRange,omitempty" xml:"referenceRange,omitempty"`
 	// A  reference to another resource (usually another Observation but could  also be a QuestionnaireAnswer) whose relationship is defined by the relationship type code.
-	Related *Related `form:"related,omitempty" json:"related,omitempty" xml:"related,omitempty"`
+	Related []*Related `form:"related,omitempty" json:"related,omitempty" xml:"related,omitempty"`
 	// The specimen that was used when this observation was made.
 	Specimen *HL7Reference `form:"specimen,omitempty" json:"specimen,omitempty" xml:"specimen,omitempty"`
 	// The status of the result value. See http://hl7.org/fhir/ValueSet/observation-status
@@ -808,9 +783,11 @@ type ObservationMedia struct {
 
 // Validate validates the ObservationMedia media type instance.
 func (mt *ObservationMedia) Validate() (err error) {
-	if mt.Component != nil {
-		if err2 := mt.Component.Validate(); err2 != nil {
-			err = goa.MergeErrors(err, err2)
+	for _, e := range mt.Component {
+		if e != nil {
+			if err2 := e.Validate(); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
 		}
 	}
 	for _, e := range mt.Identifier {
@@ -820,14 +797,11 @@ func (mt *ObservationMedia) Validate() (err error) {
 			}
 		}
 	}
-	if mt.Meta != nil {
-		if err2 := mt.Meta.Validate(); err2 != nil {
-			err = goa.MergeErrors(err, err2)
-		}
-	}
-	if mt.ReferenceRange != nil {
-		if err2 := mt.ReferenceRange.Validate(); err2 != nil {
-			err = goa.MergeErrors(err, err2)
+	for _, e := range mt.ReferenceRange {
+		if e != nil {
+			if err2 := e.Validate(); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
 		}
 	}
 	if mt.Status != nil {
@@ -916,13 +890,14 @@ type PatientMedia struct {
 	// Indicates if the individual is deceased or not.
 	DeceasedBoolean *bool `form:"deceasedBoolean,omitempty" json:"deceasedBoolean,omitempty" xml:"deceasedBoolean,omitempty"`
 	// Indicates if the individual is deceased or not.
-	DeceasedDateTime *time.Time `form:"deceasedDateTime,omitempty" json:"deceasedDateTime,omitempty" xml:"deceasedDateTime,omitempty"`
+	DeceasedDateTime *time.Time   `form:"deceasedDateTime,omitempty" json:"deceasedDateTime,omitempty" xml:"deceasedDateTime,omitempty"`
+	Extension        []*Extension `form:"extension,omitempty" json:"extension,omitempty" xml:"extension,omitempty"`
 	// Administrative Gender - the gender that the patient is considered to have for administration and record keeping purposes. See http://hl7.org/fhir/ValueSet/administrative-gender
-	Gender string `form:"gender" json:"gender" xml:"gender"`
+	Gender *string `form:"gender,omitempty" json:"gender,omitempty" xml:"gender,omitempty"`
 	// API href of patient
 	Href *string `form:"href,omitempty" json:"href,omitempty" xml:"href,omitempty"`
-	// ID of patient
-	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+	// Unique id for the element within a resource (for internal references).
+	ID *string `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
 	// Patient identifer
 	Identifier []*Identifier `form:"identifier,omitempty" json:"identifier,omitempty" xml:"identifier,omitempty"`
 	// Link to another patient resource that concerns the same actual patient.
@@ -939,16 +914,14 @@ type PatientMedia struct {
 	// A name associated with the individual.
 	Name []*HumanName `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
 	// Image of the patient.
-	Photo []*Attachment `form:"photo,omitempty" json:"photo,omitempty" xml:"photo,omitempty"`
+	Photo        []*Attachment `form:"photo,omitempty" json:"photo,omitempty" xml:"photo,omitempty"`
+	ResourceType *string       `form:"resourceType,omitempty" json:"resourceType,omitempty" xml:"resourceType,omitempty"`
 	// A contact detail (e.g. a telephone number or an email address) by which the individual may be contacted..
 	Telecom []*ContactPoint `form:"telecom,omitempty" json:"telecom,omitempty" xml:"telecom,omitempty"`
 }
 
 // Validate validates the PatientMedia media type instance.
 func (mt *PatientMedia) Validate() (err error) {
-	if mt.Gender == "" {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`response`, "gender"))
-	}
 	for _, e := range mt.Address {
 		if e != nil {
 			if err2 := e.Validate(); err2 != nil {
@@ -968,8 +941,17 @@ func (mt *PatientMedia) Validate() (err error) {
 			err = goa.MergeErrors(err, goa.InvalidFormatError(`response.created_by`, *mt.CreatedBy, goa.FormatEmail, err2))
 		}
 	}
-	if !(mt.Gender == "male" || mt.Gender == "female" || mt.Gender == "other" || mt.Gender == "unknown") {
-		err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.gender`, mt.Gender, []interface{}{"male", "female", "other", "unknown"}))
+	for _, e := range mt.Extension {
+		if e != nil {
+			if err2 := e.Validate(); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
+	}
+	if mt.Gender != nil {
+		if !(*mt.Gender == "male" || *mt.Gender == "female" || *mt.Gender == "other" || *mt.Gender == "unknown") {
+			err = goa.MergeErrors(err, goa.InvalidEnumValueError(`response.gender`, *mt.Gender, []interface{}{"male", "female", "other", "unknown"}))
+		}
 	}
 	for _, e := range mt.Identifier {
 		if e != nil {
@@ -983,11 +965,6 @@ func (mt *PatientMedia) Validate() (err error) {
 			if err2 := e.Validate(); err2 != nil {
 				err = goa.MergeErrors(err, err2)
 			}
-		}
-	}
-	if mt.Meta != nil {
-		if err2 := mt.Meta.Validate(); err2 != nil {
-			err = goa.MergeErrors(err, err2)
 		}
 	}
 	for _, e := range mt.Name {
@@ -1020,8 +997,8 @@ func (mt *PatientMedia) Validate() (err error) {
 type PatientMediaLink struct {
 	// API href of patient
 	Href *string `form:"href,omitempty" json:"href,omitempty" xml:"href,omitempty"`
-	// ID of patient
-	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+	// Unique id for the element within a resource (for internal references).
+	ID *string `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
 }
 
 // PatientMediaCollection is the media type for an array of PatientMedia (default view)

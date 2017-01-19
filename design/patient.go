@@ -61,7 +61,7 @@ var _ = Resource("patient", func() {
 
 	Action("read", func() {
 		Description("Retrieve patient with given id. IDs 1 and 2 pre-exist in the system.")
-		Payload(PatientPayload) // Request payload is described by the BottlePayload type
+		//Payload(PatientPayload) // Request payload is described by the BottlePayload type
 		Routing(
 			GET("/:patientID"),
 		)
@@ -69,6 +69,7 @@ var _ = Resource("patient", func() {
 			Param("patientID", Integer, "Patient ID", func() {
 				Minimum(1)
 			})
+
 		})
 		Response(OK)
 		Response(NotFound)
@@ -101,7 +102,7 @@ var _ = Resource("patient", func() {
 		})
 		Payload(func() {
 			Member("name")
-			Required("name")
+			//Required("name")
 		})
 		Response(NoContent)
 		Response(NotFound)
@@ -116,13 +117,13 @@ var _ = Resource("patient", func() {
 		)
 		//			POST(""),
 
-		Params(func() {
-			Param("active", Boolean, "Filter by active")
-			Param("birthDate", ArrayOf(DateTime), "Filter by birth date")
-			Param("gender", String, "Filter by gender")
-			Param("name", ArrayOf(String), "Filter by name")
-			//Param("years", ArrayOf(Integer), "Filter by years")
-		})
+		// Params(func() {
+		// 	Param("active", Boolean, "Filter by active")
+		// 	Param("birthDate", ArrayOf(DateTime), "Filter by birth date")
+		// 	Param("gender", String, "Filter by gender")
+		// 	Param("name", ArrayOf(String), "Filter by name")
+		// 	//Param("years", ArrayOf(Integer), "Filter by years")
+		// })
 		Response(OK, func() {
 			Media(CollectionOf(PatientMedia, func() {
 				View("default")
@@ -139,7 +140,7 @@ var _ = Resource("patient", func() {
 		Description("Create new patient")
 		Payload(func() {
 			Member("name")
-			Required("name")
+			//Required("name")
 		})
 		Response(Created, "/patients/[0-9]+")
 		Response(BadRequest, ErrorMedia)
@@ -148,9 +149,9 @@ var _ = Resource("patient", func() {
 	Action("delete", func() {
 		Description("Delete record")
 
-		Security(OAuth2Sec, func() {
-			Scope("api:write")
-		})
+		// Security(OAuth2Sec, func() {
+		// 	Scope("api:write")
+		// })
 
 		Routing(
 			DELETE("/:patientID"),

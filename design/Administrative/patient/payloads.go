@@ -7,13 +7,18 @@ import (
 // Patient is the patient resource media type------------------------------------------------------------------------------------------------
 var PatientPayload = Type("PatientPayload", func() {
 	Reference(Patient)
+	//Local elements
 	Attribute("created_at")
 	Attribute("created_by")
 	Attribute("id")
 	Attribute("href")
-	//FHIR elements
+	//FHIR base elements
+	Attribute("resourceType")
+	Attribute("id")
+	Attribute("extension")
 	Attribute("meta")
-	Required("gender")
+	//FHIR elements
+	//Required("gender", "maritalStatus")
 	Attribute("identifier")
 	Attribute("active")
 	Attribute("name")

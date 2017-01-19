@@ -51,8 +51,8 @@ func (c *Client) NewShowObservationRequest(ctx context.Context, path string, con
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp53 := strconv.Itoa(*count)
-		values.Set("_count", tmp53)
+		tmp51 := strconv.Itoa(*count)
+		values.Set("_count", tmp51)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -61,15 +61,15 @@ func (c *Client) NewShowObservationRequest(ctx context.Context, path string, con
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp54 := strconv.Itoa(*id)
-		values.Set("_id", tmp54)
+		tmp52 := strconv.Itoa(*id)
+		values.Set("_id", tmp52)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp55 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp55)
+		tmp53 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp53)
 	}
 	if list != nil {
 		values.Set("_list", *list)

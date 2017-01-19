@@ -1078,11 +1078,11 @@ func DeletePatientNotFound(t goatest.TInterface, ctx context.Context, service *g
 	return rw
 }
 
-// ReadPatientBadRequest runs the method Read of the given controller with the given parameters and payload.
+// ReadPatientBadRequest runs the method Read of the given controller with the given parameters.
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ReadPatientBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.PatientPayload) (http.ResponseWriter, error) {
+func ReadPatientBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1098,16 +1098,6 @@ func ReadPatientBadRequest(t goatest.TInterface, ctx context.Context, service *g
 		newEncoder := func(io.Writer) goa.Encoder { return respSetter }
 		service.Encoder = goa.NewHTTPEncoder() // Make sure the code ends up using this decoder
 		service.Encoder.Register(newEncoder, "*/*")
-	}
-
-	// Validate payload
-	err := payload.Validate()
-	if err != nil {
-		e, ok := err.(goa.ServiceError)
-		if !ok {
-			panic(err) // bug
-		}
-		return nil, e
 	}
 
 	// Setup request context
@@ -1275,7 +1265,6 @@ func ReadPatientBadRequest(t goatest.TInterface, ctx context.Context, service *g
 	if err != nil {
 		panic("invalid test data " + err.Error()) // bug
 	}
-	readCtx.Payload = payload
 
 	// Perform action
 	err = ctrl.Read(readCtx)
@@ -1300,11 +1289,11 @@ func ReadPatientBadRequest(t goatest.TInterface, ctx context.Context, service *g
 	return rw, mt
 }
 
-// ReadPatientNotFound runs the method Read of the given controller with the given parameters and payload.
+// ReadPatientNotFound runs the method Read of the given controller with the given parameters.
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ReadPatientNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.PatientPayload) http.ResponseWriter {
+func ReadPatientNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1320,17 +1309,6 @@ func ReadPatientNotFound(t goatest.TInterface, ctx context.Context, service *goa
 		newEncoder := func(io.Writer) goa.Encoder { return respSetter }
 		service.Encoder = goa.NewHTTPEncoder() // Make sure the code ends up using this decoder
 		service.Encoder.Register(newEncoder, "*/*")
-	}
-
-	// Validate payload
-	err := payload.Validate()
-	if err != nil {
-		e, ok := err.(goa.ServiceError)
-		if !ok {
-			panic(err) // bug
-		}
-		t.Errorf("unexpected payload validation error: %+v", e)
-		return nil
 	}
 
 	// Setup request context
@@ -1498,7 +1476,6 @@ func ReadPatientNotFound(t goatest.TInterface, ctx context.Context, service *goa
 	if err != nil {
 		panic("invalid test data " + err.Error()) // bug
 	}
-	readCtx.Payload = payload
 
 	// Perform action
 	err = ctrl.Read(readCtx)
@@ -1515,11 +1492,11 @@ func ReadPatientNotFound(t goatest.TInterface, ctx context.Context, service *goa
 	return rw
 }
 
-// ReadPatientOK runs the method Read of the given controller with the given parameters and payload.
+// ReadPatientOK runs the method Read of the given controller with the given parameters.
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ReadPatientOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.PatientPayload) (http.ResponseWriter, *app.PatientMedia) {
+func ReadPatientOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, *app.PatientMedia) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1535,17 +1512,6 @@ func ReadPatientOK(t goatest.TInterface, ctx context.Context, service *goa.Servi
 		newEncoder := func(io.Writer) goa.Encoder { return respSetter }
 		service.Encoder = goa.NewHTTPEncoder() // Make sure the code ends up using this decoder
 		service.Encoder.Register(newEncoder, "*/*")
-	}
-
-	// Validate payload
-	err := payload.Validate()
-	if err != nil {
-		e, ok := err.(goa.ServiceError)
-		if !ok {
-			panic(err) // bug
-		}
-		t.Errorf("unexpected payload validation error: %+v", e)
-		return nil, nil
 	}
 
 	// Setup request context
@@ -1713,7 +1679,6 @@ func ReadPatientOK(t goatest.TInterface, ctx context.Context, service *goa.Servi
 	if err != nil {
 		panic("invalid test data " + err.Error()) // bug
 	}
-	readCtx.Payload = payload
 
 	// Perform action
 	err = ctrl.Read(readCtx)
@@ -1742,11 +1707,11 @@ func ReadPatientOK(t goatest.TInterface, ctx context.Context, service *goa.Servi
 	return rw, mt
 }
 
-// ReadPatientOKLink runs the method Read of the given controller with the given parameters and payload.
+// ReadPatientOKLink runs the method Read of the given controller with the given parameters.
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func ReadPatientOKLink(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.PatientPayload) (http.ResponseWriter, *app.PatientMediaLink) {
+func ReadPatientOKLink(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, patientID int, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (http.ResponseWriter, *app.PatientMediaLink) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -1762,17 +1727,6 @@ func ReadPatientOKLink(t goatest.TInterface, ctx context.Context, service *goa.S
 		newEncoder := func(io.Writer) goa.Encoder { return respSetter }
 		service.Encoder = goa.NewHTTPEncoder() // Make sure the code ends up using this decoder
 		service.Encoder.Register(newEncoder, "*/*")
-	}
-
-	// Validate payload
-	err := payload.Validate()
-	if err != nil {
-		e, ok := err.(goa.ServiceError)
-		if !ok {
-			panic(err) // bug
-		}
-		t.Errorf("unexpected payload validation error: %+v", e)
-		return nil, nil
 	}
 
 	// Setup request context
@@ -1940,7 +1894,6 @@ func ReadPatientOKLink(t goatest.TInterface, ctx context.Context, service *goa.S
 	if err != nil {
 		panic("invalid test data " + err.Error()) // bug
 	}
-	readCtx.Payload = payload
 
 	// Perform action
 	err = ctrl.Read(readCtx)
@@ -1969,7 +1922,7 @@ func ReadPatientOKLink(t goatest.TInterface, ctx context.Context, service *goa.S
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func SearchPatientBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, active *bool, birthDate []time.Time, gender *string, name []string, payload *app.PatientPayload) (http.ResponseWriter, error) {
+func SearchPatientBadRequest(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.PatientPayload) (http.ResponseWriter, error) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -2071,25 +2024,6 @@ func SearchPatientBadRequest(t goatest.TInterface, ctx context.Context, service 
 	if type_ != nil {
 		sliceVal := []string{*type_}
 		query["_type"] = sliceVal
-	}
-	if active != nil {
-		sliceVal := []string{fmt.Sprintf("%v", *active)}
-		query["active"] = sliceVal
-	}
-	{
-		sliceVal := make([]string, len(birthDate))
-		for i, v := range birthDate {
-			sliceVal[i] = fmt.Sprintf("%v", v)
-		}
-		query["birthDate"] = sliceVal
-	}
-	if gender != nil {
-		sliceVal := []string{*gender}
-		query["gender"] = sliceVal
-	}
-	{
-		sliceVal := name
-		query["name"] = sliceVal
 	}
 	u := &url.URL{
 		Path:     fmt.Sprintf("/nosh/patients"),
@@ -2171,25 +2105,6 @@ func SearchPatientBadRequest(t goatest.TInterface, ctx context.Context, service 
 	if type_ != nil {
 		sliceVal := []string{*type_}
 		prms["_type"] = sliceVal
-	}
-	if active != nil {
-		sliceVal := []string{fmt.Sprintf("%v", *active)}
-		prms["active"] = sliceVal
-	}
-	{
-		sliceVal := make([]string, len(birthDate))
-		for i, v := range birthDate {
-			sliceVal[i] = fmt.Sprintf("%v", v)
-		}
-		prms["birthDate"] = sliceVal
-	}
-	if gender != nil {
-		sliceVal := []string{*gender}
-		prms["gender"] = sliceVal
-	}
-	{
-		sliceVal := name
-		prms["name"] = sliceVal
 	}
 	if ctx == nil {
 		ctx = context.Background()
@@ -2228,7 +2143,7 @@ func SearchPatientBadRequest(t goatest.TInterface, ctx context.Context, service 
 // It returns the response writer so it's possible to inspect the response headers.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func SearchPatientNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, active *bool, birthDate []time.Time, gender *string, name []string, payload *app.PatientPayload) http.ResponseWriter {
+func SearchPatientNotFound(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.PatientPayload) http.ResponseWriter {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -2332,25 +2247,6 @@ func SearchPatientNotFound(t goatest.TInterface, ctx context.Context, service *g
 		sliceVal := []string{*type_}
 		query["_type"] = sliceVal
 	}
-	if active != nil {
-		sliceVal := []string{fmt.Sprintf("%v", *active)}
-		query["active"] = sliceVal
-	}
-	{
-		sliceVal := make([]string, len(birthDate))
-		for i, v := range birthDate {
-			sliceVal[i] = fmt.Sprintf("%v", v)
-		}
-		query["birthDate"] = sliceVal
-	}
-	if gender != nil {
-		sliceVal := []string{*gender}
-		query["gender"] = sliceVal
-	}
-	{
-		sliceVal := name
-		query["name"] = sliceVal
-	}
 	u := &url.URL{
 		Path:     fmt.Sprintf("/nosh/patients"),
 		RawQuery: query.Encode(),
@@ -2432,25 +2328,6 @@ func SearchPatientNotFound(t goatest.TInterface, ctx context.Context, service *g
 		sliceVal := []string{*type_}
 		prms["_type"] = sliceVal
 	}
-	if active != nil {
-		sliceVal := []string{fmt.Sprintf("%v", *active)}
-		prms["active"] = sliceVal
-	}
-	{
-		sliceVal := make([]string, len(birthDate))
-		for i, v := range birthDate {
-			sliceVal[i] = fmt.Sprintf("%v", v)
-		}
-		prms["birthDate"] = sliceVal
-	}
-	if gender != nil {
-		sliceVal := []string{*gender}
-		prms["gender"] = sliceVal
-	}
-	{
-		sliceVal := name
-		prms["name"] = sliceVal
-	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -2480,7 +2357,7 @@ func SearchPatientNotFound(t goatest.TInterface, ctx context.Context, service *g
 // It returns the response writer so it's possible to inspect the response headers and the media type struct written to the response.
 // If ctx is nil then context.Background() is used.
 // If service is nil then a default service is created.
-func SearchPatientOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, active *bool, birthDate []time.Time, gender *string, name []string, payload *app.PatientPayload) (http.ResponseWriter, app.PatientMediaCollection) {
+func SearchPatientOK(t goatest.TInterface, ctx context.Context, service *goa.Service, ctrl app.PatientController, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, payload *app.PatientPayload) (http.ResponseWriter, app.PatientMediaCollection) {
 	// Setup service
 	var (
 		logBuf bytes.Buffer
@@ -2584,25 +2461,6 @@ func SearchPatientOK(t goatest.TInterface, ctx context.Context, service *goa.Ser
 		sliceVal := []string{*type_}
 		query["_type"] = sliceVal
 	}
-	if active != nil {
-		sliceVal := []string{fmt.Sprintf("%v", *active)}
-		query["active"] = sliceVal
-	}
-	{
-		sliceVal := make([]string, len(birthDate))
-		for i, v := range birthDate {
-			sliceVal[i] = fmt.Sprintf("%v", v)
-		}
-		query["birthDate"] = sliceVal
-	}
-	if gender != nil {
-		sliceVal := []string{*gender}
-		query["gender"] = sliceVal
-	}
-	{
-		sliceVal := name
-		query["name"] = sliceVal
-	}
 	u := &url.URL{
 		Path:     fmt.Sprintf("/nosh/patients"),
 		RawQuery: query.Encode(),
@@ -2683,25 +2541,6 @@ func SearchPatientOK(t goatest.TInterface, ctx context.Context, service *goa.Ser
 	if type_ != nil {
 		sliceVal := []string{*type_}
 		prms["_type"] = sliceVal
-	}
-	if active != nil {
-		sliceVal := []string{fmt.Sprintf("%v", *active)}
-		prms["active"] = sliceVal
-	}
-	{
-		sliceVal := make([]string, len(birthDate))
-		for i, v := range birthDate {
-			sliceVal[i] = fmt.Sprintf("%v", v)
-		}
-		prms["birthDate"] = sliceVal
-	}
-	if gender != nil {
-		sliceVal := []string{*gender}
-		prms["gender"] = sliceVal
-	}
-	{
-		sliceVal := name
-		prms["name"] = sliceVal
 	}
 	if ctx == nil {
 		ctx = context.Background()

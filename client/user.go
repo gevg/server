@@ -62,8 +62,8 @@ func (c *Client) NewCreateUserRequest(ctx context.Context, path string, payload 
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp86 := strconv.Itoa(*count)
-		values.Set("_count", tmp86)
+		tmp81 := strconv.Itoa(*count)
+		values.Set("_count", tmp81)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -72,15 +72,15 @@ func (c *Client) NewCreateUserRequest(ctx context.Context, path string, payload 
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp87 := strconv.Itoa(*id)
-		values.Set("_id", tmp87)
+		tmp82 := strconv.Itoa(*id)
+		values.Set("_id", tmp82)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp88 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp88)
+		tmp83 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp83)
 	}
 	if list != nil {
 		values.Set("_list", *list)
@@ -151,8 +151,8 @@ func (c *Client) NewDeleteUserRequest(ctx context.Context, path string, containe
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp89 := strconv.Itoa(*count)
-		values.Set("_count", tmp89)
+		tmp84 := strconv.Itoa(*count)
+		values.Set("_count", tmp84)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -161,15 +161,15 @@ func (c *Client) NewDeleteUserRequest(ctx context.Context, path string, containe
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp90 := strconv.Itoa(*id)
-		values.Set("_id", tmp90)
+		tmp85 := strconv.Itoa(*id)
+		values.Set("_id", tmp85)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp91 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp91)
+		tmp86 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp86)
 	}
 	if list != nil {
 		values.Set("_list", *list)
@@ -239,8 +239,8 @@ func (c *Client) NewListUserRequest(ctx context.Context, path string, contained 
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp92 := strconv.Itoa(*count)
-		values.Set("_count", tmp92)
+		tmp87 := strconv.Itoa(*count)
+		values.Set("_count", tmp87)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -249,15 +249,15 @@ func (c *Client) NewListUserRequest(ctx context.Context, path string, contained 
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp93 := strconv.Itoa(*id)
-		values.Set("_id", tmp93)
+		tmp88 := strconv.Itoa(*id)
+		values.Set("_id", tmp88)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp94 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp94)
+		tmp89 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp89)
 	}
 	if list != nil {
 		values.Set("_list", *list)
@@ -327,8 +327,8 @@ func (c *Client) NewSecureUserRequest(ctx context.Context, path string, containe
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp95 := strconv.Itoa(*count)
-		values.Set("_count", tmp95)
+		tmp90 := strconv.Itoa(*count)
+		values.Set("_count", tmp90)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -337,15 +337,15 @@ func (c *Client) NewSecureUserRequest(ctx context.Context, path string, containe
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp96 := strconv.Itoa(*id)
-		values.Set("_id", tmp96)
+		tmp91 := strconv.Itoa(*id)
+		values.Set("_id", tmp91)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp97 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp97)
+		tmp92 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp92)
 	}
 	if list != nil {
 		values.Set("_list", *list)
@@ -378,8 +378,8 @@ func (c *Client) NewSecureUserRequest(ctx context.Context, path string, containe
 		values.Set("_type", *type_)
 	}
 	if fail != nil {
-		tmp98 := strconv.FormatBool(*fail)
-		values.Set("fail", tmp98)
+		tmp93 := strconv.FormatBool(*fail)
+		values.Set("fail", tmp93)
 	}
 	u.RawQuery = values.Encode()
 	req, err := http.NewRequest("GET", u.String(), nil)
@@ -420,8 +420,8 @@ func (c *Client) NewShowUserRequest(ctx context.Context, path string, contained 
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp99 := strconv.Itoa(*count)
-		values.Set("_count", tmp99)
+		tmp94 := strconv.Itoa(*count)
+		values.Set("_count", tmp94)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -430,15 +430,15 @@ func (c *Client) NewShowUserRequest(ctx context.Context, path string, contained 
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp100 := strconv.Itoa(*id)
-		values.Set("_id", tmp100)
+		tmp95 := strconv.Itoa(*id)
+		values.Set("_id", tmp95)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp101 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp101)
+		tmp96 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp96)
 	}
 	if list != nil {
 		values.Set("_list", *list)
@@ -520,8 +520,8 @@ func (c *Client) NewSigninUserRequest(ctx context.Context, path string, payload 
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp102 := strconv.Itoa(*count)
-		values.Set("_count", tmp102)
+		tmp97 := strconv.Itoa(*count)
+		values.Set("_count", tmp97)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -530,15 +530,15 @@ func (c *Client) NewSigninUserRequest(ctx context.Context, path string, payload 
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp103 := strconv.Itoa(*id)
-		values.Set("_id", tmp103)
+		tmp98 := strconv.Itoa(*id)
+		values.Set("_id", tmp98)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp104 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp104)
+		tmp99 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp99)
 	}
 	if list != nil {
 		values.Set("_list", *list)
@@ -634,8 +634,8 @@ func (c *Client) NewSignupUserRequest(ctx context.Context, path string, payload 
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp105 := strconv.Itoa(*count)
-		values.Set("_count", tmp105)
+		tmp100 := strconv.Itoa(*count)
+		values.Set("_count", tmp100)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -644,15 +644,15 @@ func (c *Client) NewSignupUserRequest(ctx context.Context, path string, payload 
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp106 := strconv.Itoa(*id)
-		values.Set("_id", tmp106)
+		tmp101 := strconv.Itoa(*id)
+		values.Set("_id", tmp101)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp107 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp107)
+		tmp102 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp102)
 	}
 	if list != nil {
 		values.Set("_list", *list)
@@ -722,8 +722,8 @@ func (c *Client) NewUnsecureUserRequest(ctx context.Context, path string, contai
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp108 := strconv.Itoa(*count)
-		values.Set("_count", tmp108)
+		tmp103 := strconv.Itoa(*count)
+		values.Set("_count", tmp103)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -732,15 +732,15 @@ func (c *Client) NewUnsecureUserRequest(ctx context.Context, path string, contai
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp109 := strconv.Itoa(*id)
-		values.Set("_id", tmp109)
+		tmp104 := strconv.Itoa(*id)
+		values.Set("_id", tmp104)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp110 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp110)
+		tmp105 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp105)
 	}
 	if list != nil {
 		values.Set("_list", *list)
@@ -823,8 +823,8 @@ func (c *Client) NewUpdateUserRequest(ctx context.Context, path string, payload 
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp111 := strconv.Itoa(*count)
-		values.Set("_count", tmp111)
+		tmp106 := strconv.Itoa(*count)
+		values.Set("_count", tmp106)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -833,15 +833,15 @@ func (c *Client) NewUpdateUserRequest(ctx context.Context, path string, payload 
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp112 := strconv.Itoa(*id)
-		values.Set("_id", tmp112)
+		tmp107 := strconv.Itoa(*id)
+		values.Set("_id", tmp107)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp113 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp113)
+		tmp108 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp108)
 	}
 	if list != nil {
 		values.Set("_list", *list)

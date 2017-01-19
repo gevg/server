@@ -240,26 +240,26 @@ var ContactPoint = Type("ContactPoint", func() {
 	})
 })
 var DomainResource = Type("DomainResource", func() {
-	Description("")
+	Description("A resource with narrative, extensions, and contained resources.")
 	//Comments:
 	//Reason for inclusion or contrainment:
-	Attribute("resource", HL7Resource, "", func() {
+	Attribute("resource", HL7Resource, "A resource with narrative, extensions, and contained resources.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("text", Narrative, "", func() {
+	Attribute("text", Narrative, "Text summary of the resource, for human interpretation.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("contained", ArrayOf(Any), "", func() {
+	Attribute("contained", ArrayOf(HL7Resource), "Contained, inline Resources.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("extension", Extension, "", func() {
+	Attribute("extension", ArrayOf(Extension), "Additional Content defined by implementations.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("modifierExtension", Extension, "", func() {
+	Attribute("modifierExtension", ArrayOf(Extension), "Extensions that cannot be ignored.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
@@ -282,26 +282,26 @@ var HL7Reference = Type("HL7Reference", func() {
 	})
 })
 var HL7Resource = Type("HL7Resource", func() {
-	Description("")
+	Description("Base Resource.")
 	//Comments:
 	//Reason for inclusion or contrainment:
 	Attribute("resourceType", String, "", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("display", String, "", func() {
+	Attribute("id", String, "Logical id of this artifact.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("tyoe", Meta, "", func() {
+	Attribute("meta", Meta, "Metadata about the resource.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("ReferenceId", String, "", func() {
+	Attribute("implicitRules", String, "A set of rules under which this content was created.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("External", Boolean, "", func() {
+	Attribute("language", String, "Language of the resource content.", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
@@ -391,17 +391,16 @@ var Meta = Type("Meta", func() {
 		//Comments: This value is always populated except when the resource is first being created. The server / resource manager sets this value; what a client provides is irrelevant.
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("profile", String, "A list of profiles [[[StructureDefinition]]]s that this resource claims to conform to. The URL is a reference to [[[StructureDefinition.url]]].", func() {
+	Attribute("profile", ArrayOf(String), "A list of profiles [[[StructureDefinition]]]s that this resource claims to conform to. The URL is a reference to [[[StructureDefinition.url]]].", func() {
 		//Type: uri
 		//Comments: It is up to the server and/or other infrastructure of policy to determine whether/how these claims are verified and/or updated over time.  The list of profile URLs is a set.
 		//Reason for inclusion or contrainment:
-		Format("uri")
 	})
-	Attribute("security", Coding, "Security labels applied to this resource. These tags connect specific resources to the overall security policy and infrastructure.", func() {
+	Attribute("security", ArrayOf(Coding), "Security labels applied to this resource. These tags connect specific resources to the overall security policy and infrastructure.", func() {
 		//Comments: The security labels can be updated without changing the stated version of the resource  The list of security labels is a set. Uniqueness is based the system/code, and version and display are ignored.
 		//Reason for inclusion or contrainment:
 	})
-	Attribute("tag", Coding, "Tags applied to this resource. Tags are intended to be used to identify and relate resources to process and workflow, and applications are not required to consider the tags when interpreting the meaning of a resource.", func() {
+	Attribute("tag", ArrayOf(Coding), "Tags applied to this resource. Tags are intended to be used to identify and relate resources to process and workflow, and applications are not required to consider the tags when interpreting the meaning of a resource.", func() {
 		//Comments:The tags can be updated without changing the stated version of the resource.  The list of tags is a set. Uniqueness is based the system/code, and version and display are ignored.
 		//Reason for inclusion or contrainment:
 	})

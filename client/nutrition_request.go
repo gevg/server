@@ -51,8 +51,8 @@ func (c *Client) NewReadNutritionRequestRequest(ctx context.Context, path string
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp50 := strconv.Itoa(*count)
-		values.Set("_count", tmp50)
+		tmp48 := strconv.Itoa(*count)
+		values.Set("_count", tmp48)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -61,15 +61,15 @@ func (c *Client) NewReadNutritionRequestRequest(ctx context.Context, path string
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp51 := strconv.Itoa(*id)
-		values.Set("_id", tmp51)
+		tmp49 := strconv.Itoa(*id)
+		values.Set("_id", tmp49)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp52 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp52)
+		tmp50 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp50)
 	}
 	if list != nil {
 		values.Set("_list", *list)

@@ -20,7 +20,7 @@ var Bundle = Type("Bundle", func() {
 	})
 	Attribute("link", ArrayOf(BundleLink), "Link to another patient resource that concerns the same actual person", func() {
 	})
-	Attribute("entry", Entry, "Entry in the bundle - will have a resource, or information.", func() {
+	Attribute("entry", ArrayOf(Entry), "Entry in the bundle - will have a resource, or information.", func() {
 	})
 	Attribute("signature", Signature, "Digital Signature.", func() {
 	})
@@ -30,7 +30,7 @@ var Bundle = Type("Bundle", func() {
 var Entry = Type("Entry", func() {
 	Description("Entry in the bundle - will have a resource, or information")
 
-	Attribute("link", BundleLink, "Persistent identifier for the bundle.", func() {
+	Attribute("link", ArrayOf(BundleLink), "Persistent identifier for the bundle.", func() {
 	})
 	Attribute("fullUrl", String, "Absolute URL for resource (server address, or UUID/OID).", func() {
 		//Type: uri

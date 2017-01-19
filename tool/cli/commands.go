@@ -241,8 +241,6 @@ type (
 
 	// ReadPatientCommand is the command line data structure for the read action of patient
 	ReadPatientCommand struct {
-		Payload     string
-		ContentType string
 		// Patient ID
 		PatientID     int
 		Contained     string
@@ -288,15 +286,7 @@ type (
 		Tag           string
 		Text          string
 		Type          string
-		// Filter by active
-		Active string
-		// Filter by birth date
-		BirthDate []string
-		// Filter by gender
-		Gender string
-		// Filter by name
-		Name        []string
-		PrettyPrint bool
+		PrettyPrint   bool
 	}
 
 	// UpdatePatientCommand is the command line data structure for the update action of patient
@@ -616,24 +606,51 @@ Payload example:
    "name": [
       {
          "family": [
-            "Repudiandae aut qui doloribus voluptate."
+            "Quasi molestiae culpa qui facilis amet maiores.",
+            "Quasi molestiae culpa qui facilis amet maiores.",
+            "Quasi molestiae culpa qui facilis amet maiores."
          ],
          "given": [
-            "Tenetur ut fugit occaecati sequi amet."
+            "Ea aspernatur.",
+            "Ea aspernatur."
          ],
          "period": {
             "end": "1981-07-03T17:26:51-04:00",
             "start": "1998-04-13T16:02:45-04:00"
          },
          "prefix": [
-            "Similique nostrum nemo illum aperiam.",
-            "Similique nostrum nemo illum aperiam.",
-            "Similique nostrum nemo illum aperiam."
+            "Officiis deserunt ut repudiandae illo quo provident.",
+            "Officiis deserunt ut repudiandae illo quo provident.",
+            "Officiis deserunt ut repudiandae illo quo provident."
          ],
          "suffix": [
-            "Qui veritatis quidem nihil."
+            "Repudiandae aut qui doloribus voluptate."
          ],
-         "use": "old"
+         "use": "official"
+      },
+      {
+         "family": [
+            "Quasi molestiae culpa qui facilis amet maiores.",
+            "Quasi molestiae culpa qui facilis amet maiores.",
+            "Quasi molestiae culpa qui facilis amet maiores."
+         ],
+         "given": [
+            "Ea aspernatur.",
+            "Ea aspernatur."
+         ],
+         "period": {
+            "end": "1981-07-03T17:26:51-04:00",
+            "start": "1998-04-13T16:02:45-04:00"
+         },
+         "prefix": [
+            "Officiis deserunt ut repudiandae illo quo provident.",
+            "Officiis deserunt ut repudiandae illo quo provident.",
+            "Officiis deserunt ut repudiandae illo quo provident."
+         ],
+         "suffix": [
+            "Repudiandae aut qui doloribus voluptate."
+         ],
+         "use": "official"
       }
    ]
 }`,
@@ -652,7 +669,7 @@ Payload example:
 
 {
    "email": "jim.smith@gmail.com",
-   "password": "Quod possimus est dolores praesentium."
+   "password": "Atque quod possimus."
 }`,
 		RunE: func(cmd *cobra.Command, args []string) error { return tmp3.Run(c, args) },
 	}
@@ -696,11 +713,11 @@ Payload example:
 Payload example:
 
 {
-   "code": "Quae laborum voluptate.",
-   "grant_type": "refresh_token",
-   "redirect_uri": "Corrupti quia.",
-   "refresh_token": "Quis rerum.",
-   "scope": "Odit vel nobis exercitationem."
+   "code": "Eligendi commodi eos.",
+   "grant_type": "authorization_code",
+   "redirect_uri": "Exercitationem et temporibus est delectus et.",
+   "refresh_token": "Sed maiores consequatur.",
+   "scope": "Ea eius necessitatibus optio laudantium quia at."
 }`,
 		RunE: func(cmd *cobra.Command, args []string) error { return tmp6.Run(c, args) },
 	}
@@ -762,471 +779,7 @@ Payload example:
 	sub = &cobra.Command{
 		Use:   `patient ["/nosh/patients/PATIENTID"]`,
 		Short: `This resource uses JWT to secure its endpoints`,
-		Long: `This resource uses JWT to secure its endpoints
-
-Payload example:
-
-{
-   "active": false,
-   "address": [
-      {
-         "city": "Eaque vero quasi quod.",
-         "country": "Enim sit porro asperiores aspernatur dolorem.",
-         "distinct": "Modi provident earum aut quam dolorem sit.",
-         "line": [
-            "Est asperiores laboriosam consectetur voluptatem et."
-         ],
-         "period": {
-            "end": "1981-07-03T17:26:51-04:00",
-            "start": "1998-04-13T16:02:45-04:00"
-         },
-         "postalCode": "Consectetur ut.",
-         "state": "Et dolorem.",
-         "text": "Maxime eius rerum quia sunt neque.",
-         "type": "both",
-         "use": "work"
-      }
-   ],
-   "animal": {
-      "breed": {
-         "coding": [
-            {
-               "code": "Consequatur ad.",
-               "display": "Non reprehenderit et laboriosam.",
-               "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-               "userSelected": false,
-               "version": "Est ab est eveniet."
-            },
-            {
-               "code": "Consequatur ad.",
-               "display": "Non reprehenderit et laboriosam.",
-               "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-               "userSelected": false,
-               "version": "Est ab est eveniet."
-            },
-            {
-               "code": "Consequatur ad.",
-               "display": "Non reprehenderit et laboriosam.",
-               "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-               "userSelected": false,
-               "version": "Est ab est eveniet."
-            }
-         ],
-         "text": "Consectetur aliquam consequatur rerum."
-      },
-      "genderStatus": {
-         "coding": [
-            {
-               "code": "Consequatur ad.",
-               "display": "Non reprehenderit et laboriosam.",
-               "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-               "userSelected": false,
-               "version": "Est ab est eveniet."
-            },
-            {
-               "code": "Consequatur ad.",
-               "display": "Non reprehenderit et laboriosam.",
-               "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-               "userSelected": false,
-               "version": "Est ab est eveniet."
-            },
-            {
-               "code": "Consequatur ad.",
-               "display": "Non reprehenderit et laboriosam.",
-               "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-               "userSelected": false,
-               "version": "Est ab est eveniet."
-            }
-         ],
-         "text": "Consectetur aliquam consequatur rerum."
-      },
-      "species": {
-         "coding": [
-            {
-               "code": "Consequatur ad.",
-               "display": "Non reprehenderit et laboriosam.",
-               "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-               "userSelected": false,
-               "version": "Est ab est eveniet."
-            },
-            {
-               "code": "Consequatur ad.",
-               "display": "Non reprehenderit et laboriosam.",
-               "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-               "userSelected": false,
-               "version": "Est ab est eveniet."
-            },
-            {
-               "code": "Consequatur ad.",
-               "display": "Non reprehenderit et laboriosam.",
-               "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-               "userSelected": false,
-               "version": "Est ab est eveniet."
-            }
-         ],
-         "text": "Consectetur aliquam consequatur rerum."
-      }
-   },
-   "birthDate": "2000-05-04T09:23:10-04:00",
-   "careProvider": {
-      "display": "Eaque et expedita omnis officiis illo.",
-      "reference": "Nisi culpa."
-   },
-   "communication": [
-      {
-         "careProvider": {
-            "display": "Eaque et expedita omnis officiis illo.",
-            "reference": "Nisi culpa."
-         },
-         "language": {
-            "coding": [
-               {
-                  "code": "Consequatur ad.",
-                  "display": "Non reprehenderit et laboriosam.",
-                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-                  "userSelected": false,
-                  "version": "Est ab est eveniet."
-               },
-               {
-                  "code": "Consequatur ad.",
-                  "display": "Non reprehenderit et laboriosam.",
-                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-                  "userSelected": false,
-                  "version": "Est ab est eveniet."
-               },
-               {
-                  "code": "Consequatur ad.",
-                  "display": "Non reprehenderit et laboriosam.",
-                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-                  "userSelected": false,
-                  "version": "Est ab est eveniet."
-               }
-            ],
-            "text": "Consectetur aliquam consequatur rerum."
-         },
-         "preferred": true
-      }
-   ],
-   "contact": [
-      {
-         "address": {
-            "city": "Eaque vero quasi quod.",
-            "country": "Enim sit porro asperiores aspernatur dolorem.",
-            "distinct": "Modi provident earum aut quam dolorem sit.",
-            "line": [
-               "Est asperiores laboriosam consectetur voluptatem et."
-            ],
-            "period": {
-               "end": "1981-07-03T17:26:51-04:00",
-               "start": "1998-04-13T16:02:45-04:00"
-            },
-            "postalCode": "Consectetur ut.",
-            "state": "Et dolorem.",
-            "text": "Maxime eius rerum quia sunt neque.",
-            "type": "both",
-            "use": "work"
-         },
-         "careProvider": {
-            "display": "Eaque et expedita omnis officiis illo.",
-            "reference": "Nisi culpa."
-         },
-         "gender": "other",
-         "language": {
-            "coding": [
-               {
-                  "code": "Consequatur ad.",
-                  "display": "Non reprehenderit et laboriosam.",
-                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-                  "userSelected": false,
-                  "version": "Est ab est eveniet."
-               },
-               {
-                  "code": "Consequatur ad.",
-                  "display": "Non reprehenderit et laboriosam.",
-                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-                  "userSelected": false,
-                  "version": "Est ab est eveniet."
-               },
-               {
-                  "code": "Consequatur ad.",
-                  "display": "Non reprehenderit et laboriosam.",
-                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-                  "userSelected": false,
-                  "version": "Est ab est eveniet."
-               }
-            ],
-            "text": "Consectetur aliquam consequatur rerum."
-         },
-         "name": {
-            "family": [
-               "Repudiandae aut qui doloribus voluptate."
-            ],
-            "given": [
-               "Tenetur ut fugit occaecati sequi amet."
-            ],
-            "period": {
-               "end": "1981-07-03T17:26:51-04:00",
-               "start": "1998-04-13T16:02:45-04:00"
-            },
-            "prefix": [
-               "Similique nostrum nemo illum aperiam.",
-               "Similique nostrum nemo illum aperiam.",
-               "Similique nostrum nemo illum aperiam."
-            ],
-            "suffix": [
-               "Qui veritatis quidem nihil."
-            ],
-            "use": "old"
-         },
-         "organization": {
-            "display": "Eaque et expedita omnis officiis illo.",
-            "reference": "Nisi culpa."
-         },
-         "period": {
-            "end": "1981-07-03T17:26:51-04:00",
-            "start": "1998-04-13T16:02:45-04:00"
-         },
-         "preferred": false,
-         "relationship": {
-            "coding": [
-               {
-                  "code": "Consequatur ad.",
-                  "display": "Non reprehenderit et laboriosam.",
-                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-                  "userSelected": false,
-                  "version": "Est ab est eveniet."
-               },
-               {
-                  "code": "Consequatur ad.",
-                  "display": "Non reprehenderit et laboriosam.",
-                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-                  "userSelected": false,
-                  "version": "Est ab est eveniet."
-               },
-               {
-                  "code": "Consequatur ad.",
-                  "display": "Non reprehenderit et laboriosam.",
-                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-                  "userSelected": false,
-                  "version": "Est ab est eveniet."
-               }
-            ],
-            "text": "Consectetur aliquam consequatur rerum."
-         },
-         "telecom": {
-            "rank": 8423925307476269937,
-            "system": "phone",
-            "use": "work",
-            "value": "Dignissimos placeat nemo quo."
-         }
-      }
-   ],
-   "created_at": "2006-09-08T11:48:32-04:00",
-   "created_by": "me@goa.design",
-   "deceasedBoolean": false,
-   "deceasedDateTime": "1977-02-20T12:15:51-05:00",
-   "gender": "male",
-   "href": "/patients/1",
-   "id": 1,
-   "identifier": [
-      {
-         "assigner": {
-            "display": "Eaque et expedita omnis officiis illo.",
-            "reference": "Nisi culpa."
-         },
-         "period": {
-            "end": "1981-07-03T17:26:51-04:00",
-            "start": "1998-04-13T16:02:45-04:00"
-         },
-         "system": "http://sawayn.net/crystel",
-         "type": {
-            "coding": [
-               {
-                  "code": "Consequatur ad.",
-                  "display": "Non reprehenderit et laboriosam.",
-                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-                  "userSelected": false,
-                  "version": "Est ab est eveniet."
-               },
-               {
-                  "code": "Consequatur ad.",
-                  "display": "Non reprehenderit et laboriosam.",
-                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-                  "userSelected": false,
-                  "version": "Est ab est eveniet."
-               },
-               {
-                  "code": "Consequatur ad.",
-                  "display": "Non reprehenderit et laboriosam.",
-                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-                  "userSelected": false,
-                  "version": "Est ab est eveniet."
-               }
-            ],
-            "text": "Consectetur aliquam consequatur rerum."
-         },
-         "use": "usual",
-         "value": "Reprehenderit omnis cumque quia."
-      },
-      {
-         "assigner": {
-            "display": "Eaque et expedita omnis officiis illo.",
-            "reference": "Nisi culpa."
-         },
-         "period": {
-            "end": "1981-07-03T17:26:51-04:00",
-            "start": "1998-04-13T16:02:45-04:00"
-         },
-         "system": "http://sawayn.net/crystel",
-         "type": {
-            "coding": [
-               {
-                  "code": "Consequatur ad.",
-                  "display": "Non reprehenderit et laboriosam.",
-                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-                  "userSelected": false,
-                  "version": "Est ab est eveniet."
-               },
-               {
-                  "code": "Consequatur ad.",
-                  "display": "Non reprehenderit et laboriosam.",
-                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-                  "userSelected": false,
-                  "version": "Est ab est eveniet."
-               },
-               {
-                  "code": "Consequatur ad.",
-                  "display": "Non reprehenderit et laboriosam.",
-                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-                  "userSelected": false,
-                  "version": "Est ab est eveniet."
-               }
-            ],
-            "text": "Consectetur aliquam consequatur rerum."
-         },
-         "use": "usual",
-         "value": "Reprehenderit omnis cumque quia."
-      }
-   ],
-   "link": [
-      {
-         "other": {
-            "display": "Eaque et expedita omnis officiis illo.",
-            "reference": "Nisi culpa."
-         },
-         "type": "See also"
-      },
-      {
-         "other": {
-            "display": "Eaque et expedita omnis officiis illo.",
-            "reference": "Nisi culpa."
-         },
-         "type": "See also"
-      }
-   ],
-   "managingOrganization": {
-      "display": "Eaque et expedita omnis officiis illo.",
-      "reference": "Nisi culpa."
-   },
-   "meta": {
-      "lastUpdated": "1977-07-18T23:43:10-04:00",
-      "profile": "http://cummerata.name/savanna_kulas",
-      "security": {
-         "code": "Consequatur ad.",
-         "display": "Non reprehenderit et laboriosam.",
-         "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-         "userSelected": false,
-         "version": "Est ab est eveniet."
-      },
-      "tag": {
-         "code": "Consequatur ad.",
-         "display": "Non reprehenderit et laboriosam.",
-         "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-         "userSelected": false,
-         "version": "Est ab est eveniet."
-      },
-      "versionId": "Reprehenderit unde et ab."
-   },
-   "multipleBirthBoolean": false,
-   "multipleBirthInteger": 3693525351942771919,
-   "name": [
-      {
-         "family": [
-            "Repudiandae aut qui doloribus voluptate."
-         ],
-         "given": [
-            "Tenetur ut fugit occaecati sequi amet."
-         ],
-         "period": {
-            "end": "1981-07-03T17:26:51-04:00",
-            "start": "1998-04-13T16:02:45-04:00"
-         },
-         "prefix": [
-            "Similique nostrum nemo illum aperiam.",
-            "Similique nostrum nemo illum aperiam.",
-            "Similique nostrum nemo illum aperiam."
-         ],
-         "suffix": [
-            "Qui veritatis quidem nihil."
-         ],
-         "use": "old"
-      },
-      {
-         "family": [
-            "Repudiandae aut qui doloribus voluptate."
-         ],
-         "given": [
-            "Tenetur ut fugit occaecati sequi amet."
-         ],
-         "period": {
-            "end": "1981-07-03T17:26:51-04:00",
-            "start": "1998-04-13T16:02:45-04:00"
-         },
-         "prefix": [
-            "Similique nostrum nemo illum aperiam.",
-            "Similique nostrum nemo illum aperiam.",
-            "Similique nostrum nemo illum aperiam."
-         ],
-         "suffix": [
-            "Qui veritatis quidem nihil."
-         ],
-         "use": "old"
-      }
-   ],
-   "photo": [
-      {
-         "contentType": "Amet incidunt.",
-         "creation": "1988-01-11T11:21:25-05:00",
-         "data": "Sint iusto quo nostrum quaerat sapiente molestiae.",
-         "hash": "Veritatis assumenda nihil quis.",
-         "size": 3859331959323497509,
-         "title": "Officiis labore ut quasi."
-      },
-      {
-         "contentType": "Amet incidunt.",
-         "creation": "1988-01-11T11:21:25-05:00",
-         "data": "Sint iusto quo nostrum quaerat sapiente molestiae.",
-         "hash": "Veritatis assumenda nihil quis.",
-         "size": 3859331959323497509,
-         "title": "Officiis labore ut quasi."
-      }
-   ],
-   "telecom": [
-      {
-         "rank": 8423925307476269937,
-         "system": "phone",
-         "use": "work",
-         "value": "Dignissimos placeat nemo quo."
-      },
-      {
-         "rank": 8423925307476269937,
-         "system": "phone",
-         "use": "work",
-         "value": "Dignissimos placeat nemo quo."
-      }
-   ]
-}`,
-		RunE: func(cmd *cobra.Command, args []string) error { return tmp11.Run(c, args) },
+		RunE:  func(cmd *cobra.Command, args []string) error { return tmp11.Run(c, args) },
 	}
 	tmp11.RegisterFlags(sub, c)
 	sub.PersistentFlags().BoolVar(&tmp11.PrettyPrint, "pp", false, "Pretty print response body")
@@ -1245,12 +798,12 @@ Payload example:
 Payload example:
 
 {
-   "active": false,
+   "active": true,
    "address": [
       {
-         "city": "Eaque vero quasi quod.",
-         "country": "Enim sit porro asperiores aspernatur dolorem.",
-         "distinct": "Modi provident earum aut quam dolorem sit.",
+         "city": "Culpa laudantium.",
+         "country": "Dolores velit ullam similique ut eos.",
+         "distinct": "Placeat ut molestias quia ad laboriosam.",
          "line": [
             "Est asperiores laboriosam consectetur voluptatem et."
          ],
@@ -1258,11 +811,45 @@ Payload example:
             "end": "1981-07-03T17:26:51-04:00",
             "start": "1998-04-13T16:02:45-04:00"
          },
-         "postalCode": "Consectetur ut.",
-         "state": "Et dolorem.",
-         "text": "Maxime eius rerum quia sunt neque.",
-         "type": "both",
-         "use": "work"
+         "postalCode": "Unde reprehenderit vel et consequatur nemo.",
+         "state": "Qui voluptate aut velit eius sapiente.",
+         "text": "Magni eaque.",
+         "type": "physical",
+         "use": "old - purpose of this address"
+      },
+      {
+         "city": "Culpa laudantium.",
+         "country": "Dolores velit ullam similique ut eos.",
+         "distinct": "Placeat ut molestias quia ad laboriosam.",
+         "line": [
+            "Est asperiores laboriosam consectetur voluptatem et."
+         ],
+         "period": {
+            "end": "1981-07-03T17:26:51-04:00",
+            "start": "1998-04-13T16:02:45-04:00"
+         },
+         "postalCode": "Unde reprehenderit vel et consequatur nemo.",
+         "state": "Qui voluptate aut velit eius sapiente.",
+         "text": "Magni eaque.",
+         "type": "physical",
+         "use": "old - purpose of this address"
+      },
+      {
+         "city": "Culpa laudantium.",
+         "country": "Dolores velit ullam similique ut eos.",
+         "distinct": "Placeat ut molestias quia ad laboriosam.",
+         "line": [
+            "Est asperiores laboriosam consectetur voluptatem et."
+         ],
+         "period": {
+            "end": "1981-07-03T17:26:51-04:00",
+            "start": "1998-04-13T16:02:45-04:00"
+         },
+         "postalCode": "Unde reprehenderit vel et consequatur nemo.",
+         "state": "Qui voluptate aut velit eius sapiente.",
+         "text": "Magni eaque.",
+         "type": "physical",
+         "use": "old - purpose of this address"
       }
    ],
    "animal": {
@@ -1345,7 +932,7 @@ Payload example:
          "text": "Consectetur aliquam consequatur rerum."
       }
    },
-   "birthDate": "2000-05-04T09:23:10-04:00",
+   "birthDate": "1999-06-06T03:16:01-04:00",
    "careProvider": {
       "display": "Eaque et expedita omnis officiis illo.",
       "reference": "Nisi culpa."
@@ -1382,15 +969,81 @@ Payload example:
             ],
             "text": "Consectetur aliquam consequatur rerum."
          },
-         "preferred": true
+         "preferred": false
+      },
+      {
+         "careProvider": {
+            "display": "Eaque et expedita omnis officiis illo.",
+            "reference": "Nisi culpa."
+         },
+         "language": {
+            "coding": [
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               }
+            ],
+            "text": "Consectetur aliquam consequatur rerum."
+         },
+         "preferred": false
+      },
+      {
+         "careProvider": {
+            "display": "Eaque et expedita omnis officiis illo.",
+            "reference": "Nisi culpa."
+         },
+         "language": {
+            "coding": [
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               }
+            ],
+            "text": "Consectetur aliquam consequatur rerum."
+         },
+         "preferred": false
       }
    ],
    "contact": [
       {
          "address": {
-            "city": "Eaque vero quasi quod.",
-            "country": "Enim sit porro asperiores aspernatur dolorem.",
-            "distinct": "Modi provident earum aut quam dolorem sit.",
+            "city": "Culpa laudantium.",
+            "country": "Dolores velit ullam similique ut eos.",
+            "distinct": "Placeat ut molestias quia ad laboriosam.",
             "line": [
                "Est asperiores laboriosam consectetur voluptatem et."
             ],
@@ -1398,17 +1051,17 @@ Payload example:
                "end": "1981-07-03T17:26:51-04:00",
                "start": "1998-04-13T16:02:45-04:00"
             },
-            "postalCode": "Consectetur ut.",
-            "state": "Et dolorem.",
-            "text": "Maxime eius rerum quia sunt neque.",
-            "type": "both",
-            "use": "work"
+            "postalCode": "Unde reprehenderit vel et consequatur nemo.",
+            "state": "Qui voluptate aut velit eius sapiente.",
+            "text": "Magni eaque.",
+            "type": "physical",
+            "use": "old - purpose of this address"
          },
          "careProvider": {
             "display": "Eaque et expedita omnis officiis illo.",
             "reference": "Nisi culpa."
          },
-         "gender": "other",
+         "gender": "unknown",
          "language": {
             "coding": [
                {
@@ -1437,24 +1090,27 @@ Payload example:
          },
          "name": {
             "family": [
-               "Repudiandae aut qui doloribus voluptate."
+               "Quasi molestiae culpa qui facilis amet maiores.",
+               "Quasi molestiae culpa qui facilis amet maiores.",
+               "Quasi molestiae culpa qui facilis amet maiores."
             ],
             "given": [
-               "Tenetur ut fugit occaecati sequi amet."
+               "Ea aspernatur.",
+               "Ea aspernatur."
             ],
             "period": {
                "end": "1981-07-03T17:26:51-04:00",
                "start": "1998-04-13T16:02:45-04:00"
             },
             "prefix": [
-               "Similique nostrum nemo illum aperiam.",
-               "Similique nostrum nemo illum aperiam.",
-               "Similique nostrum nemo illum aperiam."
+               "Officiis deserunt ut repudiandae illo quo provident.",
+               "Officiis deserunt ut repudiandae illo quo provident.",
+               "Officiis deserunt ut repudiandae illo quo provident."
             ],
             "suffix": [
-               "Qui veritatis quidem nihil."
+               "Repudiandae aut qui doloribus voluptate."
             ],
-            "use": "old"
+            "use": "official"
          },
          "organization": {
             "display": "Eaque et expedita omnis officiis illo.",
@@ -1492,32 +1148,36 @@ Payload example:
             "text": "Consectetur aliquam consequatur rerum."
          },
          "telecom": {
-            "rank": 8423925307476269937,
-            "system": "phone",
-            "use": "work",
-            "value": "Dignissimos placeat nemo quo."
+            "rank": 4555316963050062016,
+            "system": "email",
+            "use": "old",
+            "value": "Sit quisquam et error blanditiis fugiat ipsum."
          }
-      }
-   ],
-   "created_at": "2006-09-08T11:48:32-04:00",
-   "created_by": "me@goa.design",
-   "deceasedBoolean": false,
-   "deceasedDateTime": "1977-02-20T12:15:51-05:00",
-   "gender": "male",
-   "href": "/patients/1",
-   "id": 1,
-   "identifier": [
+      },
       {
-         "assigner": {
+         "address": {
+            "city": "Culpa laudantium.",
+            "country": "Dolores velit ullam similique ut eos.",
+            "distinct": "Placeat ut molestias quia ad laboriosam.",
+            "line": [
+               "Est asperiores laboriosam consectetur voluptatem et."
+            ],
+            "period": {
+               "end": "1981-07-03T17:26:51-04:00",
+               "start": "1998-04-13T16:02:45-04:00"
+            },
+            "postalCode": "Unde reprehenderit vel et consequatur nemo.",
+            "state": "Qui voluptate aut velit eius sapiente.",
+            "text": "Magni eaque.",
+            "type": "physical",
+            "use": "old - purpose of this address"
+         },
+         "careProvider": {
             "display": "Eaque et expedita omnis officiis illo.",
             "reference": "Nisi culpa."
          },
-         "period": {
-            "end": "1981-07-03T17:26:51-04:00",
-            "start": "1998-04-13T16:02:45-04:00"
-         },
-         "system": "http://sawayn.net/crystel",
-         "type": {
+         "gender": "unknown",
+         "language": {
             "coding": [
                {
                   "code": "Consequatur ad.",
@@ -1543,9 +1203,291 @@ Payload example:
             ],
             "text": "Consectetur aliquam consequatur rerum."
          },
-         "use": "usual",
-         "value": "Reprehenderit omnis cumque quia."
-      },
+         "name": {
+            "family": [
+               "Quasi molestiae culpa qui facilis amet maiores.",
+               "Quasi molestiae culpa qui facilis amet maiores.",
+               "Quasi molestiae culpa qui facilis amet maiores."
+            ],
+            "given": [
+               "Ea aspernatur.",
+               "Ea aspernatur."
+            ],
+            "period": {
+               "end": "1981-07-03T17:26:51-04:00",
+               "start": "1998-04-13T16:02:45-04:00"
+            },
+            "prefix": [
+               "Officiis deserunt ut repudiandae illo quo provident.",
+               "Officiis deserunt ut repudiandae illo quo provident.",
+               "Officiis deserunt ut repudiandae illo quo provident."
+            ],
+            "suffix": [
+               "Repudiandae aut qui doloribus voluptate."
+            ],
+            "use": "official"
+         },
+         "organization": {
+            "display": "Eaque et expedita omnis officiis illo.",
+            "reference": "Nisi culpa."
+         },
+         "period": {
+            "end": "1981-07-03T17:26:51-04:00",
+            "start": "1998-04-13T16:02:45-04:00"
+         },
+         "preferred": false,
+         "relationship": {
+            "coding": [
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               }
+            ],
+            "text": "Consectetur aliquam consequatur rerum."
+         },
+         "telecom": {
+            "rank": 4555316963050062016,
+            "system": "email",
+            "use": "old",
+            "value": "Sit quisquam et error blanditiis fugiat ipsum."
+         }
+      }
+   ],
+   "created_at": "2004-06-06T09:08:39-04:00",
+   "created_by": "me@goa.design",
+   "deceasedBoolean": false,
+   "deceasedDateTime": "1970-12-01T14:13:39-05:00",
+   "extension": [
+      {
+         "ValueAddress": {
+            "city": "Culpa laudantium.",
+            "country": "Dolores velit ullam similique ut eos.",
+            "distinct": "Placeat ut molestias quia ad laboriosam.",
+            "line": [
+               "Est asperiores laboriosam consectetur voluptatem et."
+            ],
+            "period": {
+               "end": "1981-07-03T17:26:51-04:00",
+               "start": "1998-04-13T16:02:45-04:00"
+            },
+            "postalCode": "Unde reprehenderit vel et consequatur nemo.",
+            "state": "Qui voluptate aut velit eius sapiente.",
+            "text": "Magni eaque.",
+            "type": "physical",
+            "use": "old - purpose of this address"
+         },
+         "ValueAnnotation": {
+            "authorReference": {
+               "display": "Eaque et expedita omnis officiis illo.",
+               "reference": "Nisi culpa."
+            },
+            "authorString": "Consequatur voluptate et consequatur quas quia.",
+            "time": "2008-12-19T10:05:40-05:00"
+         },
+         "ValueAttachment": {
+            "contentType": "Vel enim sit porro asperiores aspernatur.",
+            "creation": "1975-12-19T22:27:19-05:00",
+            "data": "Modi provident earum aut quam dolorem sit.",
+            "hash": "Quia consectetur ut in et dolorem.",
+            "size": 8381895107066531980,
+            "title": "Eius rerum quia sunt neque ratione blanditiis."
+         },
+         "ValueBase64Binary": "Amet incidunt.",
+         "ValueBoolean": false,
+         "ValueCode": "Sint iusto quo nostrum quaerat sapiente molestiae.",
+         "ValueCodeableConcept": {
+            "coding": [
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               }
+            ],
+            "text": "Consectetur aliquam consequatur rerum."
+         },
+         "ValueCoding": {
+            "code": "Consequatur ad.",
+            "display": "Non reprehenderit et laboriosam.",
+            "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+            "userSelected": false,
+            "version": "Est ab est eveniet."
+         },
+         "ValueContactPoint": "Veritatis assumenda nihil quis.",
+         "ValueDate": "1986-12-30T10:11:49-05:00",
+         "ValueDateTime": "1983-05-08T12:52:29-04:00",
+         "ValueDecimal": 0.7250928108853039,
+         "ValueHumanName": {
+            "family": [
+               "Quasi molestiae culpa qui facilis amet maiores.",
+               "Quasi molestiae culpa qui facilis amet maiores.",
+               "Quasi molestiae culpa qui facilis amet maiores."
+            ],
+            "given": [
+               "Ea aspernatur.",
+               "Ea aspernatur."
+            ],
+            "period": {
+               "end": "1981-07-03T17:26:51-04:00",
+               "start": "1998-04-13T16:02:45-04:00"
+            },
+            "prefix": [
+               "Officiis deserunt ut repudiandae illo quo provident.",
+               "Officiis deserunt ut repudiandae illo quo provident.",
+               "Officiis deserunt ut repudiandae illo quo provident."
+            ],
+            "suffix": [
+               "Repudiandae aut qui doloribus voluptate."
+            ],
+            "use": "official"
+         },
+         "ValueId": "Tenetur ut fugit occaecati sequi amet.",
+         "ValueIdentifier": {
+            "assigner": {
+               "display": "Eaque et expedita omnis officiis illo.",
+               "reference": "Nisi culpa."
+            },
+            "period": {
+               "end": "1981-07-03T17:26:51-04:00",
+               "start": "1998-04-13T16:02:45-04:00"
+            },
+            "system": "http://sawayn.net/crystel",
+            "type": {
+               "coding": [
+                  {
+                     "code": "Consequatur ad.",
+                     "display": "Non reprehenderit et laboriosam.",
+                     "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                     "userSelected": false,
+                     "version": "Est ab est eveniet."
+                  },
+                  {
+                     "code": "Consequatur ad.",
+                     "display": "Non reprehenderit et laboriosam.",
+                     "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                     "userSelected": false,
+                     "version": "Est ab est eveniet."
+                  },
+                  {
+                     "code": "Consequatur ad.",
+                     "display": "Non reprehenderit et laboriosam.",
+                     "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                     "userSelected": false,
+                     "version": "Est ab est eveniet."
+                  }
+               ],
+               "text": "Consectetur aliquam consequatur rerum."
+            },
+            "use": "usual",
+            "value": "Reprehenderit omnis cumque quia."
+         },
+         "ValueInstant": "1990-02-25T02:38:47-05:00",
+         "ValueInteger": 2380532849054388906,
+         "ValueMarkdown": "Nostrum nemo illum aperiam rerum.",
+         "ValueMeta": {
+            "lastUpdated": "1977-07-18T23:43:10-04:00",
+            "profile": [
+               "Magni qui excepturi sunt quo voluptas repellat."
+            ],
+            "security": [
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               }
+            ],
+            "tag": [
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               }
+            ],
+            "versionId": "Non doloremque."
+         },
+         "ValueOid": "Qui veritatis quidem nihil.",
+         "ValuePeriod": {
+            "end": "1981-07-03T17:26:51-04:00",
+            "start": "1998-04-13T16:02:45-04:00"
+         },
+         "ValuePositiveInt": 0.18456956720633907,
+         "ValueQuantity": {
+            "code": "Corporis quisquam nisi.",
+            "comparator": "\u003e=",
+            "system": "http://cummerata.biz/ignacio_doyle",
+            "unit": "Doloribus nisi.",
+            "value": 0.2469657627769717
+         },
+         "ValueRange": "Eum aspernatur quia nostrum aut omnis.",
+         "ValueRatio": 3890369954141924436,
+         "ValueReference": {
+            "display": "Eaque et expedita omnis officiis illo.",
+            "reference": "Nisi culpa."
+         },
+         "ValueSampledData": "Porro et suscipit quas unde molestiae totam.",
+         "ValueSignature": "Voluptatibus sint officiis nulla.",
+         "ValueString": "Impedit dolorem et ab.",
+         "ValueTime": "1990-05-18T23:54:14-04:00",
+         "ValueTiming": "1972-06-24T05:33:28-04:00",
+         "ValueUnsignedInt": 0.4277345962058835,
+         "ValueUri": "Et mollitia omnis accusamus ex ea molestias.",
+         "url": "Aliquid distinctio ipsa aut sunt maxime."
+      }
+   ],
+   "gender": "male",
+   "href": "/patients/1",
+   "id": "Rerum at odit vel nobis exercitationem voluptas.",
+   "identifier": [
       {
          "assigner": {
             "display": "Eaque et expedita omnis officiis illo.",
@@ -1592,14 +1534,7 @@ Payload example:
             "display": "Eaque et expedita omnis officiis illo.",
             "reference": "Nisi culpa."
          },
-         "type": "See also"
-      },
-      {
-         "other": {
-            "display": "Eaque et expedita omnis officiis illo.",
-            "reference": "Nisi culpa."
-         },
-         "type": "See also"
+         "type": "refer"
       }
    ],
    "managingOrganization": {
@@ -1608,99 +1543,110 @@ Payload example:
    },
    "meta": {
       "lastUpdated": "1977-07-18T23:43:10-04:00",
-      "profile": "http://cummerata.name/savanna_kulas",
-      "security": {
-         "code": "Consequatur ad.",
-         "display": "Non reprehenderit et laboriosam.",
-         "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-         "userSelected": false,
-         "version": "Est ab est eveniet."
-      },
-      "tag": {
-         "code": "Consequatur ad.",
-         "display": "Non reprehenderit et laboriosam.",
-         "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-         "userSelected": false,
-         "version": "Est ab est eveniet."
-      },
-      "versionId": "Reprehenderit unde et ab."
+      "profile": [
+         "Magni qui excepturi sunt quo voluptas repellat."
+      ],
+      "security": [
+         {
+            "code": "Consequatur ad.",
+            "display": "Non reprehenderit et laboriosam.",
+            "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+            "userSelected": false,
+            "version": "Est ab est eveniet."
+         },
+         {
+            "code": "Consequatur ad.",
+            "display": "Non reprehenderit et laboriosam.",
+            "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+            "userSelected": false,
+            "version": "Est ab est eveniet."
+         }
+      ],
+      "tag": [
+         {
+            "code": "Consequatur ad.",
+            "display": "Non reprehenderit et laboriosam.",
+            "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+            "userSelected": false,
+            "version": "Est ab est eveniet."
+         },
+         {
+            "code": "Consequatur ad.",
+            "display": "Non reprehenderit et laboriosam.",
+            "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+            "userSelected": false,
+            "version": "Est ab est eveniet."
+         }
+      ],
+      "versionId": "Non doloremque."
    },
-   "multipleBirthBoolean": false,
-   "multipleBirthInteger": 3693525351942771919,
+   "multipleBirthBoolean": true,
+   "multipleBirthInteger": 8975007319133812653,
    "name": [
       {
          "family": [
-            "Repudiandae aut qui doloribus voluptate."
+            "Quasi molestiae culpa qui facilis amet maiores.",
+            "Quasi molestiae culpa qui facilis amet maiores.",
+            "Quasi molestiae culpa qui facilis amet maiores."
          ],
          "given": [
-            "Tenetur ut fugit occaecati sequi amet."
+            "Ea aspernatur.",
+            "Ea aspernatur."
          ],
          "period": {
             "end": "1981-07-03T17:26:51-04:00",
             "start": "1998-04-13T16:02:45-04:00"
          },
          "prefix": [
-            "Similique nostrum nemo illum aperiam.",
-            "Similique nostrum nemo illum aperiam.",
-            "Similique nostrum nemo illum aperiam."
+            "Officiis deserunt ut repudiandae illo quo provident.",
+            "Officiis deserunt ut repudiandae illo quo provident.",
+            "Officiis deserunt ut repudiandae illo quo provident."
          ],
          "suffix": [
-            "Qui veritatis quidem nihil."
-         ],
-         "use": "old"
-      },
-      {
-         "family": [
             "Repudiandae aut qui doloribus voluptate."
          ],
-         "given": [
-            "Tenetur ut fugit occaecati sequi amet."
-         ],
-         "period": {
-            "end": "1981-07-03T17:26:51-04:00",
-            "start": "1998-04-13T16:02:45-04:00"
-         },
-         "prefix": [
-            "Similique nostrum nemo illum aperiam.",
-            "Similique nostrum nemo illum aperiam.",
-            "Similique nostrum nemo illum aperiam."
-         ],
-         "suffix": [
-            "Qui veritatis quidem nihil."
-         ],
-         "use": "old"
+         "use": "official"
       }
    ],
    "photo": [
       {
-         "contentType": "Amet incidunt.",
-         "creation": "1988-01-11T11:21:25-05:00",
-         "data": "Sint iusto quo nostrum quaerat sapiente molestiae.",
-         "hash": "Veritatis assumenda nihil quis.",
-         "size": 3859331959323497509,
-         "title": "Officiis labore ut quasi."
+         "contentType": "Vel enim sit porro asperiores aspernatur.",
+         "creation": "1975-12-19T22:27:19-05:00",
+         "data": "Modi provident earum aut quam dolorem sit.",
+         "hash": "Quia consectetur ut in et dolorem.",
+         "size": 8381895107066531980,
+         "title": "Eius rerum quia sunt neque ratione blanditiis."
       },
       {
-         "contentType": "Amet incidunt.",
-         "creation": "1988-01-11T11:21:25-05:00",
-         "data": "Sint iusto quo nostrum quaerat sapiente molestiae.",
-         "hash": "Veritatis assumenda nihil quis.",
-         "size": 3859331959323497509,
-         "title": "Officiis labore ut quasi."
+         "contentType": "Vel enim sit porro asperiores aspernatur.",
+         "creation": "1975-12-19T22:27:19-05:00",
+         "data": "Modi provident earum aut quam dolorem sit.",
+         "hash": "Quia consectetur ut in et dolorem.",
+         "size": 8381895107066531980,
+         "title": "Eius rerum quia sunt neque ratione blanditiis."
+      },
+      {
+         "contentType": "Vel enim sit porro asperiores aspernatur.",
+         "creation": "1975-12-19T22:27:19-05:00",
+         "data": "Modi provident earum aut quam dolorem sit.",
+         "hash": "Quia consectetur ut in et dolorem.",
+         "size": 8381895107066531980,
+         "title": "Eius rerum quia sunt neque ratione blanditiis."
       }
    ],
+   "resourceType": "Qui eaque atque consectetur aliquam quam.",
    "telecom": [
       {
-         "rank": 8423925307476269937,
-         "system": "phone",
-         "use": "work",
-         "value": "Dignissimos placeat nemo quo."
+         "rank": 4555316963050062016,
+         "system": "email",
+         "use": "old",
+         "value": "Sit quisquam et error blanditiis fugiat ipsum."
       },
       {
-         "rank": 8423925307476269937,
-         "system": "phone",
-         "use": "work",
-         "value": "Dignissimos placeat nemo quo."
+         "rank": 4555316963050062016,
+         "system": "email",
+         "use": "old",
+         "value": "Sit quisquam et error blanditiis fugiat ipsum."
       }
    ]
 }`,
@@ -1760,7 +1706,7 @@ Payload example:
 Payload example:
 
 {
-   "password": "Quibusdam soluta officiis occaecati odit cupiditate dolorem.",
+   "password": "Dolores praesentium qui quibusdam soluta officiis.",
    "username": "jim"
 }`,
 		RunE: func(cmd *cobra.Command, args []string) error { return tmp16.Run(c, args) },
@@ -1789,7 +1735,7 @@ Payload example:
    "email": "jim.smith@gmail.com",
    "first_name": "Jim",
    "last_name": "Smith",
-   "password": "Doloremque assumenda et eum voluptatem laboriosam omnis.",
+   "password": "Odit cupiditate dolorem quidem doloremque.",
    "username": "jim"
 }`,
 		RunE: func(cmd *cobra.Command, args []string) error { return tmp17.Run(c, args) },
@@ -1828,24 +1774,51 @@ Payload example:
    "name": [
       {
          "family": [
-            "Repudiandae aut qui doloribus voluptate."
+            "Quasi molestiae culpa qui facilis amet maiores.",
+            "Quasi molestiae culpa qui facilis amet maiores.",
+            "Quasi molestiae culpa qui facilis amet maiores."
          ],
          "given": [
-            "Tenetur ut fugit occaecati sequi amet."
+            "Ea aspernatur.",
+            "Ea aspernatur."
          ],
          "period": {
             "end": "1981-07-03T17:26:51-04:00",
             "start": "1998-04-13T16:02:45-04:00"
          },
          "prefix": [
-            "Similique nostrum nemo illum aperiam.",
-            "Similique nostrum nemo illum aperiam.",
-            "Similique nostrum nemo illum aperiam."
+            "Officiis deserunt ut repudiandae illo quo provident.",
+            "Officiis deserunt ut repudiandae illo quo provident.",
+            "Officiis deserunt ut repudiandae illo quo provident."
          ],
          "suffix": [
-            "Qui veritatis quidem nihil."
+            "Repudiandae aut qui doloribus voluptate."
          ],
-         "use": "old"
+         "use": "official"
+      },
+      {
+         "family": [
+            "Quasi molestiae culpa qui facilis amet maiores.",
+            "Quasi molestiae culpa qui facilis amet maiores.",
+            "Quasi molestiae culpa qui facilis amet maiores."
+         ],
+         "given": [
+            "Ea aspernatur.",
+            "Ea aspernatur."
+         ],
+         "period": {
+            "end": "1981-07-03T17:26:51-04:00",
+            "start": "1998-04-13T16:02:45-04:00"
+         },
+         "prefix": [
+            "Officiis deserunt ut repudiandae illo quo provident.",
+            "Officiis deserunt ut repudiandae illo quo provident.",
+            "Officiis deserunt ut repudiandae illo quo provident."
+         ],
+         "suffix": [
+            "Repudiandae aut qui doloribus voluptate."
+         ],
+         "use": "official"
       }
    ]
 }`,
@@ -1864,7 +1837,7 @@ Payload example:
 
 {
    "email": "jim.smith@gmail.com",
-   "password": "Reprehenderit molestiae sapiente dolor suscipit."
+   "password": "Et eum voluptatem laboriosam."
 }`,
 		RunE: func(cmd *cobra.Command, args []string) error { return tmp20.Run(c, args) },
 	}
@@ -1885,12 +1858,12 @@ Payload example:
 Payload example:
 
 {
-   "active": false,
+   "active": true,
    "address": [
       {
-         "city": "Eaque vero quasi quod.",
-         "country": "Enim sit porro asperiores aspernatur dolorem.",
-         "distinct": "Modi provident earum aut quam dolorem sit.",
+         "city": "Culpa laudantium.",
+         "country": "Dolores velit ullam similique ut eos.",
+         "distinct": "Placeat ut molestias quia ad laboriosam.",
          "line": [
             "Est asperiores laboriosam consectetur voluptatem et."
          ],
@@ -1898,11 +1871,45 @@ Payload example:
             "end": "1981-07-03T17:26:51-04:00",
             "start": "1998-04-13T16:02:45-04:00"
          },
-         "postalCode": "Consectetur ut.",
-         "state": "Et dolorem.",
-         "text": "Maxime eius rerum quia sunt neque.",
-         "type": "both",
-         "use": "work"
+         "postalCode": "Unde reprehenderit vel et consequatur nemo.",
+         "state": "Qui voluptate aut velit eius sapiente.",
+         "text": "Magni eaque.",
+         "type": "physical",
+         "use": "old - purpose of this address"
+      },
+      {
+         "city": "Culpa laudantium.",
+         "country": "Dolores velit ullam similique ut eos.",
+         "distinct": "Placeat ut molestias quia ad laboriosam.",
+         "line": [
+            "Est asperiores laboriosam consectetur voluptatem et."
+         ],
+         "period": {
+            "end": "1981-07-03T17:26:51-04:00",
+            "start": "1998-04-13T16:02:45-04:00"
+         },
+         "postalCode": "Unde reprehenderit vel et consequatur nemo.",
+         "state": "Qui voluptate aut velit eius sapiente.",
+         "text": "Magni eaque.",
+         "type": "physical",
+         "use": "old - purpose of this address"
+      },
+      {
+         "city": "Culpa laudantium.",
+         "country": "Dolores velit ullam similique ut eos.",
+         "distinct": "Placeat ut molestias quia ad laboriosam.",
+         "line": [
+            "Est asperiores laboriosam consectetur voluptatem et."
+         ],
+         "period": {
+            "end": "1981-07-03T17:26:51-04:00",
+            "start": "1998-04-13T16:02:45-04:00"
+         },
+         "postalCode": "Unde reprehenderit vel et consequatur nemo.",
+         "state": "Qui voluptate aut velit eius sapiente.",
+         "text": "Magni eaque.",
+         "type": "physical",
+         "use": "old - purpose of this address"
       }
    ],
    "animal": {
@@ -1985,7 +1992,7 @@ Payload example:
          "text": "Consectetur aliquam consequatur rerum."
       }
    },
-   "birthDate": "2000-05-04T09:23:10-04:00",
+   "birthDate": "1999-06-06T03:16:01-04:00",
    "careProvider": {
       "display": "Eaque et expedita omnis officiis illo.",
       "reference": "Nisi culpa."
@@ -2022,15 +2029,81 @@ Payload example:
             ],
             "text": "Consectetur aliquam consequatur rerum."
          },
-         "preferred": true
+         "preferred": false
+      },
+      {
+         "careProvider": {
+            "display": "Eaque et expedita omnis officiis illo.",
+            "reference": "Nisi culpa."
+         },
+         "language": {
+            "coding": [
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               }
+            ],
+            "text": "Consectetur aliquam consequatur rerum."
+         },
+         "preferred": false
+      },
+      {
+         "careProvider": {
+            "display": "Eaque et expedita omnis officiis illo.",
+            "reference": "Nisi culpa."
+         },
+         "language": {
+            "coding": [
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               }
+            ],
+            "text": "Consectetur aliquam consequatur rerum."
+         },
+         "preferred": false
       }
    ],
    "contact": [
       {
          "address": {
-            "city": "Eaque vero quasi quod.",
-            "country": "Enim sit porro asperiores aspernatur dolorem.",
-            "distinct": "Modi provident earum aut quam dolorem sit.",
+            "city": "Culpa laudantium.",
+            "country": "Dolores velit ullam similique ut eos.",
+            "distinct": "Placeat ut molestias quia ad laboriosam.",
             "line": [
                "Est asperiores laboriosam consectetur voluptatem et."
             ],
@@ -2038,17 +2111,17 @@ Payload example:
                "end": "1981-07-03T17:26:51-04:00",
                "start": "1998-04-13T16:02:45-04:00"
             },
-            "postalCode": "Consectetur ut.",
-            "state": "Et dolorem.",
-            "text": "Maxime eius rerum quia sunt neque.",
-            "type": "both",
-            "use": "work"
+            "postalCode": "Unde reprehenderit vel et consequatur nemo.",
+            "state": "Qui voluptate aut velit eius sapiente.",
+            "text": "Magni eaque.",
+            "type": "physical",
+            "use": "old - purpose of this address"
          },
          "careProvider": {
             "display": "Eaque et expedita omnis officiis illo.",
             "reference": "Nisi culpa."
          },
-         "gender": "other",
+         "gender": "unknown",
          "language": {
             "coding": [
                {
@@ -2077,24 +2150,27 @@ Payload example:
          },
          "name": {
             "family": [
-               "Repudiandae aut qui doloribus voluptate."
+               "Quasi molestiae culpa qui facilis amet maiores.",
+               "Quasi molestiae culpa qui facilis amet maiores.",
+               "Quasi molestiae culpa qui facilis amet maiores."
             ],
             "given": [
-               "Tenetur ut fugit occaecati sequi amet."
+               "Ea aspernatur.",
+               "Ea aspernatur."
             ],
             "period": {
                "end": "1981-07-03T17:26:51-04:00",
                "start": "1998-04-13T16:02:45-04:00"
             },
             "prefix": [
-               "Similique nostrum nemo illum aperiam.",
-               "Similique nostrum nemo illum aperiam.",
-               "Similique nostrum nemo illum aperiam."
+               "Officiis deserunt ut repudiandae illo quo provident.",
+               "Officiis deserunt ut repudiandae illo quo provident.",
+               "Officiis deserunt ut repudiandae illo quo provident."
             ],
             "suffix": [
-               "Qui veritatis quidem nihil."
+               "Repudiandae aut qui doloribus voluptate."
             ],
-            "use": "old"
+            "use": "official"
          },
          "organization": {
             "display": "Eaque et expedita omnis officiis illo.",
@@ -2132,32 +2208,36 @@ Payload example:
             "text": "Consectetur aliquam consequatur rerum."
          },
          "telecom": {
-            "rank": 8423925307476269937,
-            "system": "phone",
-            "use": "work",
-            "value": "Dignissimos placeat nemo quo."
+            "rank": 4555316963050062016,
+            "system": "email",
+            "use": "old",
+            "value": "Sit quisquam et error blanditiis fugiat ipsum."
          }
-      }
-   ],
-   "created_at": "2006-09-08T11:48:32-04:00",
-   "created_by": "me@goa.design",
-   "deceasedBoolean": false,
-   "deceasedDateTime": "1977-02-20T12:15:51-05:00",
-   "gender": "male",
-   "href": "/patients/1",
-   "id": 1,
-   "identifier": [
+      },
       {
-         "assigner": {
+         "address": {
+            "city": "Culpa laudantium.",
+            "country": "Dolores velit ullam similique ut eos.",
+            "distinct": "Placeat ut molestias quia ad laboriosam.",
+            "line": [
+               "Est asperiores laboriosam consectetur voluptatem et."
+            ],
+            "period": {
+               "end": "1981-07-03T17:26:51-04:00",
+               "start": "1998-04-13T16:02:45-04:00"
+            },
+            "postalCode": "Unde reprehenderit vel et consequatur nemo.",
+            "state": "Qui voluptate aut velit eius sapiente.",
+            "text": "Magni eaque.",
+            "type": "physical",
+            "use": "old - purpose of this address"
+         },
+         "careProvider": {
             "display": "Eaque et expedita omnis officiis illo.",
             "reference": "Nisi culpa."
          },
-         "period": {
-            "end": "1981-07-03T17:26:51-04:00",
-            "start": "1998-04-13T16:02:45-04:00"
-         },
-         "system": "http://sawayn.net/crystel",
-         "type": {
+         "gender": "unknown",
+         "language": {
             "coding": [
                {
                   "code": "Consequatur ad.",
@@ -2183,9 +2263,291 @@ Payload example:
             ],
             "text": "Consectetur aliquam consequatur rerum."
          },
-         "use": "usual",
-         "value": "Reprehenderit omnis cumque quia."
-      },
+         "name": {
+            "family": [
+               "Quasi molestiae culpa qui facilis amet maiores.",
+               "Quasi molestiae culpa qui facilis amet maiores.",
+               "Quasi molestiae culpa qui facilis amet maiores."
+            ],
+            "given": [
+               "Ea aspernatur.",
+               "Ea aspernatur."
+            ],
+            "period": {
+               "end": "1981-07-03T17:26:51-04:00",
+               "start": "1998-04-13T16:02:45-04:00"
+            },
+            "prefix": [
+               "Officiis deserunt ut repudiandae illo quo provident.",
+               "Officiis deserunt ut repudiandae illo quo provident.",
+               "Officiis deserunt ut repudiandae illo quo provident."
+            ],
+            "suffix": [
+               "Repudiandae aut qui doloribus voluptate."
+            ],
+            "use": "official"
+         },
+         "organization": {
+            "display": "Eaque et expedita omnis officiis illo.",
+            "reference": "Nisi culpa."
+         },
+         "period": {
+            "end": "1981-07-03T17:26:51-04:00",
+            "start": "1998-04-13T16:02:45-04:00"
+         },
+         "preferred": false,
+         "relationship": {
+            "coding": [
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               }
+            ],
+            "text": "Consectetur aliquam consequatur rerum."
+         },
+         "telecom": {
+            "rank": 4555316963050062016,
+            "system": "email",
+            "use": "old",
+            "value": "Sit quisquam et error blanditiis fugiat ipsum."
+         }
+      }
+   ],
+   "created_at": "2004-06-06T09:08:39-04:00",
+   "created_by": "me@goa.design",
+   "deceasedBoolean": false,
+   "deceasedDateTime": "1970-12-01T14:13:39-05:00",
+   "extension": [
+      {
+         "ValueAddress": {
+            "city": "Culpa laudantium.",
+            "country": "Dolores velit ullam similique ut eos.",
+            "distinct": "Placeat ut molestias quia ad laboriosam.",
+            "line": [
+               "Est asperiores laboriosam consectetur voluptatem et."
+            ],
+            "period": {
+               "end": "1981-07-03T17:26:51-04:00",
+               "start": "1998-04-13T16:02:45-04:00"
+            },
+            "postalCode": "Unde reprehenderit vel et consequatur nemo.",
+            "state": "Qui voluptate aut velit eius sapiente.",
+            "text": "Magni eaque.",
+            "type": "physical",
+            "use": "old - purpose of this address"
+         },
+         "ValueAnnotation": {
+            "authorReference": {
+               "display": "Eaque et expedita omnis officiis illo.",
+               "reference": "Nisi culpa."
+            },
+            "authorString": "Consequatur voluptate et consequatur quas quia.",
+            "time": "2008-12-19T10:05:40-05:00"
+         },
+         "ValueAttachment": {
+            "contentType": "Vel enim sit porro asperiores aspernatur.",
+            "creation": "1975-12-19T22:27:19-05:00",
+            "data": "Modi provident earum aut quam dolorem sit.",
+            "hash": "Quia consectetur ut in et dolorem.",
+            "size": 8381895107066531980,
+            "title": "Eius rerum quia sunt neque ratione blanditiis."
+         },
+         "ValueBase64Binary": "Amet incidunt.",
+         "ValueBoolean": false,
+         "ValueCode": "Sint iusto quo nostrum quaerat sapiente molestiae.",
+         "ValueCodeableConcept": {
+            "coding": [
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               }
+            ],
+            "text": "Consectetur aliquam consequatur rerum."
+         },
+         "ValueCoding": {
+            "code": "Consequatur ad.",
+            "display": "Non reprehenderit et laboriosam.",
+            "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+            "userSelected": false,
+            "version": "Est ab est eveniet."
+         },
+         "ValueContactPoint": "Veritatis assumenda nihil quis.",
+         "ValueDate": "1986-12-30T10:11:49-05:00",
+         "ValueDateTime": "1983-05-08T12:52:29-04:00",
+         "ValueDecimal": 0.7250928108853039,
+         "ValueHumanName": {
+            "family": [
+               "Quasi molestiae culpa qui facilis amet maiores.",
+               "Quasi molestiae culpa qui facilis amet maiores.",
+               "Quasi molestiae culpa qui facilis amet maiores."
+            ],
+            "given": [
+               "Ea aspernatur.",
+               "Ea aspernatur."
+            ],
+            "period": {
+               "end": "1981-07-03T17:26:51-04:00",
+               "start": "1998-04-13T16:02:45-04:00"
+            },
+            "prefix": [
+               "Officiis deserunt ut repudiandae illo quo provident.",
+               "Officiis deserunt ut repudiandae illo quo provident.",
+               "Officiis deserunt ut repudiandae illo quo provident."
+            ],
+            "suffix": [
+               "Repudiandae aut qui doloribus voluptate."
+            ],
+            "use": "official"
+         },
+         "ValueId": "Tenetur ut fugit occaecati sequi amet.",
+         "ValueIdentifier": {
+            "assigner": {
+               "display": "Eaque et expedita omnis officiis illo.",
+               "reference": "Nisi culpa."
+            },
+            "period": {
+               "end": "1981-07-03T17:26:51-04:00",
+               "start": "1998-04-13T16:02:45-04:00"
+            },
+            "system": "http://sawayn.net/crystel",
+            "type": {
+               "coding": [
+                  {
+                     "code": "Consequatur ad.",
+                     "display": "Non reprehenderit et laboriosam.",
+                     "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                     "userSelected": false,
+                     "version": "Est ab est eveniet."
+                  },
+                  {
+                     "code": "Consequatur ad.",
+                     "display": "Non reprehenderit et laboriosam.",
+                     "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                     "userSelected": false,
+                     "version": "Est ab est eveniet."
+                  },
+                  {
+                     "code": "Consequatur ad.",
+                     "display": "Non reprehenderit et laboriosam.",
+                     "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                     "userSelected": false,
+                     "version": "Est ab est eveniet."
+                  }
+               ],
+               "text": "Consectetur aliquam consequatur rerum."
+            },
+            "use": "usual",
+            "value": "Reprehenderit omnis cumque quia."
+         },
+         "ValueInstant": "1990-02-25T02:38:47-05:00",
+         "ValueInteger": 2380532849054388906,
+         "ValueMarkdown": "Nostrum nemo illum aperiam rerum.",
+         "ValueMeta": {
+            "lastUpdated": "1977-07-18T23:43:10-04:00",
+            "profile": [
+               "Magni qui excepturi sunt quo voluptas repellat."
+            ],
+            "security": [
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               }
+            ],
+            "tag": [
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               },
+               {
+                  "code": "Consequatur ad.",
+                  "display": "Non reprehenderit et laboriosam.",
+                  "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+                  "userSelected": false,
+                  "version": "Est ab est eveniet."
+               }
+            ],
+            "versionId": "Non doloremque."
+         },
+         "ValueOid": "Qui veritatis quidem nihil.",
+         "ValuePeriod": {
+            "end": "1981-07-03T17:26:51-04:00",
+            "start": "1998-04-13T16:02:45-04:00"
+         },
+         "ValuePositiveInt": 0.18456956720633907,
+         "ValueQuantity": {
+            "code": "Corporis quisquam nisi.",
+            "comparator": "\u003e=",
+            "system": "http://cummerata.biz/ignacio_doyle",
+            "unit": "Doloribus nisi.",
+            "value": 0.2469657627769717
+         },
+         "ValueRange": "Eum aspernatur quia nostrum aut omnis.",
+         "ValueRatio": 3890369954141924436,
+         "ValueReference": {
+            "display": "Eaque et expedita omnis officiis illo.",
+            "reference": "Nisi culpa."
+         },
+         "ValueSampledData": "Porro et suscipit quas unde molestiae totam.",
+         "ValueSignature": "Voluptatibus sint officiis nulla.",
+         "ValueString": "Impedit dolorem et ab.",
+         "ValueTime": "1990-05-18T23:54:14-04:00",
+         "ValueTiming": "1972-06-24T05:33:28-04:00",
+         "ValueUnsignedInt": 0.4277345962058835,
+         "ValueUri": "Et mollitia omnis accusamus ex ea molestias.",
+         "url": "Aliquid distinctio ipsa aut sunt maxime."
+      }
+   ],
+   "gender": "male",
+   "href": "/patients/1",
+   "id": "Rerum at odit vel nobis exercitationem voluptas.",
+   "identifier": [
       {
          "assigner": {
             "display": "Eaque et expedita omnis officiis illo.",
@@ -2232,14 +2594,7 @@ Payload example:
             "display": "Eaque et expedita omnis officiis illo.",
             "reference": "Nisi culpa."
          },
-         "type": "See also"
-      },
-      {
-         "other": {
-            "display": "Eaque et expedita omnis officiis illo.",
-            "reference": "Nisi culpa."
-         },
-         "type": "See also"
+         "type": "refer"
       }
    ],
    "managingOrganization": {
@@ -2248,99 +2603,110 @@ Payload example:
    },
    "meta": {
       "lastUpdated": "1977-07-18T23:43:10-04:00",
-      "profile": "http://cummerata.name/savanna_kulas",
-      "security": {
-         "code": "Consequatur ad.",
-         "display": "Non reprehenderit et laboriosam.",
-         "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-         "userSelected": false,
-         "version": "Est ab est eveniet."
-      },
-      "tag": {
-         "code": "Consequatur ad.",
-         "display": "Non reprehenderit et laboriosam.",
-         "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
-         "userSelected": false,
-         "version": "Est ab est eveniet."
-      },
-      "versionId": "Reprehenderit unde et ab."
+      "profile": [
+         "Magni qui excepturi sunt quo voluptas repellat."
+      ],
+      "security": [
+         {
+            "code": "Consequatur ad.",
+            "display": "Non reprehenderit et laboriosam.",
+            "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+            "userSelected": false,
+            "version": "Est ab est eveniet."
+         },
+         {
+            "code": "Consequatur ad.",
+            "display": "Non reprehenderit et laboriosam.",
+            "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+            "userSelected": false,
+            "version": "Est ab est eveniet."
+         }
+      ],
+      "tag": [
+         {
+            "code": "Consequatur ad.",
+            "display": "Non reprehenderit et laboriosam.",
+            "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+            "userSelected": false,
+            "version": "Est ab est eveniet."
+         },
+         {
+            "code": "Consequatur ad.",
+            "display": "Non reprehenderit et laboriosam.",
+            "system": "Explicabo voluptatibus quia laboriosam tenetur magni.",
+            "userSelected": false,
+            "version": "Est ab est eveniet."
+         }
+      ],
+      "versionId": "Non doloremque."
    },
-   "multipleBirthBoolean": false,
-   "multipleBirthInteger": 3693525351942771919,
+   "multipleBirthBoolean": true,
+   "multipleBirthInteger": 8975007319133812653,
    "name": [
       {
          "family": [
-            "Repudiandae aut qui doloribus voluptate."
+            "Quasi molestiae culpa qui facilis amet maiores.",
+            "Quasi molestiae culpa qui facilis amet maiores.",
+            "Quasi molestiae culpa qui facilis amet maiores."
          ],
          "given": [
-            "Tenetur ut fugit occaecati sequi amet."
+            "Ea aspernatur.",
+            "Ea aspernatur."
          ],
          "period": {
             "end": "1981-07-03T17:26:51-04:00",
             "start": "1998-04-13T16:02:45-04:00"
          },
          "prefix": [
-            "Similique nostrum nemo illum aperiam.",
-            "Similique nostrum nemo illum aperiam.",
-            "Similique nostrum nemo illum aperiam."
+            "Officiis deserunt ut repudiandae illo quo provident.",
+            "Officiis deserunt ut repudiandae illo quo provident.",
+            "Officiis deserunt ut repudiandae illo quo provident."
          ],
          "suffix": [
-            "Qui veritatis quidem nihil."
-         ],
-         "use": "old"
-      },
-      {
-         "family": [
             "Repudiandae aut qui doloribus voluptate."
          ],
-         "given": [
-            "Tenetur ut fugit occaecati sequi amet."
-         ],
-         "period": {
-            "end": "1981-07-03T17:26:51-04:00",
-            "start": "1998-04-13T16:02:45-04:00"
-         },
-         "prefix": [
-            "Similique nostrum nemo illum aperiam.",
-            "Similique nostrum nemo illum aperiam.",
-            "Similique nostrum nemo illum aperiam."
-         ],
-         "suffix": [
-            "Qui veritatis quidem nihil."
-         ],
-         "use": "old"
+         "use": "official"
       }
    ],
    "photo": [
       {
-         "contentType": "Amet incidunt.",
-         "creation": "1988-01-11T11:21:25-05:00",
-         "data": "Sint iusto quo nostrum quaerat sapiente molestiae.",
-         "hash": "Veritatis assumenda nihil quis.",
-         "size": 3859331959323497509,
-         "title": "Officiis labore ut quasi."
+         "contentType": "Vel enim sit porro asperiores aspernatur.",
+         "creation": "1975-12-19T22:27:19-05:00",
+         "data": "Modi provident earum aut quam dolorem sit.",
+         "hash": "Quia consectetur ut in et dolorem.",
+         "size": 8381895107066531980,
+         "title": "Eius rerum quia sunt neque ratione blanditiis."
       },
       {
-         "contentType": "Amet incidunt.",
-         "creation": "1988-01-11T11:21:25-05:00",
-         "data": "Sint iusto quo nostrum quaerat sapiente molestiae.",
-         "hash": "Veritatis assumenda nihil quis.",
-         "size": 3859331959323497509,
-         "title": "Officiis labore ut quasi."
+         "contentType": "Vel enim sit porro asperiores aspernatur.",
+         "creation": "1975-12-19T22:27:19-05:00",
+         "data": "Modi provident earum aut quam dolorem sit.",
+         "hash": "Quia consectetur ut in et dolorem.",
+         "size": 8381895107066531980,
+         "title": "Eius rerum quia sunt neque ratione blanditiis."
+      },
+      {
+         "contentType": "Vel enim sit porro asperiores aspernatur.",
+         "creation": "1975-12-19T22:27:19-05:00",
+         "data": "Modi provident earum aut quam dolorem sit.",
+         "hash": "Quia consectetur ut in et dolorem.",
+         "size": 8381895107066531980,
+         "title": "Eius rerum quia sunt neque ratione blanditiis."
       }
    ],
+   "resourceType": "Qui eaque atque consectetur aliquam quam.",
    "telecom": [
       {
-         "rank": 8423925307476269937,
-         "system": "phone",
-         "use": "work",
-         "value": "Dignissimos placeat nemo quo."
+         "rank": 4555316963050062016,
+         "system": "email",
+         "use": "old",
+         "value": "Sit quisquam et error blanditiis fugiat ipsum."
       },
       {
-         "rank": 8423925307476269937,
-         "system": "phone",
-         "use": "work",
-         "value": "Dignissimos placeat nemo quo."
+         "rank": 4555316963050062016,
+         "system": "email",
+         "use": "old",
+         "value": "Sit quisquam et error blanditiis fugiat ipsum."
       }
    ]
 }`,
@@ -3174,13 +3540,6 @@ func (cmd *ReadPatientCommand) Run(c *client.Client, args []string) error {
 	} else {
 		path = fmt.Sprintf("/nosh/patients/%v", cmd.PatientID)
 	}
-	var payload client.PatientPayload
-	if cmd.Payload != "" {
-		err := json.Unmarshal([]byte(cmd.Payload), &payload)
-		if err != nil {
-			return fmt.Errorf("failed to deserialize payload: %s", err)
-		}
-	}
 	logger := goa.NewLogger(log.New(os.Stderr, "", log.LstdFlags))
 	ctx := goa.WithLogger(context.Background(), logger)
 	var tmp30 *time.Time
@@ -3192,7 +3551,7 @@ func (cmd *ReadPatientCommand) Run(c *client.Client, args []string) error {
 			return err
 		}
 	}
-	resp, err := c.ReadPatient(ctx, path, &payload, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp30, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
+	resp, err := c.ReadPatient(ctx, path, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp30, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
 	if err != nil {
 		goa.LogError(ctx, "failed", "err", err)
 		return err
@@ -3204,8 +3563,6 @@ func (cmd *ReadPatientCommand) Run(c *client.Client, args []string) error {
 
 // RegisterFlags registers the command flags with the command line.
 func (cmd *ReadPatientCommand) RegisterFlags(cc *cobra.Command, c *client.Client) {
-	cc.Flags().StringVar(&cmd.Payload, "payload", "", "Request body encoded in JSON")
-	cc.Flags().StringVar(&cmd.ContentType, "content", "", "Request content type override, e.g. 'application/x-www-form-urlencoded'")
 	var patientID int
 	cc.Flags().IntVar(&cmd.PatientID, "patientID", patientID, `Patient ID`)
 	var contained string
@@ -3272,25 +3629,7 @@ func (cmd *SearchPatientCommand) Run(c *client.Client, args []string) error {
 			return err
 		}
 	}
-	var tmp32 *bool
-	if cmd.Active != "" {
-		var err error
-		tmp32, err = boolVal(cmd.Active)
-		if err != nil {
-			goa.LogError(ctx, "failed to parse flag into *bool value", "flag", "--active", "err", err)
-			return err
-		}
-	}
-	var tmp33 []time.Time
-	if cmd.BirthDate != nil {
-		var err error
-		tmp33, err = timeArray(cmd.BirthDate)
-		if err != nil {
-			goa.LogError(ctx, "failed to parse flag into []time.Time value", "flag", "--birthDate", "err", err)
-			return err
-		}
-	}
-	resp, err := c.SearchPatient(ctx, path, &payload, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp31, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type), tmp32, tmp33, stringFlagVal("gender", cmd.Gender), cmd.Name)
+	resp, err := c.SearchPatient(ctx, path, &payload, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp31, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
 	if err != nil {
 		goa.LogError(ctx, "failed", "err", err)
 		return err
@@ -3340,14 +3679,6 @@ func (cmd *SearchPatientCommand) RegisterFlags(cc *cobra.Command, c *client.Clie
 	cc.Flags().StringVar(&cmd.Text, "_text", text, ``)
 	var type_ string
 	cc.Flags().StringVar(&cmd.Type, "_type", type_, ``)
-	var active string
-	cc.Flags().StringVar(&cmd.Active, "active", active, `Filter by active`)
-	var birthDate []string
-	cc.Flags().StringSliceVar(&cmd.BirthDate, "birthDate", birthDate, `Filter by birth date`)
-	var gender string
-	cc.Flags().StringVar(&cmd.Gender, "gender", gender, `Filter by gender`)
-	var name []string
-	cc.Flags().StringSliceVar(&cmd.Name, "name", name, `Filter by name`)
 }
 
 // Run makes the HTTP request corresponding to the UpdatePatientCommand command.
@@ -3367,16 +3698,16 @@ func (cmd *UpdatePatientCommand) Run(c *client.Client, args []string) error {
 	}
 	logger := goa.NewLogger(log.New(os.Stderr, "", log.LstdFlags))
 	ctx := goa.WithLogger(context.Background(), logger)
-	var tmp34 *time.Time
+	var tmp32 *time.Time
 	if cmd.LastUpdate != "" {
 		var err error
-		tmp34, err = timeVal(cmd.LastUpdate)
+		tmp32, err = timeVal(cmd.LastUpdate)
 		if err != nil {
 			goa.LogError(ctx, "failed to parse flag into *time.Time value", "flag", "--_lastUpdate", "err", err)
 			return err
 		}
 	}
-	resp, err := c.UpdatePatient(ctx, path, &payload, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp34, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
+	resp, err := c.UpdatePatient(ctx, path, &payload, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp32, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
 	if err != nil {
 		goa.LogError(ctx, "failed", "err", err)
 		return err
@@ -3447,16 +3778,16 @@ func (cmd *VreadPatientCommand) Run(c *client.Client, args []string) error {
 	}
 	logger := goa.NewLogger(log.New(os.Stderr, "", log.LstdFlags))
 	ctx := goa.WithLogger(context.Background(), logger)
-	var tmp35 *time.Time
+	var tmp33 *time.Time
 	if cmd.LastUpdate != "" {
 		var err error
-		tmp35, err = timeVal(cmd.LastUpdate)
+		tmp33, err = timeVal(cmd.LastUpdate)
 		if err != nil {
 			goa.LogError(ctx, "failed to parse flag into *time.Time value", "flag", "--_lastUpdate", "err", err)
 			return err
 		}
 	}
-	resp, err := c.VreadPatient(ctx, path, &payload, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp35, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
+	resp, err := c.VreadPatient(ctx, path, &payload, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp33, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
 	if err != nil {
 		goa.LogError(ctx, "failed", "err", err)
 		return err
@@ -3527,16 +3858,16 @@ func (cmd *CreateUserCommand) Run(c *client.Client, args []string) error {
 	}
 	logger := goa.NewLogger(log.New(os.Stderr, "", log.LstdFlags))
 	ctx := goa.WithLogger(context.Background(), logger)
-	var tmp36 *time.Time
+	var tmp34 *time.Time
 	if cmd.LastUpdate != "" {
 		var err error
-		tmp36, err = timeVal(cmd.LastUpdate)
+		tmp34, err = timeVal(cmd.LastUpdate)
 		if err != nil {
 			goa.LogError(ctx, "failed to parse flag into *time.Time value", "flag", "--_lastUpdate", "err", err)
 			return err
 		}
 	}
-	resp, err := c.CreateUser(ctx, path, &payload, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp36, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
+	resp, err := c.CreateUser(ctx, path, &payload, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp34, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
 	if err != nil {
 		goa.LogError(ctx, "failed", "err", err)
 		return err
@@ -3598,16 +3929,16 @@ func (cmd *DeleteUserCommand) Run(c *client.Client, args []string) error {
 	}
 	logger := goa.NewLogger(log.New(os.Stderr, "", log.LstdFlags))
 	ctx := goa.WithLogger(context.Background(), logger)
-	var tmp37 *time.Time
+	var tmp35 *time.Time
 	if cmd.LastUpdate != "" {
 		var err error
-		tmp37, err = timeVal(cmd.LastUpdate)
+		tmp35, err = timeVal(cmd.LastUpdate)
 		if err != nil {
 			goa.LogError(ctx, "failed to parse flag into *time.Time value", "flag", "--_lastUpdate", "err", err)
 			return err
 		}
 	}
-	resp, err := c.DeleteUser(ctx, path, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp37, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
+	resp, err := c.DeleteUser(ctx, path, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp35, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
 	if err != nil {
 		goa.LogError(ctx, "failed", "err", err)
 		return err
@@ -3669,16 +4000,16 @@ func (cmd *ListUserCommand) Run(c *client.Client, args []string) error {
 	}
 	logger := goa.NewLogger(log.New(os.Stderr, "", log.LstdFlags))
 	ctx := goa.WithLogger(context.Background(), logger)
-	var tmp38 *time.Time
+	var tmp36 *time.Time
 	if cmd.LastUpdate != "" {
 		var err error
-		tmp38, err = timeVal(cmd.LastUpdate)
+		tmp36, err = timeVal(cmd.LastUpdate)
 		if err != nil {
 			goa.LogError(ctx, "failed to parse flag into *time.Time value", "flag", "--_lastUpdate", "err", err)
 			return err
 		}
 	}
-	resp, err := c.ListUser(ctx, path, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp38, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
+	resp, err := c.ListUser(ctx, path, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp36, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
 	if err != nil {
 		goa.LogError(ctx, "failed", "err", err)
 		return err
@@ -3738,25 +4069,25 @@ func (cmd *SecureUserCommand) Run(c *client.Client, args []string) error {
 	}
 	logger := goa.NewLogger(log.New(os.Stderr, "", log.LstdFlags))
 	ctx := goa.WithLogger(context.Background(), logger)
-	var tmp39 *time.Time
+	var tmp37 *time.Time
 	if cmd.LastUpdate != "" {
 		var err error
-		tmp39, err = timeVal(cmd.LastUpdate)
+		tmp37, err = timeVal(cmd.LastUpdate)
 		if err != nil {
 			goa.LogError(ctx, "failed to parse flag into *time.Time value", "flag", "--_lastUpdate", "err", err)
 			return err
 		}
 	}
-	var tmp40 *bool
+	var tmp38 *bool
 	if cmd.Fail != "" {
 		var err error
-		tmp40, err = boolVal(cmd.Fail)
+		tmp38, err = boolVal(cmd.Fail)
 		if err != nil {
 			goa.LogError(ctx, "failed to parse flag into *bool value", "flag", "--fail", "err", err)
 			return err
 		}
 	}
-	resp, err := c.SecureUser(ctx, path, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp39, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type), tmp40)
+	resp, err := c.SecureUser(ctx, path, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp37, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type), tmp38)
 	if err != nil {
 		goa.LogError(ctx, "failed", "err", err)
 		return err
@@ -3818,16 +4149,16 @@ func (cmd *ShowUserCommand) Run(c *client.Client, args []string) error {
 	}
 	logger := goa.NewLogger(log.New(os.Stderr, "", log.LstdFlags))
 	ctx := goa.WithLogger(context.Background(), logger)
-	var tmp41 *time.Time
+	var tmp39 *time.Time
 	if cmd.LastUpdate != "" {
 		var err error
-		tmp41, err = timeVal(cmd.LastUpdate)
+		tmp39, err = timeVal(cmd.LastUpdate)
 		if err != nil {
 			goa.LogError(ctx, "failed to parse flag into *time.Time value", "flag", "--_lastUpdate", "err", err)
 			return err
 		}
 	}
-	resp, err := c.ShowUser(ctx, path, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp41, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
+	resp, err := c.ShowUser(ctx, path, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp39, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
 	if err != nil {
 		goa.LogError(ctx, "failed", "err", err)
 		return err
@@ -3896,16 +4227,16 @@ func (cmd *SigninUserCommand) Run(c *client.Client, args []string) error {
 	}
 	logger := goa.NewLogger(log.New(os.Stderr, "", log.LstdFlags))
 	ctx := goa.WithLogger(context.Background(), logger)
-	var tmp42 *time.Time
+	var tmp40 *time.Time
 	if cmd.LastUpdate != "" {
 		var err error
-		tmp42, err = timeVal(cmd.LastUpdate)
+		tmp40, err = timeVal(cmd.LastUpdate)
 		if err != nil {
 			goa.LogError(ctx, "failed to parse flag into *time.Time value", "flag", "--_lastUpdate", "err", err)
 			return err
 		}
 	}
-	resp, err := c.SigninUser(ctx, path, &payload, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp42, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
+	resp, err := c.SigninUser(ctx, path, &payload, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp40, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
 	if err != nil {
 		goa.LogError(ctx, "failed", "err", err)
 		return err
@@ -3974,16 +4305,16 @@ func (cmd *SignupUserCommand) Run(c *client.Client, args []string) error {
 	}
 	logger := goa.NewLogger(log.New(os.Stderr, "", log.LstdFlags))
 	ctx := goa.WithLogger(context.Background(), logger)
-	var tmp43 *time.Time
+	var tmp41 *time.Time
 	if cmd.LastUpdate != "" {
 		var err error
-		tmp43, err = timeVal(cmd.LastUpdate)
+		tmp41, err = timeVal(cmd.LastUpdate)
 		if err != nil {
 			goa.LogError(ctx, "failed to parse flag into *time.Time value", "flag", "--_lastUpdate", "err", err)
 			return err
 		}
 	}
-	resp, err := c.SignupUser(ctx, path, &payload, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp43, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
+	resp, err := c.SignupUser(ctx, path, &payload, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp41, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
 	if err != nil {
 		goa.LogError(ctx, "failed", "err", err)
 		return err
@@ -4045,16 +4376,16 @@ func (cmd *UnsecureUserCommand) Run(c *client.Client, args []string) error {
 	}
 	logger := goa.NewLogger(log.New(os.Stderr, "", log.LstdFlags))
 	ctx := goa.WithLogger(context.Background(), logger)
-	var tmp44 *time.Time
+	var tmp42 *time.Time
 	if cmd.LastUpdate != "" {
 		var err error
-		tmp44, err = timeVal(cmd.LastUpdate)
+		tmp42, err = timeVal(cmd.LastUpdate)
 		if err != nil {
 			goa.LogError(ctx, "failed to parse flag into *time.Time value", "flag", "--_lastUpdate", "err", err)
 			return err
 		}
 	}
-	resp, err := c.UnsecureUser(ctx, path, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp44, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
+	resp, err := c.UnsecureUser(ctx, path, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp42, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
 	if err != nil {
 		goa.LogError(ctx, "failed", "err", err)
 		return err
@@ -4121,16 +4452,16 @@ func (cmd *UpdateUserCommand) Run(c *client.Client, args []string) error {
 	}
 	logger := goa.NewLogger(log.New(os.Stderr, "", log.LstdFlags))
 	ctx := goa.WithLogger(context.Background(), logger)
-	var tmp45 *time.Time
+	var tmp43 *time.Time
 	if cmd.LastUpdate != "" {
 		var err error
-		tmp45, err = timeVal(cmd.LastUpdate)
+		tmp43, err = timeVal(cmd.LastUpdate)
 		if err != nil {
 			goa.LogError(ctx, "failed to parse flag into *time.Time value", "flag", "--_lastUpdate", "err", err)
 			return err
 		}
 	}
-	resp, err := c.UpdateUser(ctx, path, &payload, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp45, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
+	resp, err := c.UpdateUser(ctx, path, &payload, stringFlagVal("_contained", cmd.Contained), stringFlagVal("_containedType", cmd.ContainedType), intFlagVal("_count", cmd.Count), stringFlagVal("_elements", cmd.Elements), stringFlagVal("_has", cmd.Has), intFlagVal("_id", cmd.ID), stringFlagVal("_include", cmd.Include), tmp43, stringFlagVal("_list", cmd.List), stringFlagVal("_profile", cmd.Profile), stringFlagVal("_query", cmd.Query), stringFlagVal("_revinclude", cmd.Revinclude), stringFlagVal("_security", cmd.Security), stringFlagVal("_sort", cmd.Sort), stringFlagVal("_summary", cmd.Summary), stringFlagVal("_tag", cmd.Tag), stringFlagVal("_text", cmd.Text), stringFlagVal("_type", cmd.Type))
 	if err != nil {
 		goa.LogError(ctx, "failed", "err", err)
 		return err

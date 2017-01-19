@@ -23,7 +23,7 @@ import (
 // CreatePatientPayload is the patient create action payload.
 type CreatePatientPayload struct {
 	// A name associated with the individual.
-	Name []*HumanName `form:"name" json:"name" xml:"name"`
+	Name []*HumanName `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
 }
 
 // CreatePatientPath computes a request path to the create action of patient.
@@ -61,8 +61,8 @@ func (c *Client) NewCreatePatientRequest(ctx context.Context, path string, paylo
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp65 := strconv.Itoa(*count)
-		values.Set("_count", tmp65)
+		tmp63 := strconv.Itoa(*count)
+		values.Set("_count", tmp63)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -71,15 +71,15 @@ func (c *Client) NewCreatePatientRequest(ctx context.Context, path string, paylo
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp66 := strconv.Itoa(*id)
-		values.Set("_id", tmp66)
+		tmp64 := strconv.Itoa(*id)
+		values.Set("_id", tmp64)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp67 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp67)
+		tmp65 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp65)
 	}
 	if list != nil {
 		values.Set("_list", *list)
@@ -150,8 +150,8 @@ func (c *Client) NewDeletePatientRequest(ctx context.Context, path string, conta
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp68 := strconv.Itoa(*count)
-		values.Set("_count", tmp68)
+		tmp66 := strconv.Itoa(*count)
+		values.Set("_count", tmp66)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -160,15 +160,15 @@ func (c *Client) NewDeletePatientRequest(ctx context.Context, path string, conta
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp69 := strconv.Itoa(*id)
-		values.Set("_id", tmp69)
+		tmp67 := strconv.Itoa(*id)
+		values.Set("_id", tmp67)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp70 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp70)
+		tmp68 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp68)
 	}
 	if list != nil {
 		values.Set("_list", *list)
@@ -205,9 +205,6 @@ func (c *Client) NewDeletePatientRequest(ctx context.Context, path string, conta
 	if err != nil {
 		return nil, err
 	}
-	if c.OAuth2Signer != nil {
-		c.OAuth2Signer.Sign(req)
-	}
 	return req, nil
 }
 
@@ -219,8 +216,8 @@ func ReadPatientPath(patientID int) string {
 }
 
 // Retrieve patient with given id. IDs 1 and 2 pre-exist in the system.
-func (c *Client) ReadPatient(ctx context.Context, path string, payload *PatientPayload, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (*http.Response, error) {
-	req, err := c.NewReadPatientRequest(ctx, path, payload, contained, containedType, count, elements, has, id, include, lastUpdate, list, profile, query, revinclude, security, sort, summary, tag, text, type_)
+func (c *Client) ReadPatient(ctx context.Context, path string, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (*http.Response, error) {
+	req, err := c.NewReadPatientRequest(ctx, path, contained, containedType, count, elements, has, id, include, lastUpdate, list, profile, query, revinclude, security, sort, summary, tag, text, type_)
 	if err != nil {
 		return nil, err
 	}
@@ -228,12 +225,7 @@ func (c *Client) ReadPatient(ctx context.Context, path string, payload *PatientP
 }
 
 // NewReadPatientRequest create the request corresponding to the read action endpoint of the patient resource.
-func (c *Client) NewReadPatientRequest(ctx context.Context, path string, payload *PatientPayload, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (*http.Request, error) {
-	var body bytes.Buffer
-	err := c.Encoder.Encode(payload, &body, "*/*")
-	if err != nil {
-		return nil, fmt.Errorf("failed to encode body: %s", err)
-	}
+func (c *Client) NewReadPatientRequest(ctx context.Context, path string, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (*http.Request, error) {
 	scheme := c.Scheme
 	if scheme == "" {
 		scheme = "https"
@@ -247,8 +239,8 @@ func (c *Client) NewReadPatientRequest(ctx context.Context, path string, payload
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp71 := strconv.Itoa(*count)
-		values.Set("_count", tmp71)
+		tmp69 := strconv.Itoa(*count)
+		values.Set("_count", tmp69)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -257,15 +249,15 @@ func (c *Client) NewReadPatientRequest(ctx context.Context, path string, payload
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp72 := strconv.Itoa(*id)
-		values.Set("_id", tmp72)
+		tmp70 := strconv.Itoa(*id)
+		values.Set("_id", tmp70)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp73 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp73)
+		tmp71 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp71)
 	}
 	if list != nil {
 		values.Set("_list", *list)
@@ -298,7 +290,7 @@ func (c *Client) NewReadPatientRequest(ctx context.Context, path string, payload
 		values.Set("_type", *type_)
 	}
 	u.RawQuery = values.Encode()
-	req, err := http.NewRequest("GET", u.String(), &body)
+	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -312,8 +304,8 @@ func SearchPatientPath() string {
 }
 
 // List all bottles in account optionally filtering by year
-func (c *Client) SearchPatient(ctx context.Context, path string, payload *PatientPayload, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, active *bool, birthDate []time.Time, gender *string, name []string) (*http.Response, error) {
-	req, err := c.NewSearchPatientRequest(ctx, path, payload, contained, containedType, count, elements, has, id, include, lastUpdate, list, profile, query, revinclude, security, sort, summary, tag, text, type_, active, birthDate, gender, name)
+func (c *Client) SearchPatient(ctx context.Context, path string, payload *PatientPayload, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (*http.Response, error) {
+	req, err := c.NewSearchPatientRequest(ctx, path, payload, contained, containedType, count, elements, has, id, include, lastUpdate, list, profile, query, revinclude, security, sort, summary, tag, text, type_)
 	if err != nil {
 		return nil, err
 	}
@@ -321,7 +313,7 @@ func (c *Client) SearchPatient(ctx context.Context, path string, payload *Patien
 }
 
 // NewSearchPatientRequest create the request corresponding to the search action endpoint of the patient resource.
-func (c *Client) NewSearchPatientRequest(ctx context.Context, path string, payload *PatientPayload, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string, active *bool, birthDate []time.Time, gender *string, name []string) (*http.Request, error) {
+func (c *Client) NewSearchPatientRequest(ctx context.Context, path string, payload *PatientPayload, contained *string, containedType *string, count *int, elements *string, has *string, id *int, include *string, lastUpdate *time.Time, list *string, profile *string, query *string, revinclude *string, security *string, sort *string, summary *string, tag *string, text *string, type_ *string) (*http.Request, error) {
 	var body bytes.Buffer
 	err := c.Encoder.Encode(payload, &body, "*/*")
 	if err != nil {
@@ -340,8 +332,8 @@ func (c *Client) NewSearchPatientRequest(ctx context.Context, path string, paylo
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp74 := strconv.Itoa(*count)
-		values.Set("_count", tmp74)
+		tmp72 := strconv.Itoa(*count)
+		values.Set("_count", tmp72)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -350,15 +342,15 @@ func (c *Client) NewSearchPatientRequest(ctx context.Context, path string, paylo
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp75 := strconv.Itoa(*id)
-		values.Set("_id", tmp75)
+		tmp73 := strconv.Itoa(*id)
+		values.Set("_id", tmp73)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp76 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp76)
+		tmp74 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp74)
 	}
 	if list != nil {
 		values.Set("_list", *list)
@@ -390,21 +382,6 @@ func (c *Client) NewSearchPatientRequest(ctx context.Context, path string, paylo
 	if type_ != nil {
 		values.Set("_type", *type_)
 	}
-	if active != nil {
-		tmp77 := strconv.FormatBool(*active)
-		values.Set("active", tmp77)
-	}
-	for _, p := range birthDate {
-		tmp78 := p.Format(time.RFC3339)
-		values.Add("birthDate", tmp78)
-	}
-	if gender != nil {
-		values.Set("gender", *gender)
-	}
-	for _, p := range name {
-		tmp79 := p
-		values.Add("name", tmp79)
-	}
 	u.RawQuery = values.Encode()
 	req, err := http.NewRequest("GET", u.String(), &body)
 	if err != nil {
@@ -416,7 +393,7 @@ func (c *Client) NewSearchPatientRequest(ctx context.Context, path string, paylo
 // UpdatePatientPayload is the patient update action payload.
 type UpdatePatientPayload struct {
 	// A name associated with the individual.
-	Name []*HumanName `form:"name" json:"name" xml:"name"`
+	Name []*HumanName `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
 }
 
 // UpdatePatientPath computes a request path to the update action of patient.
@@ -455,8 +432,8 @@ func (c *Client) NewUpdatePatientRequest(ctx context.Context, path string, paylo
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp80 := strconv.Itoa(*count)
-		values.Set("_count", tmp80)
+		tmp75 := strconv.Itoa(*count)
+		values.Set("_count", tmp75)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -465,15 +442,15 @@ func (c *Client) NewUpdatePatientRequest(ctx context.Context, path string, paylo
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp81 := strconv.Itoa(*id)
-		values.Set("_id", tmp81)
+		tmp76 := strconv.Itoa(*id)
+		values.Set("_id", tmp76)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp82 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp82)
+		tmp77 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp77)
 	}
 	if list != nil {
 		values.Set("_list", *list)
@@ -549,8 +526,8 @@ func (c *Client) NewVreadPatientRequest(ctx context.Context, path string, payloa
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp83 := strconv.Itoa(*count)
-		values.Set("_count", tmp83)
+		tmp78 := strconv.Itoa(*count)
+		values.Set("_count", tmp78)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -559,15 +536,15 @@ func (c *Client) NewVreadPatientRequest(ctx context.Context, path string, payloa
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp84 := strconv.Itoa(*id)
-		values.Set("_id", tmp84)
+		tmp79 := strconv.Itoa(*id)
+		values.Set("_id", tmp79)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp85 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp85)
+		tmp80 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp80)
 	}
 	if list != nil {
 		values.Set("_list", *list)

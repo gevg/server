@@ -51,8 +51,8 @@ func (c *Client) NewReadAllergyIntoleranceRequest(ctx context.Context, path stri
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp46 := strconv.Itoa(*count)
-		values.Set("_count", tmp46)
+		tmp44 := strconv.Itoa(*count)
+		values.Set("_count", tmp44)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -61,15 +61,15 @@ func (c *Client) NewReadAllergyIntoleranceRequest(ctx context.Context, path stri
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp47 := strconv.Itoa(*id)
-		values.Set("_id", tmp47)
+		tmp45 := strconv.Itoa(*id)
+		values.Set("_id", tmp45)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp48 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp48)
+		tmp46 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp46)
 	}
 	if list != nil {
 		values.Set("_list", *list)
@@ -102,8 +102,8 @@ func (c *Client) NewReadAllergyIntoleranceRequest(ctx context.Context, path stri
 		values.Set("_type", *type_)
 	}
 	if allergyIntoleranceID != nil {
-		tmp49 := strconv.Itoa(*allergyIntoleranceID)
-		values.Set("allergy.intoleranceID", tmp49)
+		tmp47 := strconv.Itoa(*allergyIntoleranceID)
+		values.Set("allergy.intoleranceID", tmp47)
 	}
 	u.RawQuery = values.Encode()
 	req, err := http.NewRequest("GET", u.String(), nil)

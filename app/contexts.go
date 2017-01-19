@@ -1263,9 +1263,6 @@ type createPatientPayload struct {
 
 // Validate runs the validation rules defined in the design.
 func (payload *createPatientPayload) Validate() (err error) {
-	if payload.Name == nil {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "name"))
-	}
 	for _, e := range payload.Name {
 		if e != nil {
 			if err2 := e.Validate(); err2 != nil {
@@ -1291,14 +1288,11 @@ func (payload *createPatientPayload) Publicize() *CreatePatientPayload {
 // CreatePatientPayload is the patient create action payload.
 type CreatePatientPayload struct {
 	// A name associated with the individual.
-	Name []*HumanName `form:"name" json:"name" xml:"name"`
+	Name []*HumanName `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
 }
 
 // Validate runs the validation rules defined in the design.
 func (payload *CreatePatientPayload) Validate() (err error) {
-	if payload.Name == nil {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "name"))
-	}
 	for _, e := range payload.Name {
 		if e != nil {
 			if err2 := e.Validate(); err2 != nil {
@@ -1521,7 +1515,6 @@ type ReadPatientContext struct {
 	Text          *string
 	Type          *string
 	PatientID     int
-	Payload       *PatientPayload
 }
 
 // NewReadPatientContext parses the incoming request URL and body, performs validations and creates the
@@ -1706,10 +1699,6 @@ type SearchPatientContext struct {
 	Tag           *string
 	Text          *string
 	Type          *string
-	Active        *bool
-	BirthDate     []time.Time
-	Gender        *string
-	Name          []string
 	Payload       *PatientPayload
 }
 
@@ -1833,43 +1822,6 @@ func NewSearchPatientContext(ctx context.Context, service *goa.Service) (*Search
 		rawType := paramType[0]
 		rctx.Type = &rawType
 	}
-	paramActive := req.Params["active"]
-	if len(paramActive) > 0 {
-		rawActive := paramActive[0]
-		if active, err2 := strconv.ParseBool(rawActive); err2 == nil {
-			tmp60 := &active
-			rctx.Active = tmp60
-		} else {
-			err = goa.MergeErrors(err, goa.InvalidParamTypeError("active", rawActive, "boolean"))
-		}
-	}
-	paramBirthDate := req.Params["birthDate"]
-	if len(paramBirthDate) > 0 {
-		params := make([]time.Time, len(paramBirthDate))
-		for i, rawBirthDate := range paramBirthDate {
-			if birthDate, err2 := time.Parse(time.RFC3339, rawBirthDate); err2 == nil {
-				params[i] = birthDate
-			} else {
-				err = goa.MergeErrors(err, goa.InvalidParamTypeError("birthDate", rawBirthDate, "datetime"))
-			}
-		}
-		rctx.BirthDate = params
-	}
-	paramGender := req.Params["gender"]
-	if len(paramGender) > 0 {
-		rawGender := paramGender[0]
-		rctx.Gender = &rawGender
-		if rctx.Gender != nil {
-			if !(*rctx.Gender == "male" || *rctx.Gender == "female" || *rctx.Gender == "other" || *rctx.Gender == "unknown") {
-				err = goa.MergeErrors(err, goa.InvalidEnumValueError(`gender`, *rctx.Gender, []interface{}{"male", "female", "other", "unknown"}))
-			}
-		}
-	}
-	paramName := req.Params["name"]
-	if len(paramName) > 0 {
-		params := paramName
-		rctx.Name = params
-	}
 	return &rctx, err
 }
 
@@ -1943,9 +1895,9 @@ func NewUpdatePatientContext(ctx context.Context, service *goa.Service) (*Update
 	if len(paramCount) > 0 {
 		rawCount := paramCount[0]
 		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
-			tmp63 := count
-			tmp62 := &tmp63
-			rctx.Count = tmp62
+			tmp61 := count
+			tmp60 := &tmp61
+			rctx.Count = tmp60
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
 		}
@@ -1964,9 +1916,9 @@ func NewUpdatePatientContext(ctx context.Context, service *goa.Service) (*Update
 	if len(paramID) > 0 {
 		rawID := paramID[0]
 		if id, err2 := strconv.Atoi(rawID); err2 == nil {
-			tmp65 := id
-			tmp64 := &tmp65
-			rctx.ID = tmp64
+			tmp63 := id
+			tmp62 := &tmp63
+			rctx.ID = tmp62
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
 		}
@@ -1980,8 +1932,8 @@ func NewUpdatePatientContext(ctx context.Context, service *goa.Service) (*Update
 	if len(paramLastUpdate) > 0 {
 		rawLastUpdate := paramLastUpdate[0]
 		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
-			tmp66 := &lastUpdate
-			rctx.LastUpdate = tmp66
+			tmp64 := &lastUpdate
+			rctx.LastUpdate = tmp64
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
 		}
@@ -2061,9 +2013,6 @@ type updatePatientPayload struct {
 
 // Validate runs the validation rules defined in the design.
 func (payload *updatePatientPayload) Validate() (err error) {
-	if payload.Name == nil {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "name"))
-	}
 	for _, e := range payload.Name {
 		if e != nil {
 			if err2 := e.Validate(); err2 != nil {
@@ -2089,14 +2038,11 @@ func (payload *updatePatientPayload) Publicize() *UpdatePatientPayload {
 // UpdatePatientPayload is the patient update action payload.
 type UpdatePatientPayload struct {
 	// A name associated with the individual.
-	Name []*HumanName `form:"name" json:"name" xml:"name"`
+	Name []*HumanName `form:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
 }
 
 // Validate runs the validation rules defined in the design.
 func (payload *UpdatePatientPayload) Validate() (err error) {
-	if payload.Name == nil {
-		err = goa.MergeErrors(err, goa.MissingAttributeError(`raw`, "name"))
-	}
 	for _, e := range payload.Name {
 		if e != nil {
 			if err2 := e.Validate(); err2 != nil {
@@ -2174,9 +2120,9 @@ func NewVreadPatientContext(ctx context.Context, service *goa.Service) (*VreadPa
 	if len(paramCount) > 0 {
 		rawCount := paramCount[0]
 		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
-			tmp69 := count
-			tmp68 := &tmp69
-			rctx.Count = tmp68
+			tmp67 := count
+			tmp66 := &tmp67
+			rctx.Count = tmp66
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
 		}
@@ -2195,9 +2141,9 @@ func NewVreadPatientContext(ctx context.Context, service *goa.Service) (*VreadPa
 	if len(paramID) > 0 {
 		rawID := paramID[0]
 		if id, err2 := strconv.Atoi(rawID); err2 == nil {
-			tmp71 := id
-			tmp70 := &tmp71
-			rctx.ID = tmp70
+			tmp69 := id
+			tmp68 := &tmp69
+			rctx.ID = tmp68
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
 		}
@@ -2211,8 +2157,8 @@ func NewVreadPatientContext(ctx context.Context, service *goa.Service) (*VreadPa
 	if len(paramLastUpdate) > 0 {
 		rawLastUpdate := paramLastUpdate[0]
 		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
-			tmp72 := &lastUpdate
-			rctx.LastUpdate = tmp72
+			tmp70 := &lastUpdate
+			rctx.LastUpdate = tmp70
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
 		}
@@ -2359,9 +2305,9 @@ func NewCreateUserContext(ctx context.Context, service *goa.Service) (*CreateUse
 	if len(paramCount) > 0 {
 		rawCount := paramCount[0]
 		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
-			tmp75 := count
-			tmp74 := &tmp75
-			rctx.Count = tmp74
+			tmp73 := count
+			tmp72 := &tmp73
+			rctx.Count = tmp72
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
 		}
@@ -2380,9 +2326,9 @@ func NewCreateUserContext(ctx context.Context, service *goa.Service) (*CreateUse
 	if len(paramID) > 0 {
 		rawID := paramID[0]
 		if id, err2 := strconv.Atoi(rawID); err2 == nil {
-			tmp77 := id
-			tmp76 := &tmp77
-			rctx.ID = tmp76
+			tmp75 := id
+			tmp74 := &tmp75
+			rctx.ID = tmp74
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
 		}
@@ -2396,8 +2342,8 @@ func NewCreateUserContext(ctx context.Context, service *goa.Service) (*CreateUse
 	if len(paramLastUpdate) > 0 {
 		rawLastUpdate := paramLastUpdate[0]
 		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
-			tmp78 := &lastUpdate
-			rctx.LastUpdate = tmp78
+			tmp76 := &lastUpdate
+			rctx.LastUpdate = tmp76
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
 		}
@@ -2576,9 +2522,9 @@ func NewDeleteUserContext(ctx context.Context, service *goa.Service) (*DeleteUse
 	if len(paramCount) > 0 {
 		rawCount := paramCount[0]
 		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
-			tmp80 := count
-			tmp79 := &tmp80
-			rctx.Count = tmp79
+			tmp78 := count
+			tmp77 := &tmp78
+			rctx.Count = tmp77
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
 		}
@@ -2597,9 +2543,9 @@ func NewDeleteUserContext(ctx context.Context, service *goa.Service) (*DeleteUse
 	if len(paramID) > 0 {
 		rawID := paramID[0]
 		if id, err2 := strconv.Atoi(rawID); err2 == nil {
-			tmp82 := id
-			tmp81 := &tmp82
-			rctx.ID = tmp81
+			tmp80 := id
+			tmp79 := &tmp80
+			rctx.ID = tmp79
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
 		}
@@ -2613,8 +2559,8 @@ func NewDeleteUserContext(ctx context.Context, service *goa.Service) (*DeleteUse
 	if len(paramLastUpdate) > 0 {
 		rawLastUpdate := paramLastUpdate[0]
 		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
-			tmp83 := &lastUpdate
-			rctx.LastUpdate = tmp83
+			tmp81 := &lastUpdate
+			rctx.LastUpdate = tmp81
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
 		}
@@ -2751,9 +2697,9 @@ func NewListUserContext(ctx context.Context, service *goa.Service) (*ListUserCon
 	if len(paramCount) > 0 {
 		rawCount := paramCount[0]
 		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
-			tmp86 := count
-			tmp85 := &tmp86
-			rctx.Count = tmp85
+			tmp84 := count
+			tmp83 := &tmp84
+			rctx.Count = tmp83
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
 		}
@@ -2772,9 +2718,9 @@ func NewListUserContext(ctx context.Context, service *goa.Service) (*ListUserCon
 	if len(paramID) > 0 {
 		rawID := paramID[0]
 		if id, err2 := strconv.Atoi(rawID); err2 == nil {
-			tmp88 := id
-			tmp87 := &tmp88
-			rctx.ID = tmp87
+			tmp86 := id
+			tmp85 := &tmp86
+			rctx.ID = tmp85
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
 		}
@@ -2788,8 +2734,8 @@ func NewListUserContext(ctx context.Context, service *goa.Service) (*ListUserCon
 	if len(paramLastUpdate) > 0 {
 		rawLastUpdate := paramLastUpdate[0]
 		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
-			tmp89 := &lastUpdate
-			rctx.LastUpdate = tmp89
+			tmp87 := &lastUpdate
+			rctx.LastUpdate = tmp87
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
 		}
@@ -2927,9 +2873,9 @@ func NewSecureUserContext(ctx context.Context, service *goa.Service) (*SecureUse
 	if len(paramCount) > 0 {
 		rawCount := paramCount[0]
 		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
-			tmp91 := count
-			tmp90 := &tmp91
-			rctx.Count = tmp90
+			tmp89 := count
+			tmp88 := &tmp89
+			rctx.Count = tmp88
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
 		}
@@ -2948,9 +2894,9 @@ func NewSecureUserContext(ctx context.Context, service *goa.Service) (*SecureUse
 	if len(paramID) > 0 {
 		rawID := paramID[0]
 		if id, err2 := strconv.Atoi(rawID); err2 == nil {
-			tmp93 := id
-			tmp92 := &tmp93
-			rctx.ID = tmp92
+			tmp91 := id
+			tmp90 := &tmp91
+			rctx.ID = tmp90
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
 		}
@@ -2964,8 +2910,8 @@ func NewSecureUserContext(ctx context.Context, service *goa.Service) (*SecureUse
 	if len(paramLastUpdate) > 0 {
 		rawLastUpdate := paramLastUpdate[0]
 		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
-			tmp94 := &lastUpdate
-			rctx.LastUpdate = tmp94
+			tmp92 := &lastUpdate
+			rctx.LastUpdate = tmp92
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
 		}
@@ -3029,8 +2975,8 @@ func NewSecureUserContext(ctx context.Context, service *goa.Service) (*SecureUse
 	if len(paramFail) > 0 {
 		rawFail := paramFail[0]
 		if fail, err2 := strconv.ParseBool(rawFail); err2 == nil {
-			tmp95 := &fail
-			rctx.Fail = tmp95
+			tmp93 := &fail
+			rctx.Fail = tmp93
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("fail", rawFail, "boolean"))
 		}
@@ -3098,9 +3044,9 @@ func NewShowUserContext(ctx context.Context, service *goa.Service) (*ShowUserCon
 	if len(paramCount) > 0 {
 		rawCount := paramCount[0]
 		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
-			tmp97 := count
-			tmp96 := &tmp97
-			rctx.Count = tmp96
+			tmp95 := count
+			tmp94 := &tmp95
+			rctx.Count = tmp94
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
 		}
@@ -3119,9 +3065,9 @@ func NewShowUserContext(ctx context.Context, service *goa.Service) (*ShowUserCon
 	if len(paramID) > 0 {
 		rawID := paramID[0]
 		if id, err2 := strconv.Atoi(rawID); err2 == nil {
-			tmp99 := id
-			tmp98 := &tmp99
-			rctx.ID = tmp98
+			tmp97 := id
+			tmp96 := &tmp97
+			rctx.ID = tmp96
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
 		}
@@ -3135,8 +3081,8 @@ func NewShowUserContext(ctx context.Context, service *goa.Service) (*ShowUserCon
 	if len(paramLastUpdate) > 0 {
 		rawLastUpdate := paramLastUpdate[0]
 		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
-			tmp100 := &lastUpdate
-			rctx.LastUpdate = tmp100
+			tmp98 := &lastUpdate
+			rctx.LastUpdate = tmp98
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
 		}
@@ -3289,9 +3235,9 @@ func NewSigninUserContext(ctx context.Context, service *goa.Service) (*SigninUse
 	if len(paramCount) > 0 {
 		rawCount := paramCount[0]
 		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
-			tmp103 := count
-			tmp102 := &tmp103
-			rctx.Count = tmp102
+			tmp101 := count
+			tmp100 := &tmp101
+			rctx.Count = tmp100
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
 		}
@@ -3310,9 +3256,9 @@ func NewSigninUserContext(ctx context.Context, service *goa.Service) (*SigninUse
 	if len(paramID) > 0 {
 		rawID := paramID[0]
 		if id, err2 := strconv.Atoi(rawID); err2 == nil {
-			tmp105 := id
-			tmp104 := &tmp105
-			rctx.ID = tmp104
+			tmp103 := id
+			tmp102 := &tmp103
+			rctx.ID = tmp102
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
 		}
@@ -3326,8 +3272,8 @@ func NewSigninUserContext(ctx context.Context, service *goa.Service) (*SigninUse
 	if len(paramLastUpdate) > 0 {
 		rawLastUpdate := paramLastUpdate[0]
 		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
-			tmp106 := &lastUpdate
-			rctx.LastUpdate = tmp106
+			tmp104 := &lastUpdate
+			rctx.LastUpdate = tmp104
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
 		}
@@ -3510,9 +3456,9 @@ func NewSignupUserContext(ctx context.Context, service *goa.Service) (*SignupUse
 	if len(paramCount) > 0 {
 		rawCount := paramCount[0]
 		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
-			tmp108 := count
-			tmp107 := &tmp108
-			rctx.Count = tmp107
+			tmp106 := count
+			tmp105 := &tmp106
+			rctx.Count = tmp105
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
 		}
@@ -3531,9 +3477,9 @@ func NewSignupUserContext(ctx context.Context, service *goa.Service) (*SignupUse
 	if len(paramID) > 0 {
 		rawID := paramID[0]
 		if id, err2 := strconv.Atoi(rawID); err2 == nil {
-			tmp110 := id
-			tmp109 := &tmp110
-			rctx.ID = tmp109
+			tmp108 := id
+			tmp107 := &tmp108
+			rctx.ID = tmp107
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
 		}
@@ -3547,8 +3493,8 @@ func NewSignupUserContext(ctx context.Context, service *goa.Service) (*SignupUse
 	if len(paramLastUpdate) > 0 {
 		rawLastUpdate := paramLastUpdate[0]
 		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
-			tmp111 := &lastUpdate
-			rctx.LastUpdate = tmp111
+			tmp109 := &lastUpdate
+			rctx.LastUpdate = tmp109
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
 		}
@@ -3833,9 +3779,9 @@ func NewUnsecureUserContext(ctx context.Context, service *goa.Service) (*Unsecur
 	if len(paramCount) > 0 {
 		rawCount := paramCount[0]
 		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
-			tmp113 := count
-			tmp112 := &tmp113
-			rctx.Count = tmp112
+			tmp111 := count
+			tmp110 := &tmp111
+			rctx.Count = tmp110
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
 		}
@@ -3854,9 +3800,9 @@ func NewUnsecureUserContext(ctx context.Context, service *goa.Service) (*Unsecur
 	if len(paramID) > 0 {
 		rawID := paramID[0]
 		if id, err2 := strconv.Atoi(rawID); err2 == nil {
-			tmp115 := id
-			tmp114 := &tmp115
-			rctx.ID = tmp114
+			tmp113 := id
+			tmp112 := &tmp113
+			rctx.ID = tmp112
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
 		}
@@ -3870,8 +3816,8 @@ func NewUnsecureUserContext(ctx context.Context, service *goa.Service) (*Unsecur
 	if len(paramLastUpdate) > 0 {
 		rawLastUpdate := paramLastUpdate[0]
 		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
-			tmp116 := &lastUpdate
-			rctx.LastUpdate = tmp116
+			tmp114 := &lastUpdate
+			rctx.LastUpdate = tmp114
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
 		}
@@ -4001,9 +3947,9 @@ func NewUpdateUserContext(ctx context.Context, service *goa.Service) (*UpdateUse
 	if len(paramCount) > 0 {
 		rawCount := paramCount[0]
 		if count, err2 := strconv.Atoi(rawCount); err2 == nil {
-			tmp118 := count
-			tmp117 := &tmp118
-			rctx.Count = tmp117
+			tmp116 := count
+			tmp115 := &tmp116
+			rctx.Count = tmp115
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_count", rawCount, "integer"))
 		}
@@ -4022,9 +3968,9 @@ func NewUpdateUserContext(ctx context.Context, service *goa.Service) (*UpdateUse
 	if len(paramID) > 0 {
 		rawID := paramID[0]
 		if id, err2 := strconv.Atoi(rawID); err2 == nil {
-			tmp120 := id
-			tmp119 := &tmp120
-			rctx.ID = tmp119
+			tmp118 := id
+			tmp117 := &tmp118
+			rctx.ID = tmp117
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_id", rawID, "integer"))
 		}
@@ -4038,8 +3984,8 @@ func NewUpdateUserContext(ctx context.Context, service *goa.Service) (*UpdateUse
 	if len(paramLastUpdate) > 0 {
 		rawLastUpdate := paramLastUpdate[0]
 		if lastUpdate, err2 := time.Parse(time.RFC3339, rawLastUpdate); err2 == nil {
-			tmp121 := &lastUpdate
-			rctx.LastUpdate = tmp121
+			tmp119 := &lastUpdate
+			rctx.LastUpdate = tmp119
 		} else {
 			err = goa.MergeErrors(err, goa.InvalidParamTypeError("_lastUpdate", rawLastUpdate, "datetime"))
 		}

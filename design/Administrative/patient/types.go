@@ -13,9 +13,9 @@ var Patient = Type("Patient", func() {
 	//Comments:
 	//Reason for inclusion or contrainment:
 	//Start Local-------------------------------------------
-	Required("id", "href", "created_at", "created_by")
+	//Required("patient_id", "href", "created_at", "created_by")
 
-	Attribute("id", Integer, "ID of patient", func() {
+	Attribute("patient_id", Integer, "ID of patient", func() {
 		Example(1)
 	})
 	Attribute("href", String, "API href of patient", func() {
@@ -26,15 +26,29 @@ var Patient = Type("Patient", func() {
 		Format("email")
 		Example("me@goa.design")
 	})
-	//End Local-----------------------------------------------
 
 	//Start FHIR----------------------------------------------
-	Required("gender", "maritalStatus")
+	Attribute("resourceType", String, "", func() {
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
+	Attribute("id", String, "Unique id for the element within a resource (for internal references).", func() {
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
+	Attribute("extension", ArrayOf(Extension), "", func() {
+		//Comments:
+		//Reason for inclusion or contrainment:
+	})
 	Attribute("meta", Meta, `The metadata about a resource. This is content in the resource that is maintained by the infrastructure.
 	Changes to the content may not always be associated with version changes to the resource.`, func() {
 		//Comments:
 		//Reason for inclusion or contrainment:
 	})
+
+	//Start Patient Resource--------------------------------
+	//Required("gender", "maritalStatus")
+
 	Attribute("identifier", ArrayOf(Identifier), "Patient identifer", func() {
 		//Comments:
 		//Reason for inclusion or contrainment:

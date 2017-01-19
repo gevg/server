@@ -49,8 +49,8 @@ func (c *Client) NewHealthHealthRequest(ctx context.Context, path string, contai
 		values.Set("_containedType", *containedType)
 	}
 	if count != nil {
-		tmp56 := strconv.Itoa(*count)
-		values.Set("_count", tmp56)
+		tmp54 := strconv.Itoa(*count)
+		values.Set("_count", tmp54)
 	}
 	if elements != nil {
 		values.Set("_elements", *elements)
@@ -59,15 +59,15 @@ func (c *Client) NewHealthHealthRequest(ctx context.Context, path string, contai
 		values.Set("_has", *has)
 	}
 	if id != nil {
-		tmp57 := strconv.Itoa(*id)
-		values.Set("_id", tmp57)
+		tmp55 := strconv.Itoa(*id)
+		values.Set("_id", tmp55)
 	}
 	if include != nil {
 		values.Set("_include", *include)
 	}
 	if lastUpdate != nil {
-		tmp58 := lastUpdate.Format(time.RFC3339)
-		values.Set("_lastUpdate", tmp58)
+		tmp56 := lastUpdate.Format(time.RFC3339)
+		values.Set("_lastUpdate", tmp56)
 	}
 	if list != nil {
 		values.Set("_list", *list)
